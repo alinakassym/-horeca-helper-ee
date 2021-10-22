@@ -1,24 +1,30 @@
 import React, {useState} from 'react';
-import {Text, View, TextInput, ScrollView, Image, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {updateEmployee} from '../../services/EmployeesService';
 
 export const ProfileEditScreen = ({route, navigation}) => {
-  console.log('ProfileEdit Screen params', route.params)
+  console.log('ProfileEdit Screen params', route.params);
 
   const [employee, setEmployee] = useState(route.params.value);
 
   const save = async () => {
     const hhToken = await AsyncStorage.getItem('hhToken');
-    updateEmployee(employee, hhToken)
-      .then(() => {
-        navigation.navigate("Profile", {
-          value: employee,
-        });
-      })
-  }
+    updateEmployee(employee, hhToken).then(() => {
+      navigation.navigate('Profile', {
+        value: employee,
+      });
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -31,37 +37,47 @@ export const ProfileEditScreen = ({route, navigation}) => {
       <Text style={globalStyles.label}>Name</Text>
       <TextInput
         style={globalStyles.primaryInput}
-        onChangeText={(val) => {setEmployee({...employee, title: val})}}
-        value={employee.title}/>
+        onChangeText={val => {
+          setEmployee({...employee, title: val});
+        }}
+        value={employee.title}
+      />
 
       <Text style={globalStyles.label}>Address</Text>
       <TextInput
         style={globalStyles.primaryInput}
-        onChangeText={(val) => {setEmployee({...employee, address: val})}}
-        value={employee.address}/>
+        onChangeText={val => {
+          setEmployee({...employee, address: val});
+        }}
+        value={employee.address}
+      />
 
       <Text style={globalStyles.label}>Phone</Text>
       <TextInput
         style={globalStyles.primaryInput}
-        onChangeText={(val) => {setEmployee({...employee, phone: val})}}
-        value={employee.phone}/>
+        onChangeText={val => {
+          setEmployee({...employee, phone: val});
+        }}
+        value={employee.phone}
+      />
 
       <Text style={globalStyles.label}>E-mail</Text>
       <TextInput
         style={globalStyles.primaryInput}
-        onChangeText={(val) => {setEmployee({...employee, email: val})}}
-        value={employee.email}/>
+        onChangeText={val => {
+          setEmployee({...employee, email: val});
+        }}
+        value={employee.email}
+      />
 
-
-      <PrimaryButton label={'Save'} onPress={() => save()}/>
+      <PrimaryButton label={'Save'} onPress={() => save()} />
     </ScrollView>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
-    padding: 16
+    padding: 16,
   },
   profilePhoto: {
     marginBottom: 24,
@@ -81,4 +97,3 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
-

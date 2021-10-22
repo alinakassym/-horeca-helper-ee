@@ -19,9 +19,9 @@ export const ProfileScreen = ({navigation}) => {
 
   useEffect(() => {
     async function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async() => {
+      const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
-        const hhToken = await AsyncStorage.getItem('hhToken')
+        const hhToken = await AsyncStorage.getItem('hhToken');
         getEmployee(hhToken)
           .then(res => {
             console.log('ProfileScreen companies/me:', res.data);
@@ -30,16 +30,14 @@ export const ProfileScreen = ({navigation}) => {
           .catch(err => {
             console.error('ProfileScreen error');
             console.log(err);
-          })
+          });
       });
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
     fetchData().then();
-
   }, [navigation]);
-
 
   const logOut = () => {
     console.log('AuthContext', AuthContext);
@@ -69,11 +67,12 @@ export const ProfileScreen = ({navigation}) => {
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween]}>
           <Text style={styles.text}>{employee.title || 'Is not entered'} </Text>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate("ProfileEditScreen", {
-              value: employee,
-            });
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProfileEditScreen', {
+                value: employee,
+              });
+            }}>
             <IconPencil color={'#767676'} size={24} width={1.5} />
           </TouchableOpacity>
         </View>
@@ -82,7 +81,9 @@ export const ProfileScreen = ({navigation}) => {
           <View style={styles.iconWrapper}>
             <IconAddress color={'#767676'} size={24} width={1.5} />
           </View>
-          <Text style={styles.text}>{employee.address || 'Is not entered'}</Text>
+          <Text style={styles.text}>
+            {employee.address || 'Is not entered'}
+          </Text>
         </View>
 
         <View style={styles.row}>

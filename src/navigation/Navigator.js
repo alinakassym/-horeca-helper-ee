@@ -79,11 +79,11 @@ export const Navigator = () => {
     );
   };
   return (
-    <Stack.Navigator
-      initialRouteName="App">
-      <Stack.Group screenOptions={{
-        headerShown: false,
-      }}>
+    <Stack.Navigator initialRouteName="App">
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="Tab" component={TabStack} />
       </Stack.Group>
       <Stack.Group>
@@ -91,7 +91,9 @@ export const Navigator = () => {
           options={{
             headerTitle: 'Profile',
           }}
-          name="ProfileEditScreen" component={ProfileEditScreen} />
+          name="ProfileEditScreen"
+          component={ProfileEditScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {AuthContext} from './src/store/context';
 import {RootStackScreen} from './src/screens/RootStackScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -90,10 +90,7 @@ const App = () => {
   const authContext = React.useMemo(
     () => ({
       signIn: async foundUser => {
-        // setUserToken('fgkj');
-        // setIsLoading(false);
         const userToken = String(foundUser[0].userToken);
-        const hhToken = String(foundUser[0].hhToken);
         const userName = foundUser[0].username;
 
         try {
@@ -113,10 +110,7 @@ const App = () => {
         }
         dispatch({type: 'LOGOUT'});
       },
-      signUp: () => {
-        // setUserToken('fgkj');
-        // setIsLoading(false);
-      },
+      signUp: () => {},
       toggleTheme: () => {
         setIsDarkTheme(isDarkTheme => !isDarkTheme);
       },

@@ -18,7 +18,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
-import {getHhToken} from '../services/AuthService'
+import {getHhToken} from '../services/AuthService';
 
 GoogleSignin.configure({
   webClientId:
@@ -60,15 +60,13 @@ export const SignInScreen = () => {
         loaded: true,
       });
 
-
       console.log('SignInScreen googleToken:', userInfo.idToken);
       console.log('SignInScreen userInfo:', userInfo);
 
-
       if (userInfo.idToken) {
         getHhToken(userInfo.idToken)
-          .then(async (authData) => {
-            console.log('SignInScreen authData:', authData)
+          .then(async authData => {
+            console.log('SignInScreen authData:', authData);
             const foundUser = [
               {
                 email: userInfo.user.email,
@@ -81,13 +79,12 @@ export const SignInScreen = () => {
               },
             ];
             await storeData(foundUser[0]);
-            AsyncStorage.setItem('hhToken', authData.hhToken)
-              .then(() => {
-                signIn(foundUser);
-              })
+            AsyncStorage.setItem('hhToken', authData.hhToken).then(() => {
+              signIn(foundUser);
+            });
           })
           .catch(e => {
-            console.log('SignInScreen', e)
+            console.log('SignInScreen', e);
           });
       }
     } catch (error) {
@@ -103,8 +100,6 @@ export const SignInScreen = () => {
       }
     }
   };
-
-
 
   const textInputChange = val => {
     if (val.trim().length >= 4) {

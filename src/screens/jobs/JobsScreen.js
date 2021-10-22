@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
-import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {getJobs} from '../../services/JobsService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
@@ -11,24 +10,23 @@ export const JobsScreen = ({navigation}) => {
 
   useEffect(() => {
     async function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async() => {
+      const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
-        const hhToken = await AsyncStorage.getItem('hhToken')
+        const hhToken = await AsyncStorage.getItem('hhToken');
         getJobs(hhToken)
           .then(result => {
             // console.log('jobs: ', result.data);
             setJobs(result.data);
           })
           .catch(e => {
-            console.log('getJobs err:', e)
-          })
+            console.log('getJobs err:', e);
+          });
       });
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
-    fetchData()
-      .then();
+    fetchData().then();
   }, [navigation]);
 
   return (
@@ -41,9 +39,8 @@ export const JobsScreen = ({navigation}) => {
       {/*<Text>{jobs.toString()}</Text>*/}
       <ScrollView>
         <View style={styles.section}>
-          {jobs && jobs.map((item, index) => (
-            <JobCard key={index} item={item}/>
-          ))}
+          {jobs &&
+            jobs.map((item, index) => <JobCard key={index} item={item} />)}
         </View>
       </ScrollView>
     </View>
@@ -57,18 +54,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC'
+    borderBottomColor: '#CCCCCC',
   },
   title: {
     fontFamily: 'Roboto-Medium',
-    fontSize: 18
+    fontSize: 18,
   },
   section: {
     paddingTop: 14,
     paddingLeft: 14,
-    paddingRight: 14
+    paddingRight: 14,
   },
   btn: {
-    marginBottom: 16
-  }
+    marginBottom: 16,
+  },
 });
