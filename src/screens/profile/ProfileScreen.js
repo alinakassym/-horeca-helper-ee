@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
 import {IconPhone} from '../../assets/icons/main/IconPhone';
+import {IconComment} from '../../assets/icons/main/IconComment';
 import {IconAddress} from '../../assets/icons/main/IconAddress';
 import {IconMail} from '../../assets/icons/main/IconMail';
 import {IconPencil} from '../../assets/icons/main/IconPencil';
@@ -24,7 +25,7 @@ export const ProfileScreen = ({navigation}) => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getEmployee(hhToken)
           .then(res => {
-            console.log('ProfileScreen companies/me:', res.data);
+            console.log('ProfileScreen employee/me:', res.data);
             setEmployee(res.data);
           })
           .catch(err => {
@@ -65,8 +66,10 @@ export const ProfileScreen = ({navigation}) => {
       {/*About*/}
       <Text style={styles.label}>About</Text>
       <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween]}>
-          <Text style={styles.text}>{employee.title || 'Is not entered'} </Text>
+        <View style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
+          <Text style={styles.text}>
+            {employee.firstName || 'Is not entered'} {employee.lastName || ''}
+          </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('ProfileEditScreen', {
@@ -77,13 +80,25 @@ export const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
+        {(employee.position || employee.gender || employee.schedule) && (
+          <View style={[styles.row, styles.paddingTop0]}>
+            {employee.schedule && <Text>{employee.schedule.title}</Text>}
+            {employee.schedule && employee.position && <Text>, </Text>}
+            {employee.position && <Text>{employee.position.title}</Text>}
+            {employee.position && employee.gender && <Text>, </Text>}
+            {employee.gender && <Text>{employee.gender.title}</Text>}
+          </View>
+        )}
+
         <View style={styles.row}>
           <View style={styles.iconWrapper}>
             <IconAddress color={'#767676'} size={24} width={1.5} />
           </View>
-          <Text style={styles.text}>
-            {employee.address || 'Is not entered'}
-          </Text>
+          {employee.city ? (
+            <Text style={styles.text}>{employee.city.title}</Text>
+          ) : (
+            <Text>Is not entered</Text>
+          )}
         </View>
 
         <View style={styles.row}>
@@ -98,6 +113,25 @@ export const ProfileScreen = ({navigation}) => {
             <IconMail color={'#767676'} size={24} width={1.5} />
           </View>
           <Text style={styles.text}>{employee.email}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.iconWrapper}>
+            <IconComment color={'#767676'} size={24} width={1.5} />
+          </View>
+          <Text style={styles.text}>
+            {employee.description || 'About me ...'}
+          </Text>
+        </View>
+      </View>
+
+      {/*Works*/}
+      <Text style={styles.label}>Works</Text>
+
+      {/*Works*/}
+      <View style={styles.block}>
+        <View style={[styles.row, styles.spaceBetween]}>
+          <Text style={styles.text}>List</Text>
         </View>
       </View>
 
@@ -182,6 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     lineHeight: 16,
+    color: '#000000',
   },
   block: {
     paddingHorizontal: 16,
@@ -195,6 +230,12 @@ const styles = StyleSheet.create({
   },
   spaceBetween: {
     justifyContent: 'space-between',
+  },
+  paddingBottom0: {
+    paddingBottom: 0,
+  },
+  paddingTop0: {
+    paddingTop: 0,
   },
   profilePhoto: {
     paddingTop: 16,
