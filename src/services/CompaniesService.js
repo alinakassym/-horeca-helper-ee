@@ -3,23 +3,24 @@ import {Platform} from 'react-native';
 
 // emulator
 const baseUrl =
-  Platform.OS === 'android' ? 'http://10.0.2.2' : 'http://localhost';
+  Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 
 // android device
-// const baseUrl = 'http://localhost';
+// const baseUrl = 'http://localhost:3000';
 
-const port = '3000';
+// cloud BE
+// const baseUrl = 'https://horecahelper.kz/backend';
 
 export const getCompanies = async hhToken => {
-  const r = await axios.get(`${baseUrl}:${port}/er/companies`, {
+  const r = await axios.get(`${baseUrl}/er/companies`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('res', r.data);
-  return r;
+  return r.data;
 };
 
 export const getCompany = async hhToken => {
-  const r = await axios.get(`${baseUrl}:${port}/er/companies/me`, {
+  const r = await axios.get(`${baseUrl}/er/companies/me`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('Company Service getCompany result:', r.data);
@@ -27,7 +28,7 @@ export const getCompany = async hhToken => {
 };
 
 export const updateCompany = async (data, hhToken) => {
-  const r = await axios.patch(`${baseUrl}:${port}/er/companies/me`, data, {
+  const r = await axios.patch(`${baseUrl}/er/companies/me`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('Company Service updateCompany result:', r.data);

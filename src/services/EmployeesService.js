@@ -3,15 +3,16 @@ import {Platform} from 'react-native';
 
 // emulator
 const baseUrl =
-  Platform.OS === 'android' ? 'http://10.0.2.2' : 'http://localhost';
+  Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 
 // android device
-// const baseUrl = 'http://localhost';
+// const baseUrl = 'http://localhost:3000';
 
-const port = '3000';
+// cloud BE
+// const baseUrl = 'https://horecahelper.kz/backend';
 
 export const getEmployee = async hhToken => {
-  const r = await axios.get(`${baseUrl}:${port}/ee/employees/me`, {
+  const r = await axios.get(`${baseUrl}/ee/employees/me`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('Employees Service getEmployee result:', r.data);
@@ -19,7 +20,7 @@ export const getEmployee = async hhToken => {
 };
 
 export const updateEmployee = async (data, hhToken) => {
-  const r = await axios.patch(`${baseUrl}:${port}/ee/employees/me`, data, {
+  const r = await axios.patch(`${baseUrl}/ee/employees/me`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('Employees Service updateEmployee result:', r.data);
