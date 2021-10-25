@@ -34,3 +34,11 @@ export const postWork = async (data, hhToken) => {
   console.log('Employees Service setWork result:', r.data);
   return r;
 };
+
+export const updateWork = async (data, hhToken) => {
+  const r = await axios.patch(`${baseUrl}/ee/works/${data.id}`, data, {
+    headers: {Authorization: `Bearer ${hhToken || ''}`},
+  });
+  console.log('Employees Service setWork result:', r.data);
+  return r;
+};

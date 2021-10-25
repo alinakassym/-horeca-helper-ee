@@ -5,6 +5,7 @@ import {MessagesScreen} from '../screens/messages/MessagesScreen';
 import {ProfileScreen} from '../screens/profile/ProfileScreen';
 import {ProfileEditScreen} from '../screens/profile/ProfileEditScreen';
 import {AddWorkScreen} from '../screens/profile/AddWorkScreen';
+import {EditWorkScreen} from '../screens/profile/EditWorkScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {IconVacancies} from '../assets/icons/tabs/IconVacancies';
@@ -101,6 +102,13 @@ export const Navigator = () => {
           }}
           name="AddWorkScreen"
           component={AddWorkScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: 'Edit work',
+          }}
+          name="EditWorkScreen"
+          component={EditWorkScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

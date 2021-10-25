@@ -151,7 +151,12 @@ export const ProfileScreen = ({navigation}) => {
         </View>
         <View style={styles.column}>
           {employee.works.map((item, index) => (
-            <TouchableOpacity key={index} style={[styles.row, styles.spaceBetween]}>
+            <TouchableOpacity
+              key={index}
+              style={[styles.row, styles.spaceBetween]}
+              onPress={() => {
+                navigation.navigate('EditWorkScreen', {value: item});
+              }}>
               <Text style={styles.text}>{item.company.title}</Text>
               <IconExpandRight color={'#767676'} size={24} width={1.5} />
             </TouchableOpacity>
