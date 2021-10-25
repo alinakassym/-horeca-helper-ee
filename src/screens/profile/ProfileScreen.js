@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, ScrollView, Image, StyleSheet, Switch} from 'react-native';
+import {Text, View, ScrollView, Image, StyleSheet, Switch, ActivityIndicator} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
@@ -8,8 +8,10 @@ import {IconComment} from '../../assets/icons/main/IconComment';
 import {IconAddress} from '../../assets/icons/main/IconAddress';
 import {IconMail} from '../../assets/icons/main/IconMail';
 import {IconPencil} from '../../assets/icons/main/IconPencil';
+import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {getEmployee} from '../../services/EmployeesService';
+import PlainButton from '../../components/buttons/PlainButton';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,9 +19,10 @@ export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
 
   const [employee, setEmployee] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
         const hhToken = await AsyncStorage.getItem('hhToken');
@@ -27,6 +30,7 @@ export const ProfileScreen = ({navigation}) => {
           .then(res => {
             console.log('ProfileScreen employee/me:', res.data);
             setEmployee(res.data);
+            setLoading(false);
           })
           .catch(err => {
             console.error('ProfileScreen error');
@@ -37,7 +41,7 @@ export const ProfileScreen = ({navigation}) => {
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
-    fetchData().then();
+    fetchData();
   }, [navigation]);
 
   const logOut = () => {
@@ -54,6 +58,14 @@ export const ProfileScreen = ({navigation}) => {
   const [isNotification, setIsNotification] = useState(false);
   const toggleNotification = () =>
     setIsNotification(previousNotificationState => !previousNotificationState);
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={globalStyles.container}>
@@ -131,7 +143,18 @@ export const ProfileScreen = ({navigation}) => {
       {/*Works*/}
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween]}>
-          <Text style={styles.text}>List</Text>
+          <TouchableOpacity>
+            <PlainButton label={'Add'} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.column}>
+          {/*<Text>{employee.works.length.toString()}</Text>*/}
+          {employee.works.length > 0 && (
+            <TouchableOpacity style={[styles.row, styles.spaceBetween]}>
+              <Text style={styles.text}>List</Text>
+              <IconExpandRight color={'#767676'} size={24} width={1.5} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -227,6 +250,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  column: {
+    flexDirection: 'column',
   },
   spaceBetween: {
     justifyContent: 'space-between',
