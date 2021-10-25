@@ -45,9 +45,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
       salary: employee.salary,
     };
     updateEmployee(data, hhToken).then(() => {
-      navigation.navigate('Profile', {
-        value: employee,
-      });
+      navigation.navigate('Profile');
     });
   };
 

@@ -26,3 +26,11 @@ export const updateEmployee = async (data, hhToken) => {
   console.log('Employees Service updateEmployee result:', r.data);
   return r;
 };
+
+export const postWork = async (data, hhToken) => {
+  const r = await axios.post(`${baseUrl}/ee/works`, data, {
+    headers: {Authorization: `Bearer ${hhToken || ''}`},
+  });
+  console.log('Employees Service setWork result:', r.data);
+  return r;
+};

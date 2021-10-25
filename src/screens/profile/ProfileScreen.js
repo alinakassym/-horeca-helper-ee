@@ -143,18 +143,19 @@ export const ProfileScreen = ({navigation}) => {
       {/*Works*/}
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate('AddWorkScreen');
+          }}>
             <PlainButton label={'Add'} />
           </TouchableOpacity>
         </View>
         <View style={styles.column}>
-          {/*<Text>{employee.works.length.toString()}</Text>*/}
-          {employee.works.length > 0 && (
-            <TouchableOpacity style={[styles.row, styles.spaceBetween]}>
-              <Text style={styles.text}>List</Text>
+          {employee.works.map((item, index) => (
+            <TouchableOpacity key={index} style={[styles.row, styles.spaceBetween]}>
+              <Text style={styles.text}>{item.company.title}</Text>
               <IconExpandRight color={'#767676'} size={24} width={1.5} />
             </TouchableOpacity>
-          )}
+          ))}
         </View>
       </View>
 

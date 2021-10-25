@@ -4,13 +4,12 @@ import {
   View,
   TextInput,
   ScrollView,
-  Image,
   StyleSheet,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
-import {updateEmployee} from '../../services/EmployeesService';
+import {postWork} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import {
   getCities,
@@ -19,8 +18,7 @@ import {
 } from '../../services/DictionariesService';
 import {getCompanies} from "../../services/CompaniesService";
 
-export const AddWorkScreen = ({route, navigation}) => {
-  console.log('ProfileEdit Screen params', route.params);
+export const AddWorkScreen = ({navigation}) => {
 
   const [work, setWork] = useState({
     company: null,
@@ -30,34 +28,22 @@ export const AddWorkScreen = ({route, navigation}) => {
     startDate: null,
     endDate: null,
   });
-  const [employee, setEmployee] = useState(route.params.value);
   const [companies, setCompanies] = useState([]);
   const [cities, setCities] = useState([]);
   const [positions, setPositions] = useState([]);
-  const [genders, setGenders] = useState([]);
-  const [schedules, setSchedules] = useState([]);
 
   const save = async () => {
     const hhToken = await AsyncStorage.getItem('hhToken');
     const data = {
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      email: employee.email,
-      photo: employee.photo,
-      googleId: employee.googleId,
-      positionId: employee.position ? employee.position.id : null,
-      description: employee.position ? employee.description : '',
-      cityId: employee.city ? employee.city.id : null,
-      birthDate: employee.birthDate,
-      genderId: employee.gender ? employee.gender.id : null,
-      experience: employee.experience,
-      scheduleId: employee.schedule ? employee.schedule.id : null,
-      salary: employee.salary,
+      companyId: work.company ? work.company.id : null,
+      positionId: work.position ? work.position.id : null,
+      description: work.description,
+      cityId: work.city ? work.city.id : null,
+      startDate: work.startDate,
+      endDate: work.endDate,
     };
-    updateEmployee(data, hhToken).then(() => {
-      navigation.navigate('Profile', {
-        value: employee,
-      });
+    postWork(data, hhToken).then(() => {
+      navigation.navigate('Profile');
     });
   };
 
@@ -89,22 +75,6 @@ export const AddWorkScreen = ({route, navigation}) => {
           .catch(e => {
             console.log('getPositions err:', e);
           });
-        getGenders(hhToken)
-          .then(gendersData => {
-            console.log('genders: ', gendersData);
-            setGenders(gendersData);
-          })
-          .catch(e => {
-            console.log('getGenders err:', e);
-          });
-        getSchedules(hhToken)
-          .then(schedulesData => {
-            console.log('schedules: ', schedulesData);
-            setSchedules(schedulesData);
-          })
-          .catch(e => {
-            console.log('getSchedules err:', e);
-          });
       });
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -118,9 +88,9 @@ export const AddWorkScreen = ({route, navigation}) => {
       <ModalSelect
         label={'Location'}
         onChangeText={val => {
-          setEmployee({...employee, city: val});
+          setWork({...work, city: val});
         }}
-        value={employee}
+        value={work}
         valueKey={'city'}
         items={cities}
         itemTitle={'title'}
@@ -129,52 +99,32 @@ export const AddWorkScreen = ({route, navigation}) => {
       <ModalSelect
         label={'Company'}
         onChangeText={val => {
-          setEmployee({...employee, city: val});
+          setWork({...work, company: val});
         }}
-        value={employee}
-        valueKey={'city'}
-        items={cities}
+        value={work}
+        valueKey={'company'}
+        items={companies}
         itemTitle={'title'}
       />
 
       <ModalSelect
         label={'Position'}
         onChangeText={val => {
-          setEmployee({...employee, position: val});
+          setWork({...work, position: val});
         }}
-        value={employee}
+        value={work}
         valueKey={'position'}
         items={positions}
         itemTitle={'title'}
-      />
-
-      <ModalSelect
-        label={'Schedule'}
-        onChangeText={val => {
-          setEmployee({...employee, schedule: val});
-        }}
-        value={employee}
-        valueKey={'schedule'}
-        items={schedules}
-        itemTitle={'title'}
-      />
-
-      <Text style={globalStyles.label}>E-mail</Text>
-      <TextInput
-        style={globalStyles.primaryInput}
-        onChangeText={val => {
-          setEmployee({...employee, email: val});
-        }}
-        value={employee.email}
       />
 
       <Text style={globalStyles.label}>Description</Text>
       <TextInput
         style={[globalStyles.primaryInput, globalStyles.multiline]}
         onChangeText={val => {
-          setEmployee({...employee, description: val});
+          setWork({...work, description: val});
         }}
-        value={employee.description}
+        value={work.description}
       />
 
       <View style={styles.btn}>
@@ -187,23 +137,6 @@ export const AddWorkScreen = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-  },
-  profilePhoto: {
-    marginBottom: 24,
-    paddingTop: 16,
-    alignItems: 'center',
-  },
-  imageWrapper: {
-    height: 128,
-    width: 128,
-    borderRadius: 64,
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
   },
   btn: {
     marginBottom: 42,

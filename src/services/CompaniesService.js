@@ -12,7 +12,7 @@ const baseUrl =
 // const baseUrl = 'https://horecahelper.kz/backend';
 
 export const getCompanies = async hhToken => {
-  const r = await axios.get(`${baseUrl}/er/companies`, {
+  const r = await axios.get(`${baseUrl}/ee/companies`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('res', r.data);
