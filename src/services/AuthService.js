@@ -11,7 +11,7 @@ const baseUrl =
 const port = '3000';
 
 export const getHhToken = async googleToken => {
-  const r = await axios.post(`${baseUrl}:${port}/er/auth/login/google`, {
+  const r = await axios.post(`${baseUrl}:${port}/ee/auth/login/google`, {
     googleToken: googleToken,
   });
   console.log('res', r.data);

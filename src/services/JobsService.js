@@ -10,8 +10,8 @@ const baseUrl =
 
 const port = '3000';
 
-export const getJobs = async hhToken => {
-  const r = await axios.get(`${baseUrl}:${port}/er/jobs/my`, {
+export const searchJobs = async (data, hhToken) => {
+  const r = await axios.post(`${baseUrl}:${port}/ee/jobs/search`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   // console.log('getJobs result: ', r.data)
