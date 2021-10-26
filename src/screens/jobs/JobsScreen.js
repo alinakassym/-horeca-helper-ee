@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {ScrollView, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {searchJobs} from '../../services/JobsService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,17 +11,17 @@ import { useSelector } from 'react-redux';
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector((state) => state.jobs.filter)
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
         const hhToken = await AsyncStorage.getItem('hhToken');
-
-
         searchJobs(filterState, hhToken)
           .then(result => {
             setJobs(result.data.items);
+            setLoading(false);
           })
           .catch(e => {
             console.log('searchJobs err:', e);
@@ -34,6 +34,13 @@ export const JobsScreen = ({navigation}) => {
     fetchData();
   }, [navigation]);
 
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={globalStyles.container}>
