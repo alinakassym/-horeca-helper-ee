@@ -42,3 +42,11 @@ export const getSchedules = async hhToken => {
   // console.log('getSchedules result:', r.data);
   return r.data;
 };
+
+export const getCategories = async hhToken => {
+  const r = await axios.get(`${baseUrl}/ee/dictionaries/categories`, {
+    headers: {Authorization: `Bearer ${hhToken || ''}`},
+  });
+  // console.log('getCategories result:', r.data);
+  return r.data;
+};

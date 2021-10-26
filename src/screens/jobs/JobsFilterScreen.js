@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getPositions} from '../../services/DictionariesService';
+import {getPositions, getCategories, getCities} from '../../services/DictionariesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,6 +15,8 @@ export const JobsFilterScreen = ({route, navigation}) => {
   const [filters, setFilters] = useState({...filterState});
 
   const [positions, setPositions] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [cities, setCities] = useState([]);
 
   const apply = async() => {
     await dispatch(setFilter(filters));
@@ -23,7 +25,9 @@ export const JobsFilterScreen = ({route, navigation}) => {
   const getData = async() => {
     const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
-      getPositions(hhToken)
+      getPositions(hhToken),
+      getCategories(hhToken),
+      getCities(hhToken),
     ])
   };
 
@@ -31,8 +35,10 @@ export const JobsFilterScreen = ({route, navigation}) => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         getData()
-          .then(([positionsData]) => {
+          .then(([positionsData, categoriesData, citiesData]) => {
             setPositions(positionsData);
+            setCategories(categoriesData);
+            setCities(citiesData);
           })
           .catch(err =>{
             console.log(err);
@@ -46,6 +52,30 @@ export const JobsFilterScreen = ({route, navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
+      {/*City*/}
+      <ModalSelect
+        onChangeText={val => {
+          setFilters({...filters, city: val});
+        }}
+        label={'City'}
+        value={filters}
+        valueKey={'city'}
+        items={cities}
+        itemTitle={'title'}
+      />
+
+      {/*categories*/}
+      <ModalSelect
+        onChangeText={val => {
+          setFilters({...filters, companyCategory: val});
+        }}
+        label={'Category'}
+        value={filters}
+        valueKey={'companyCategory'}
+        items={categories}
+        itemTitle={'title'}
+      />
+
       {/*Position*/}
       <ModalSelect
         onChangeText={val => {
@@ -57,6 +87,35 @@ export const JobsFilterScreen = ({route, navigation}) => {
         items={positions}
         itemTitle={'title'}
       />
+
+      {/*Age*/}
+      <View>
+        <Text style={globalStyles.label}>Age</Text>
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>From</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, ageMin: val})
+              }}
+              value={filters.ageMin ? filters.ageMin.toString() : null}
+            />
+          </View>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>To</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, ageMax: val})
+              }}
+              value={filters.ageMax ? filters.ageMax.toString() : null}
+            />
+          </View>
+        </View>
+      </View>
 
       <Text style={globalStyles.label}>Test</Text>
       <TextInput
@@ -78,6 +137,17 @@ export const JobsFilterScreen = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+  },
+  row: {
+  marginRight: -5,
+    marginLeft: -5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  col: {
+    marginLeft: 5,
+      marginRight: 5,
+      flex: 1,
   },
   btn: {
     marginBottom: 42,
