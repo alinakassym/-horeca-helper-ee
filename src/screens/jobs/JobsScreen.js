@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
+    color: '#000000',
   },
   section: {
     paddingTop: 14,

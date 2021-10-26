@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: 'Roboto-Bold',
     fontSize: 18,
+    color: '#000000'
   },
 });
