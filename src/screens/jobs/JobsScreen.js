@@ -1,21 +1,40 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {searchJobs} from '../../services/JobsService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
+import {IconFilter} from '../../assets/icons/main/IconFilter';
+import {IconArrowDown} from '../../assets/icons/main/IconArrowDown';
 
 export const JobsScreen = ({navigation}) => {
+
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
+    function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
         const hhToken = await AsyncStorage.getItem('hhToken');
-        searchJobs({}, hhToken)
+        let params = {
+            positionId: null,
+            companyCategoryId: null,
+            cityId: null,
+            ageMin: null,
+            ageMax: null,
+            genderId: null,
+            experienceMin: null,
+            experienceMax: null,
+            scheduleId: null,
+            salaryMin: null,
+            salaryMax: null,
+            sortBy: 'updatedAt',
+            sortOrder: 'DESC',
+            pageSize: 10,
+            pageNum: 1
+        }
+        searchJobs(params, hhToken)
           .then(result => {
-            console.log('jobs: ', result.data);
             setJobs(result.data.items);
           })
           .catch(e => {
@@ -26,7 +45,7 @@ export const JobsScreen = ({navigation}) => {
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
-    fetchData().then();
+    fetchData();
   }, [navigation]);
 
   return (
@@ -34,6 +53,23 @@ export const JobsScreen = ({navigation}) => {
       <View style={styles.topSection}>
         <Text style={styles.title}>Astana</Text>
         <Text style={styles.title}>123</Text>
+      </View>
+      <View style={globalStyles.topBar}>
+
+
+        <TouchableOpacity style={globalStyles.filterBtn} onPress={() => {
+          navigation.navigate('JobsFilterScreen')
+        }}>
+
+          <IconFilter color={'#185AB7'} size={32} width={1.5} />
+          <Text style={globalStyles.filterBtnRightText}>Filters</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity style={globalStyles.filterBtn}>
+          <Text style={globalStyles.filterBtnLeftText}>Order by rating</Text>
+          <IconArrowDown color={'#767676'} size={24} width={1.5} />
+        </TouchableOpacity>
       </View>
 
       {/*<Text>{jobs.toString()}</Text>*/}

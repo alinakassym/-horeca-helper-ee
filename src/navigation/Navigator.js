@@ -22,7 +22,7 @@ export const Navigator = () => {
   const TabStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Profile"
+        initialRouteName="Jobs"
         screenOptions={{
           headerShown: false,
           tabBarLabelStyle: {
@@ -88,19 +88,14 @@ export const Navigator = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="Tab" component={TabStack} />
+      </Stack.Group>
+      <Stack.Group>
         <Stack.Screen
           options={{
             headerTitle: 'Filters',
           }}
           name="JobsFilterScreen"
           component={JobsFilterScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: 'Jobs',
-          }}
-          name="Jobs"
-          component={JobsScreen}
         />
       </Stack.Group>
       <Stack.Group>
