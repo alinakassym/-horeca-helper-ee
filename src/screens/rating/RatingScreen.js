@@ -36,13 +36,13 @@ const items = [
 export const RatingScreen = () => {
   return (
     <View style={globalStyles.container}>
-      <View style={styles.topBar}>
-        <TouchableOpacity style={styles.filterBtn}>
+      <View style={globalStyles.topBar}>
+        <TouchableOpacity style={globalStyles.filterBtn}>
           <IconFilter color={'#185AB7'} size={32} width={1.5} />
-          <Text style={styles.filterBtnRightText}>Filters</Text>
+          <Text style={globalStyles.filterBtnRightText}>Filters</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterBtn}>
-          <Text style={styles.filterBtnLeftText}>Order by rating</Text>
+        <TouchableOpacity style={globalStyles.filterBtn}>
+          <Text style={globalStyles.filterBtnLeftText}>Order by rating</Text>
           <IconArrowDown color={'#767676'} size={24} width={1.5} />
         </TouchableOpacity>
       </View>
@@ -62,26 +62,6 @@ export const RatingScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: '#F6F6F6',
-  },
-  filterBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  filterBtnRightText: {
-    marginLeft: 6,
-    fontSize: 14,
-  },
-  filterBtnLeftText: {
-    marginRight: 4,
-    fontSize: 14,
-  },
-
   row: {
     flexDirection: 'row',
     alignItems: 'center',

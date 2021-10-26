@@ -38,5 +38,29 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CCCCCC'
-  }
+  },
+
+  // --- start of Filters TopBar --- //
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#F6F6F6',
+  },
+  filterBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  filterBtnRightText: {
+    marginLeft: 6,
+    fontSize: 14,
+  },
+  filterBtnLeftText: {
+    marginRight: 4,
+    fontSize: 14,
+  },
+  // --- end of Filters TopBar --- //
+
+
 });

@@ -15,7 +15,7 @@ export const getCities = async hhToken => {
   const r = await axios.get(`${baseUrl}/ee/dictionaries/cities`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('getCities result:', r.data);
+  // console.log('getCities result:', r.data);
   return r.data;
 };
 
@@ -23,7 +23,7 @@ export const getGenders = async hhToken => {
   const r = await axios.get(`${baseUrl}/ee/dictionaries/genders`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('getGenders result:', r.data);
+  // console.log('getGenders result:', r.data);
   return r.data;
 };
 
@@ -31,7 +31,7 @@ export const getPositions = async hhToken => {
   const r = await axios.get(`${baseUrl}/ee/dictionaries/positions`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('getPositions result:', r.data);
+  // console.log('getPositions result:', r.data);
   return r.data;
 };
 
@@ -39,6 +39,6 @@ export const getSchedules = async hhToken => {
   const r = await axios.get(`${baseUrl}/ee/dictionaries/schedules`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('getSchedules result:', r.data);
+  // console.log('getSchedules result:', r.data);
   return r.data;
 };

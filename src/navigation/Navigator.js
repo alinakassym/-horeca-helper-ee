@@ -1,5 +1,6 @@
 import React from 'react';
 import {JobsScreen} from '../screens/jobs/JobsScreen';
+import {JobsFilterScreen} from '../screens/jobs/JobsFilterScreen';
 import {RatingScreen} from '../screens/rating/RatingScreen';
 import {MessagesScreen} from '../screens/messages/MessagesScreen';
 import {ProfileScreen} from '../screens/profile/ProfileScreen';
@@ -87,6 +88,20 @@ export const Navigator = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="Tab" component={TabStack} />
+        <Stack.Screen
+          options={{
+            headerTitle: 'Filters',
+          }}
+          name="JobsFilterScreen"
+          component={JobsFilterScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: 'Jobs',
+          }}
+          name="Jobs"
+          component={JobsScreen}
+        />
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen
