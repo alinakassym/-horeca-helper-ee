@@ -14,8 +14,10 @@ import {IconRating} from '../assets/icons/tabs/IconRating';
 import {IconNotifications} from '../assets/icons/tabs/IconNotifications';
 import {IconProfile} from '../assets/icons/tabs/IconProfile';
 import {StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 
 export const Navigator = () => {
+  useSelector((state) => state.jobs.filter)
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
@@ -23,6 +25,11 @@ export const Navigator = () => {
     return (
       <Tab.Navigator
         initialRouteName="Jobs"
+        screenListeners={{
+          state: (e) => {
+            console.log('state changed', e.data.state.history);
+          },
+        }}
         screenOptions={{
           headerShown: false,
           tabBarLabelStyle: {

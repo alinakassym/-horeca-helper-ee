@@ -4,6 +4,8 @@ import {AuthContext} from './src/store/context';
 import {RootStackScreen} from './src/screens/RootStackScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigator} from './src/navigation/Navigator';
+import store from './src/store/index';
+import { Provider } from 'react-redux';
 
 import {
   NavigationContainer,
@@ -141,13 +143,15 @@ const App = () => {
     );
   }
   return (
-    <PaperProvider theme={theme}>
-      <AuthContext.Provider value={authContext}>
-        <NavigationContainer theme={theme}>
-          {loginState.userToken !== null ? <Navigator /> : <RootStackScreen />}
-        </NavigationContainer>
-      </AuthContext.Provider>
-    </PaperProvider>
+    <Provider store={store}>
+      <PaperProvider theme={theme}>
+        <AuthContext.Provider value={authContext}>
+          <NavigationContainer theme={theme}>
+            {loginState.userToken !== null ? <Navigator /> : <RootStackScreen />}
+          </NavigationContainer>
+        </AuthContext.Provider>
+      </PaperProvider>
+    </Provider>
   );
 };
 

@@ -6,9 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
 import {IconArrowDown} from '../../assets/icons/main/IconArrowDown';
+import { useSelector } from 'react-redux';
 
 export const JobsScreen = ({navigation}) => {
-
+  const filterState = useSelector((state) => state.jobs.filter)
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
@@ -16,24 +17,9 @@ export const JobsScreen = ({navigation}) => {
       const unsubscribe = navigation.addListener('focus', async () => {
         // The screen is focused
         const hhToken = await AsyncStorage.getItem('hhToken');
-        let params = {
-            positionId: null,
-            companyCategoryId: null,
-            cityId: null,
-            ageMin: null,
-            ageMax: null,
-            genderId: null,
-            experienceMin: null,
-            experienceMax: null,
-            scheduleId: null,
-            salaryMin: null,
-            salaryMax: null,
-            sortBy: 'updatedAt',
-            sortOrder: 'DESC',
-            pageSize: 10,
-            pageNum: 1
-        }
-        searchJobs(params, hhToken)
+
+
+        searchJobs(filterState, hhToken)
           .then(result => {
             setJobs(result.data.items);
           })
@@ -47,6 +33,7 @@ export const JobsScreen = ({navigation}) => {
     }
     fetchData();
   }, [navigation]);
+
 
   return (
     <View style={globalStyles.container}>
