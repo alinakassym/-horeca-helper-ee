@@ -42,3 +42,11 @@ export const updateWork = async (data, hhToken) => {
   console.log('Employees Service setWork result:', r.data);
   return r;
 };
+
+export const deleteWork = async (id, hhToken) => {
+  const r = await axios.delete(`${baseUrl}/ee/works/${id}`, {
+    headers: {Authorization: `Bearer ${hhToken || ''}`},
+  });
+  console.log('Employees Service deleteWork result:', r.data);
+  return r;
+};

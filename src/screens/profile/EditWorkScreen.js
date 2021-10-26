@@ -4,12 +4,12 @@ import {
   View,
   TextInput,
   ScrollView,
-  StyleSheet,
+  StyleSheet, Alert,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
-import {updateWork} from '../../services/EmployeesService';
+import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import {
   getCities,
@@ -17,6 +17,7 @@ import {
   getPositions, getSchedules,
 } from '../../services/DictionariesService';
 import {getCompanies} from "../../services/CompaniesService";
+import {deleteJobById} from "../../../../horeca-helper-er/src/services/JobsService";
 
 export const EditWorkScreen = ({route, navigation}) => {
 
@@ -77,6 +78,24 @@ export const EditWorkScreen = ({route, navigation}) => {
     fetchData();
   }, [navigation]);
 
+  const removeWork = async () => {
+    const hhToken = await AsyncStorage.getItem('hhToken');
+    deleteWork(work.id, hhToken).then(() => {
+      navigation.navigate('Profile');
+    });
+  };
+
+  const confirmDeletion = () => {
+    Alert.alert('Delete Job', 'Are you sure you want to delete?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Delete', onPress: () => removeWork(), style: 'destructive'},
+    ]);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <ModalSelect
@@ -120,9 +139,15 @@ export const EditWorkScreen = ({route, navigation}) => {
         }}
         value={work.description}
       />
-
-      <View style={styles.btn}>
-        <PrimaryButton label={'Save'} onPress={() => save()} />
+      <View style={styles.btnSection}>
+        <View style={styles.btn}>
+          <PrimaryButton label={'Save'} onPress={() => save()} />
+        </View>
+        <PrimaryButton
+          label={'Delete work'}
+          color={'#ea0000'}
+          onPress={() => confirmDeletion()}
+        />
       </View>
     </ScrollView>
   );
@@ -132,7 +157,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  btn: {
+  btnSection: {
     marginBottom: 42,
+  },
+  btn: {
+    marginBottom: 16,
   },
 });
