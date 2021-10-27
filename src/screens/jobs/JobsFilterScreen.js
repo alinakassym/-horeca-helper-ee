@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getPositions, getCategories, getCities} from '../../services/DictionariesService';
+import {getPositions, getCategories, getCities, getGenders, getSchedules} from '../../services/DictionariesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilter } from '../../store/slices/jobs';
 import {globalStyles} from '../../styles/globalStyles';
 
-export const JobsFilterScreen = ({route, navigation}) => {
+export const JobsFilterScreen = ({navigation}) => {
   const filterState = useSelector((state) => state.jobs.filter)
   const dispatch = useDispatch()
 
@@ -17,6 +17,8 @@ export const JobsFilterScreen = ({route, navigation}) => {
   const [positions, setPositions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
+  const [genders, setGenders] = useState([]);
+  const [schedules, setSchedules] = useState([]);
 
   const apply = async() => {
     await dispatch(setFilter(filters));
@@ -25,9 +27,11 @@ export const JobsFilterScreen = ({route, navigation}) => {
   const getData = async() => {
     const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
-      getPositions(hhToken),
       getCategories(hhToken),
       getCities(hhToken),
+      getPositions(hhToken),
+      getGenders(hhToken),
+      getSchedules(hhToken),
     ])
   };
 
@@ -35,10 +39,12 @@ export const JobsFilterScreen = ({route, navigation}) => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         getData()
-          .then(([positionsData, categoriesData, citiesData]) => {
+          .then(([categoriesData, citiesData, positionsData, gendersData, schedulesData]) => {
             setPositions(positionsData);
             setCategories(categoriesData);
             setCities(citiesData);
+            setGenders(gendersData);
+            setSchedules(schedulesData);
           })
           .catch(err =>{
             console.log(err);
@@ -88,6 +94,47 @@ export const JobsFilterScreen = ({route, navigation}) => {
         itemTitle={'title'}
       />
 
+      {/*Salary*/}
+      <View>
+        <Text style={globalStyles.label}>Salary</Text>
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>Min</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, salaryMin: val})
+              }}
+              value={filters.salaryMin ? filters.salaryMin.toString() : null}
+            />
+          </View>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>Max</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, salaryMax: val})
+              }}
+              value={filters.salaryMax ? filters.salaryMax.toString() : null}
+            />
+          </View>
+        </View>
+      </View>
+
+      {/*Schedule*/}
+      <ModalSelect
+        onChangeText={val => {
+          setFilters({...filters, schedule: val});
+        }}
+        label={'Schedule'}
+        value={filters}
+        valueKey={'schedule'}
+        items={schedules}
+        itemTitle={'title'}
+      />
+
       {/*Age*/}
       <View>
         <Text style={globalStyles.label}>Age</Text>
@@ -117,14 +164,46 @@ export const JobsFilterScreen = ({route, navigation}) => {
         </View>
       </View>
 
-      <Text style={globalStyles.label}>Test</Text>
-      <TextInput
-        style={globalStyles.primaryInput}
+      {/*Genders*/}
+      <ModalSelect
         onChangeText={val => {
-          setFilters({...filters, test: val})
+          setFilters({...filters, gender: val});
         }}
-        value={filters.test}
+        label={'Gender'}
+        value={filters}
+        valueKey={'gender'}
+        items={genders}
+        itemTitle={'title'}
       />
+
+      {/*Experience*/}
+      <View>
+        <Text style={globalStyles.label}>Experience</Text>
+        <View style={styles.row}>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>From</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, experienceMin: val})
+              }}
+              value={filters.experienceMin ? filters.experienceMin.toString() : null}
+            />
+          </View>
+          <View style={styles.col}>
+            <Text style={globalStyles.text}>To</Text>
+            <TextInput
+              keyboardType={'number-pad'}
+              style={globalStyles.primaryInput}
+              onChangeText={val => {
+                setFilters({...filters, experienceMax: val})
+              }}
+              value={filters.experienceMax ? filters.experienceMax.toString() : null}
+            />
+          </View>
+        </View>
+      </View>
 
       <View style={styles.btn}>
         <PrimaryButton label={'Save'} onPress={() => apply()} />

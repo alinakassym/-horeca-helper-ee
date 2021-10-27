@@ -14,9 +14,11 @@ export const jobsSlice = createSlice({
       ageMin: null,
       ageMax: null,
       genderId: null,
+      gender: null,
       experienceMin: null,
       experienceMax: null,
       scheduleId: null,
+      schedule: null,
       salaryMin: null,
       salaryMax: null,
       sortBy: 'updatedAt',
@@ -27,7 +29,7 @@ export const jobsSlice = createSlice({
   },
   reducers: {
     setFilter: (state, action) => {
-      const data = {
+      state.filter = {
         test: action.payload.test,
         position: action.payload.position,
         positionId: action.payload.position ? action.payload.position.id : null,
@@ -37,18 +39,19 @@ export const jobsSlice = createSlice({
         city: action.payload.city,
         ageMin: action.payload.ageMin,
         ageMax: action.payload.ageMax,
-        genderId: null,
-        experienceMin: null,
-        experienceMax: null,
-        scheduleId: null,
-        salaryMin: null,
-        salaryMax: null,
+        genderId: action.payload.gender ? action.payload.gender.id : null,
+        gender: action.payload.gender,
+        experienceMin: action.payload.experienceMin,
+        experienceMax: action.payload.experienceMax,
+        scheduleId: action.payload.schedule ? action.payload.schedule.id : null,
+        schedule: action.payload.schedule,
+        salaryMin: action.payload.salaryMin,
+        salaryMax: action.payload.salaryMax,
         sortBy: 'updatedAt',
         sortOrder: 'DESC',
         pageSize: 10,
         pageNum: 1
       }
-      state.filter = data
     },
   },
 })
