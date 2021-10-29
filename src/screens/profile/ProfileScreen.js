@@ -22,38 +22,41 @@ import PlainButton from '../../components/buttons/PlainButton';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WorkCard} from '../../components/works/WorkCard';
+import {setFilter} from '../../store/slices/jobs';
+import {useDispatch} from 'react-redux';
+import { IconSearch } from "../../assets/icons/main/IconSearch";
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
 
-  const [employee, setEmployee] = useState({});
+  const [me, setMe] = useState({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
-        // The screen is focused
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        getEmployee(hhToken)
-          .then(res => {
-            console.log(
-              'ProfileScreen employee/me:',
-              res.data.works[0].company,
-            );
-            setEmployee(res.data);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error('ProfileScreen error');
-            console.log(err);
-          });
-      });
-
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
-    }
-    fetchData();
-  }, [navigation]);
+  const dispatch = useDispatch();
+  const apply = async () => {
+    await dispatch(
+      setFilter({
+        positionId: me.positionId,
+        position: me.position,
+        companyCategoryId: null,
+        cityId: me.cityId,
+        city: me.city,
+        ageMin: me.ageMin,
+        ageMax: me.ageMax,
+        genderId: me.genderId,
+        experienceMin: me.experienceMin,
+        experienceMax: me.experienceMax,
+        scheduleId: me.scheduleId,
+        salaryMin: me.salaryMin,
+        salaryMax: me.salaryMax,
+        sortBy: 'relevance',
+        sortOrder: 'DESC',
+        pageSize: 5,
+        pageNum: 1,
+      }),
+    );
+    navigation.navigate('Jobs');
+  };
 
   const logOut = () => {
     console.log('AuthContext', AuthContext);
@@ -70,6 +73,29 @@ export const ProfileScreen = ({navigation}) => {
   const toggleNotification = () =>
     setIsNotification(previousNotificationState => !previousNotificationState);
 
+  useEffect(() => {
+    function fetchData() {
+      const unsubscribe = navigation.addListener('focus', async () => {
+        // The screen is focused
+        const hhToken = await AsyncStorage.getItem('hhToken');
+        getEmployee(hhToken)
+          .then(res => {
+            console.log('ProfileScreen employee/me:', res.data);
+            setMe(res.data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error('ProfileScreen error');
+            console.log(err);
+          });
+      });
+
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return unsubscribe;
+    }
+    fetchData();
+  }, [navigation]);
+
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -82,7 +108,7 @@ export const ProfileScreen = ({navigation}) => {
     <ScrollView style={globalStyles.container}>
       <View style={styles.profilePhoto}>
         <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={{uri: employee.photoUrl}} />
+          <Image style={styles.image} source={{uri: me.photoUrl}} />
         </View>
       </View>
 
@@ -91,25 +117,25 @@ export const ProfileScreen = ({navigation}) => {
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
           <Text style={styles.text}>
-            {employee.firstName || 'Is not entered'} {employee.lastName || ''}
+            {me.firstName || 'Is not entered'} {me.lastName || ''}
           </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('ProfileEditScreen', {
-                value: employee,
+                value: me,
               });
             }}>
             <IconPencil color={'#767676'} size={24} width={1.5} />
           </TouchableOpacity>
         </View>
 
-        {(employee.position || employee.gender || employee.schedule) && (
+        {(me.position || me.gender || me.schedule) && (
           <View style={[styles.row, styles.paddingTop0]}>
-            {employee.schedule && <Text>{employee.schedule.title}</Text>}
-            {employee.schedule && employee.position && <Text>, </Text>}
-            {employee.position && <Text>{employee.position.title}</Text>}
-            {employee.position && employee.gender && <Text>, </Text>}
-            {employee.gender && <Text>{employee.gender.title}</Text>}
+            {me.schedule && <Text>{me.schedule.title}</Text>}
+            {me.schedule && me.position && <Text>, </Text>}
+            {me.position && <Text>{me.position.title}</Text>}
+            {me.position && me.gender && <Text>, </Text>}
+            {me.gender && <Text>{me.gender.title}</Text>}
           </View>
         )}
 
@@ -117,8 +143,8 @@ export const ProfileScreen = ({navigation}) => {
           <View style={styles.iconWrapper}>
             <IconAddress color={'#767676'} size={24} width={1.5} />
           </View>
-          {employee.city ? (
-            <Text style={styles.text}>{employee.city.title}</Text>
+          {me.city ? (
+            <Text style={styles.text}>{me.city.title}</Text>
           ) : (
             <Text>Is not entered</Text>
           )}
@@ -128,16 +154,28 @@ export const ProfileScreen = ({navigation}) => {
           <View style={styles.iconWrapper}>
             <IconMail color={'#767676'} size={24} width={1.5} />
           </View>
-          <Text style={styles.text}>{employee.email}</Text>
+          <Text style={styles.text}>{me.email}</Text>
         </View>
 
         <View style={styles.row}>
           <View style={styles.iconWrapper}>
             <IconComment color={'#767676'} size={24} width={1.5} />
           </View>
-          <Text style={styles.text}>
-            {employee.description || 'About me ...'}
-          </Text>
+          <Text style={styles.text}>{me.description || 'About me ...'}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.iconWrapper}>
+            <IconSearch color={'#185AB7'} size={24} width={1.5} />
+          </View>
+          <PlainButton
+            label={'Find job'}
+            onPress={() =>
+              apply().then(() => {
+                navigation.navigate('Jobs');
+              })
+            }>
+          </PlainButton>
         </View>
       </View>
 
@@ -159,7 +197,7 @@ export const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.column}>
-          {employee.works.map((item, index) => (
+          {me.works.map((item, index) => (
             <View key={index}>
               <View style={styles.divider} />
               <WorkCard

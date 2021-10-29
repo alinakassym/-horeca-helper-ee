@@ -30,6 +30,9 @@ export const Navigator = () => {
           state: e => {
             console.log('state changed', e.data.state.history);
           },
+          blur: e => {
+            console.log('blur: ', e);
+          },
         }}
         screenOptions={{
           headerShown: false,

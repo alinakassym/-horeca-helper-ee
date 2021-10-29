@@ -13,43 +13,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
 import {IconArrowDown} from '../../assets/icons/main/IconArrowDown';
-import {useDispatch, useSelector} from 'react-redux';
-import PrimaryButton from '../../components/buttons/PrimaryButton';
-import {setFilter} from '../../store/slices/jobs';
-import {getEmployee} from '../../services/EmployeesService';
+import {useSelector} from 'react-redux';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
-  const dispatch = useDispatch();
 
   const [jobs, setJobs] = useState([]);
-  const [me, setMe] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const apply = async () => {
-    const filterBy = {
-      positionId: me.positionId,
-      position: me.position,
-      companyCategoryId: null,
-      cityId: me.cityId,
-      city: me.city,
-      ageMin: me.ageMin,
-      ageMax: me.ageMax,
-      genderId: me.genderId,
-      experienceMin: me.experienceMin,
-      experienceMax: me.experienceMax,
-      scheduleId: me.scheduleId,
-      salaryMin: me.salaryMin,
-      salaryMax: me.salaryMax,
-      sortBy: 'relevance',
-      sortOrder: 'DESC',
-      pageSize: 5,
-      pageNum: 1,
-    };
-
-    await dispatch(setFilter(filterBy));
-    navigation.navigate('JobsFilterScreen');
-  };
 
   useEffect(() => {
     function fetchData() {
@@ -59,13 +29,6 @@ export const JobsScreen = ({navigation}) => {
         searchJobs(filterState, hhToken)
           .then(result => {
             setJobs(result.data.items);
-          })
-          .catch(e => {
-            console.log('searchJobs err:', e);
-          });
-        getEmployee(hhToken)
-          .then(result => {
-            setMe(result.data);
             setLoading(false);
           })
           .catch(e => {
@@ -107,15 +70,6 @@ export const JobsScreen = ({navigation}) => {
           <Text style={globalStyles.filterBtnLeftText}>Order by</Text>
           <IconArrowDown color={'#767676'} size={24} width={1.5} />
         </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <PrimaryButton
-          label={'Find relevant'}
-          onPress={() => {
-            apply().then(r => {});
-          }}
-        />
       </View>
 
       <ScrollView>
