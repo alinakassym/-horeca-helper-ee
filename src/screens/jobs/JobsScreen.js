@@ -23,8 +23,7 @@ export const JobsScreen = ({navigation}) => {
 
   useEffect(() => {
     function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
-        // The screen is focused
+      return navigation.addListener('focus', async () => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         searchJobs(filterState, hhToken)
           .then(result => {
@@ -35,16 +34,13 @@ export const JobsScreen = ({navigation}) => {
             console.log('searchJobs err:', e);
           });
       });
-
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
     }
     fetchData();
   }, [filterState, navigation]);
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.fullScreenSection}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -91,6 +87,11 @@ export const JobsScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  fullScreenSection: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   topSection: {
     marginTop: 16,
     padding: 14,
