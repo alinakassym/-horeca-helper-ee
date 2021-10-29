@@ -5,6 +5,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,76 +45,99 @@ export const JobScreen = ({route, navigation}) => {
   }
   return (
     <ScrollView style={styles.container}>
-      {/*Company*/}
-      <Text>Company: {job.company?.title}</Text>
+      <View style={styles.row}>
+        <View style={styles.col}>
+          <Text style={styles.positionTitle}>
+            {job.position.title} {job.schedule && `(${job.schedule.title})`}
+          </Text>
+          {job.salaryMin && job.salaryMax ? (
+            <Text style={styles.salary}>
+              {job.salaryMin} - {job.salaryMax} KZT
+            </Text>
+          ) : job.salaryMin ? (
+            <Text style={styles.salary}>From {job.salaryMin} KZT</Text>
+          ) : (
+            <Text style={styles.salary}>To {job.salaryMax} KZT</Text>
+          )}
+          {job.city && <Text style={styles.cityTitle}>{job.city.title}</Text>}
+          <Text style={styles.companyTitle}>{job.company.title}</Text>
+          <Text style={styles.companyDescription}>
+            {job.company.description}
+          </Text>
+          <Text style={styles.description}>{job.description}</Text>
+          <Text style={styles.createdAt}>Created at: {job.createdAt}</Text>
+        </View>
 
-      {/*Position*/}
-      <Text>Position: {job.position?.title}</Text>
-
-      {/*Job location*/}
-      <Text>Location: {job.city?.title}</Text>
-
-      {/*Schedule*/}
-      <Text>Schedule: {job.schedule?.title}</Text>
-
-      {/*Age*/}
-      <Text>
-        Age: {job.ageMin} - {job.ageMax || 'Not entered'}
-      </Text>
-
-      {/*Gender*/}
-      <Text>Gender: {job.gender?.title}</Text>
-
-      {/*Experience*/}
-      <Text>
-        Experience: {job.experienceMin} - {job.experienceMax || 'Not entered'}{' '}
-        years
-      </Text>
-
-      {/*Salary*/}
-      <Text>
-        Salary: {job.salaryMin} {job.salaryMax ? `- ${job.salaryMax}` : ''}{' '}
-        USD
-      </Text>
-
-      {/*Description*/}
-      <Text>Description: {job.description}</Text>
-
-
-
+        <View style={[styles.col, styles.floatLeftTop]}>
+          <View style={styles.imageWrapper}>
+            <Image style={styles.img} source={{uri: job.company.photoUrl}} />
+          </View>
+        </View>
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-  },
-  sliderWrapper: {
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-  btnSection: {
-    marginBottom: 42,
-  },
-  btn: {
-    marginBottom: 16,
-  },
-  multiline: {
-    height: 100,
-    textAlignVertical: 'top',
+    paddingHorizontal: 16,
+    paddingVertical: 28,
   },
   row: {
-    marginRight: -5,
-    marginLeft: -5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   col: {
-    marginLeft: 5,
-    marginRight: 5,
-    flex: 1,
+    flexDirection: 'column',
   },
+  floatLeftTop: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  imageWrapper: {
+    height: 40,
+    width: 40,
+    borderRadius: 30,
+    backgroundColor: '#767676',
+    overflow: 'hidden',
+  },
+  img: {
+    height: '100%',
+    width: '100%',
+  },
+  positionTitle: {
+    marginBottom: 18,
+    fontFamily: 'Roboto-Bold',
+    fontSize: 22,
+    color: '#000000',
+  },
+  salary: {
+    marginBottom: 18,
+    fontSize: 16,
+    color: '#000000',
+  },
+  cityTitle: {
+    marginBottom: 8,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    color: '#000000',
+  },
+  companyTitle: {
+    marginBottom: 4,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    color: '#000000',
+  },
+  companyDescription: {
+    marginBottom: 18,
+    fontSize: 16,
+  },
+  description: {
+    marginBottom: 18,
+    fontSize: 16,
+    color: '#000000',
+  },
+  createdAt: {},
 });
 
 export default JobScreen;

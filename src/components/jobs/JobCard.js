@@ -11,12 +11,12 @@ export const JobCard = ({item, onPress}) => {
           </Text>
           {item.salaryMin && item.salaryMax ? (
             <Text style={styles.salary}>
-              {item.salaryMin} - {item.salaryMax} $
+              {item.salaryMin} - {item.salaryMax} KZT
             </Text>
           ) : item.salaryMin ? (
-            <Text style={styles.salary}>From {item.salaryMin} $</Text>
+            <Text style={styles.salary}>From {item.salaryMin} KZT</Text>
           ) : (
-            <Text style={styles.salary}>To {item.salaryMax} $</Text>
+            <Text style={styles.salary}>To {item.salaryMax} KZT</Text>
           )}
           {item.city && <Text style={styles.cityTitle}>{item.city.title}</Text>}
           <Text style={styles.companyTitle}>{item.company.title}</Text>
