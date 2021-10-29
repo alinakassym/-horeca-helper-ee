@@ -44,6 +44,7 @@ export const ProfileScreen = ({navigation}) => {
         ageMin: me.ageMin,
         ageMax: me.ageMax,
         genderId: me.genderId,
+        gender: me.gender,
         experienceMin: me.experienceMin,
         experienceMax: me.experienceMax,
         scheduleId: me.scheduleId,
@@ -51,7 +52,7 @@ export const ProfileScreen = ({navigation}) => {
         salaryMax: me.salaryMax,
         sortBy: 'relevance',
         sortOrder: 'DESC',
-        pageSize: 5,
+        pageSize: 10,
         pageNum: 1,
       }),
     );
