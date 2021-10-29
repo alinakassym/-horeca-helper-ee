@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -14,9 +14,7 @@ class PlainButton extends React.PureComponent {
     const children = this.props.children;
     const btnColor = color ? color : '#185AB7';
     return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={styles.btn}>
+      <TouchableOpacity onPress={onPress} style={styles.btn}>
         {children}
         <Text style={[styles.btnLabel, {color: btnColor}]}>{label}</Text>
       </TouchableOpacity>
@@ -27,8 +25,10 @@ class PlainButton extends React.PureComponent {
 const styles = StyleSheet.create({
   btn: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
     borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#777777',
     shadowOffset: {
       width: 0,
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
   },
   btnLabel: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 14,
+    lineHeight: 16,
     color: '#FFFFFF',
   },
 });

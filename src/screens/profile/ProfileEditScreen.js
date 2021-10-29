@@ -15,7 +15,8 @@ import {ModalSelect} from '../../components/selects/ModalSelect';
 import {
   getCities,
   getGenders,
-  getPositions, getSchedules,
+  getPositions,
+  getSchedules,
 } from '../../services/DictionariesService';
 
 export const ProfileEditScreen = ({route, navigation}) => {

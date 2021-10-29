@@ -11,17 +11,17 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
-import {IconPhone} from '../../assets/icons/main/IconPhone';
+import {IconAdd} from '../../assets/icons/main/IconAdd';
 import {IconComment} from '../../assets/icons/main/IconComment';
 import {IconAddress} from '../../assets/icons/main/IconAddress';
 import {IconMail} from '../../assets/icons/main/IconMail';
 import {IconPencil} from '../../assets/icons/main/IconPencil';
-import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {getEmployee} from '../../services/EmployeesService';
 import PlainButton from '../../components/buttons/PlainButton';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {WorkCard} from '../../components/works/WorkCard';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -36,7 +36,10 @@ export const ProfileScreen = ({navigation}) => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getEmployee(hhToken)
           .then(res => {
-            console.log('ProfileScreen employee/me:', res.data);
+            console.log(
+              'ProfileScreen employee/me:',
+              res.data.works[0].company,
+            );
             setEmployee(res.data);
             setLoading(false);
           })
@@ -123,13 +126,6 @@ export const ProfileScreen = ({navigation}) => {
 
         <View style={styles.row}>
           <View style={styles.iconWrapper}>
-            <IconPhone color={'#767676'} size={24} width={1.5} />
-          </View>
-          <Text style={styles.text}>+7 (777) 123 34 45</Text>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.iconWrapper}>
             <IconMail color={'#767676'} size={24} width={1.5} />
           </View>
           <Text style={styles.text}>{employee.email}</Text>
@@ -146,7 +142,7 @@ export const ProfileScreen = ({navigation}) => {
       </View>
 
       {/*Works*/}
-      <Text style={styles.label}>Works</Text>
+      <Text style={styles.label}>Past Experience</Text>
 
       {/*Works*/}
       <View style={styles.block}>
@@ -155,20 +151,24 @@ export const ProfileScreen = ({navigation}) => {
             onPress={() => {
               navigation.navigate('AddWorkScreen');
             }}>
-            <PlainButton label={'Add'} />
+            <PlainButton label={'Add work experience'}>
+              <View style={styles.btnIcon}>
+                <IconAdd color={'#185AB7'} size={24} width={1.5} />
+              </View>
+            </PlainButton>
           </TouchableOpacity>
         </View>
         <View style={styles.column}>
           {employee.works.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[styles.row, styles.spaceBetween]}
-              onPress={() => {
-                navigation.navigate('EditWorkScreen', {value: item});
-              }}>
-              <Text style={styles.text}>{item.company.title}</Text>
-              <IconExpandRight color={'#767676'} size={24} width={1.5} />
-            </TouchableOpacity>
+            <View key={index}>
+              <View style={styles.divider} />
+              <WorkCard
+                item={item}
+                onPress={() => {
+                  navigation.navigate('EditWorkScreen', {value: item});
+                }}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -293,5 +293,14 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  btnIcon: {
+    paddingRight: 8,
+  },
+  divider: {
+    height: 1,
+    width: '100%',
+    borderBottomColor: '#cccccc',
+    borderBottomWidth: 1,
   },
 });
