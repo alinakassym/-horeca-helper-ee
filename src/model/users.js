@@ -8,7 +8,7 @@ const Users = [
     familyName: 'Allison',
     givenName: 'Adam',
     name: 'Adam Allison',
-    photo:
+    photoUrl:
       'https://images.generated.photos/6nIN56AWpT7A4UafqanZ48-M7f5ZwfvyQJpVR3qEDjE/rs:fit:512:512/wm:0.95:sowe:18:18:0.33/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDc0MDk5LmpwZw.jpg',
   },
   {
@@ -20,7 +20,7 @@ const Users = [
     familyName: 'Ballack',
     givenName: 'Ben',
     name: 'Ben Ballack',
-    photo:
+    photoUrl:
       'https://images.generated.photos/6nIN56AWpT7A4UafqanZ48-M7f5ZwfvyQJpVR3qEDjE/rs:fit:512:512/wm:0.95:sowe:18:18:0.33/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDc0MDk5LmpwZw.jpg',
   },
   {
@@ -32,7 +32,7 @@ const Users = [
     familyName: 'Cortes',
     givenName: 'Claire',
     name: 'Claire Cortes',
-    photo:
+    photoUrl:
       'https://images.generated.photos/6nIN56AWpT7A4UafqanZ48-M7f5ZwfvyQJpVR3qEDjE/rs:fit:512:512/wm:0.95:sowe:18:18:0.33/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/MDc0MDk5LmpwZw.jpg',
   },
 ];

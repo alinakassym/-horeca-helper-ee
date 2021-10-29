@@ -33,7 +33,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
       firstName: employee.firstName,
       lastName: employee.lastName,
       email: employee.email,
-      photo: employee.photo,
+      photoUrl: employee.photoUrl,
       googleId: employee.googleId,
       positionId: employee.position ? employee.position.id : null,
       description: employee.position ? employee.description : '',
@@ -97,7 +97,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
     <ScrollView style={styles.container}>
       <View style={styles.profilePhoto}>
         <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={{uri: employee.photo}} />
+          <Image style={styles.image} source={{uri: employee.photoUrl}} />
         </View>
       </View>
 

@@ -75,7 +75,7 @@ export const SignInScreen = () => {
                 userToken: userInfo.idToken,
                 hhToken: authData.hhToken,
                 username: userInfo.user.email,
-                photo: userInfo.user.photo,
+                photoUrl: userInfo.user.photoUrl,
               },
             ];
             await storeData(foundUser[0]);
