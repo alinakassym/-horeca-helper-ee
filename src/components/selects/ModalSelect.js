@@ -8,6 +8,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
+import {IconClose} from '../../assets/icons/main/IconClose';
+
 export const ModalSelect = ({
   label,
   value,
@@ -17,38 +19,70 @@ export const ModalSelect = ({
   placeholder,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [item, setItem] = useState(value[valueKey]);
 
   const placeholderText = placeholder ? placeholder : 'Select';
 
   const saveHandler = selectedItem => {
+    setItem(selectedItem);
     value[valueKey] = selectedItem;
     setVisible(false);
   };
 
-  return (
-    <React.Fragment>
+  const clearValue = val => {
+    setItem(val);
+    value[valueKey] = val;
+    setVisible(false);
+  };
+
+  const ValueSection = () => {
+    return (
+      <View style={styles.valueSection}>
+        <Pressable
+          onPress={() => {
+            setVisible(true);
+          }}>
+          <Text style={globalStyles.select}>{item[itemTitle]}</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            clearValue(null);
+          }}
+          style={styles.clearBtn}>
+          <IconClose color={'#898989'} />
+        </Pressable>
+      </View>
+    );
+  };
+
+  const PlaceHolder = () => {
+    return (
       <Pressable
         onPress={() => {
           setVisible(true);
         }}>
-        <Text style={globalStyles.label}>{label}</Text>
-        {value[valueKey] ? (
-          <Text style={globalStyles.select}>{value[valueKey][itemTitle]}</Text>
-        ) : (
-          <Text style={globalStyles.select}>{placeholderText}</Text>
-        )}
+        <Text style={globalStyles.select}>{placeholderText}</Text>
       </Pressable>
+    );
+  };
+
+  return (
+    <React.Fragment>
+      <View>
+        <Text style={globalStyles.label}>{label}</Text>
+        {value[valueKey] ? <ValueSection /> : <PlaceHolder />}
+      </View>
       <Modal visible={visible} animationType="slide" transparent={true}>
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
           <View style={styles.wrap}>
-            {items.map((item, index) => (
+            {items.map((listItem, index) => (
               <TouchableOpacity
                 style={styles.item}
                 key={index}
                 onPress={() => {
-                  saveHandler(item);
+                  saveHandler(listItem);
                 }}>
-                <Text style={globalStyles.text}>{item[itemTitle]}</Text>
+                <Text style={globalStyles.text}>{listItem[itemTitle]}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -75,5 +109,13 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  valueSection: {
+    position: 'relative',
+  },
+  clearBtn: {
+    position: 'absolute',
+    right: 11,
+    top: 12.5,
   },
 });

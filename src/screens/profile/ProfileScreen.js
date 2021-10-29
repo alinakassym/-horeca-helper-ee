@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WorkCard} from '../../components/works/WorkCard';
 import {setFilter} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
-import { IconSearch } from "../../assets/icons/main/IconSearch";
+import {IconSearch} from '../../assets/icons/main/IconSearch';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -75,7 +75,7 @@ export const ProfileScreen = ({navigation}) => {
 
   useEffect(() => {
     function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
+      return navigation.addListener('focus', async () => {
         // The screen is focused
         const hhToken = await AsyncStorage.getItem('hhToken');
         getEmployee(hhToken)
@@ -89,16 +89,13 @@ export const ProfileScreen = ({navigation}) => {
             console.log(err);
           });
       });
-
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
     }
     fetchData();
   }, [navigation]);
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.fullScreenSection}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -174,8 +171,8 @@ export const ProfileScreen = ({navigation}) => {
               apply().then(() => {
                 navigation.navigate('Jobs');
               })
-            }>
-          </PlainButton>
+            }
+          />
         </View>
       </View>
 
@@ -264,6 +261,11 @@ export const ProfileScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  fullScreenSection: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   label: {
     paddingTop: 24,
     paddingBottom: 8,
