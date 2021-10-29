@@ -11,6 +11,7 @@ import {globalStyles} from '../../styles/globalStyles';
 import {IconClose} from '../../assets/icons/main/IconClose';
 
 export const ModalSelect = ({
+  required,
   label,
   value,
   valueKey,
@@ -61,7 +62,13 @@ export const ModalSelect = ({
         onPress={() => {
           setVisible(true);
         }}>
-        <Text style={globalStyles.select}>{placeholderText}</Text>
+        {required ? (
+          <Text style={[globalStyles.select, {color: '#E74C3C'}]}>
+            {placeholderText}
+          </Text>
+        ) : (
+          <Text style={globalStyles.select}>{placeholderText}</Text>
+        )}
       </Pressable>
     );
   };

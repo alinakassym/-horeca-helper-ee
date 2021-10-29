@@ -4,47 +4,47 @@ import {
   View,
   TextInput,
   ScrollView,
-  StyleSheet, Alert,
+  StyleSheet,
+  Alert,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
-import {
-  getCities,
-  getGenders,
-  getPositions, getSchedules,
-} from '../../services/DictionariesService';
-import {getCompanies} from "../../services/CompaniesService";
-import {deleteJobById} from "../../../../horeca-helper-er/src/services/JobsService";
+import {getCities, getPositions} from '../../services/DictionariesService';
+import {getCompanies} from '../../services/CompaniesService';
 
 export const EditWorkScreen = ({route, navigation}) => {
-
   const [work, setWork] = useState(route.params.value);
   const [companies, setCompanies] = useState([]);
   const [cities, setCities] = useState([]);
   const [positions, setPositions] = useState([]);
 
   const save = async () => {
-    const hhToken = await AsyncStorage.getItem('hhToken');
-    const data = {
-      id: work.id,
-      companyId: work.company ? work.company.id : null,
-      positionId: work.position ? work.position.id : null,
-      description: work.description,
-      cityId: work.city ? work.city.id : null,
-      startDate: work.startDate,
-      endDate: work.endDate,
-    };
-    updateWork(data, hhToken).then(() => {
-      navigation.navigate('Profile');
-    });
+    const isValid = work.company && work.position && work.city;
+    if (isValid) {
+      const hhToken = await AsyncStorage.getItem('hhToken');
+      const data = {
+        id: work.id,
+        companyId: work.company ? work.company.id : null,
+        positionId: work.position ? work.position.id : null,
+        description: work.description,
+        cityId: work.city ? work.city.id : null,
+        startDate: work.startDate,
+        endDate: work.endDate,
+      };
+      updateWork(data, hhToken).then(() => {
+        navigation.navigate('Profile');
+      });
+    } else {
+      Alert.alert('Warning', 'Location, company & position are required');
+    }
   };
 
   useEffect(() => {
     function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
+      return navigation.addListener('focus', async () => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getCompanies(hhToken)
           .then(companiesData => {
@@ -71,9 +71,6 @@ export const EditWorkScreen = ({route, navigation}) => {
             console.log('getPositions err:', e);
           });
       });
-
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
     }
     fetchData();
   }, [navigation]);
@@ -107,6 +104,7 @@ export const EditWorkScreen = ({route, navigation}) => {
         valueKey={'city'}
         items={cities}
         itemTitle={'title'}
+        required={true}
       />
 
       <ModalSelect
@@ -118,6 +116,7 @@ export const EditWorkScreen = ({route, navigation}) => {
         valueKey={'company'}
         items={companies}
         itemTitle={'title'}
+        required={true}
       />
 
       <ModalSelect
@@ -129,6 +128,7 @@ export const EditWorkScreen = ({route, navigation}) => {
         valueKey={'position'}
         items={positions}
         itemTitle={'title'}
+        required={true}
       />
 
       <Text style={globalStyles.label}>Description</Text>

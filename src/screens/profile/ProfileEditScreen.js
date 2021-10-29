@@ -247,6 +247,6 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
   },
   warningText: {
-    color: '#F50057',
+    color: '#E74C3C',
   },
 });
