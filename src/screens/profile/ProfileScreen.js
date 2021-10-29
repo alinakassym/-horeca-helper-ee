@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, ScrollView, Image, StyleSheet, Switch, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Switch,
+  ActivityIndicator,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
@@ -143,9 +151,10 @@ export const ProfileScreen = ({navigation}) => {
       {/*Works*/}
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween]}>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('AddWorkScreen');
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AddWorkScreen');
+            }}>
             <PlainButton label={'Add'} />
           </TouchableOpacity>
         </View>

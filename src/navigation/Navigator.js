@@ -1,6 +1,7 @@
 import React from 'react';
 import {JobsScreen} from '../screens/jobs/JobsScreen';
 import {JobsFilterScreen} from '../screens/jobs/JobsFilterScreen';
+import {JobScreen} from '../screens/jobs/JobScreen';
 import {RatingScreen} from '../screens/rating/RatingScreen';
 import {MessagesScreen} from '../screens/messages/MessagesScreen';
 import {ProfileScreen} from '../screens/profile/ProfileScreen';
@@ -17,7 +18,7 @@ import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 
 export const Navigator = () => {
-  useSelector((state) => state.jobs.filter)
+  useSelector(state => state.jobs.filter);
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
@@ -26,7 +27,7 @@ export const Navigator = () => {
       <Tab.Navigator
         initialRouteName="Jobs"
         screenListeners={{
-          state: (e) => {
+          state: e => {
             console.log('state changed', e.data.state.history);
           },
         }}
@@ -103,6 +104,13 @@ export const Navigator = () => {
           }}
           name="JobsFilterScreen"
           component={JobsFilterScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: 'Job',
+          }}
+          name="JobScreen"
+          component={JobScreen}
         />
       </Stack.Group>
       <Stack.Group>

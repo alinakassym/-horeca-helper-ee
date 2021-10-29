@@ -1,16 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getPositions, getCategories, getCities, getGenders, getSchedules} from '../../services/DictionariesService';
+import {
+  getPositions,
+  getCategories,
+  getCities,
+  getGenders,
+  getSchedules,
+} from '../../services/DictionariesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFilter } from '../../store/slices/jobs';
+import {useSelector, useDispatch} from 'react-redux';
+import {setFilter} from '../../store/slices/jobs';
 import {globalStyles} from '../../styles/globalStyles';
 
 export const JobsFilterScreen = ({navigation}) => {
-  const filterState = useSelector((state) => state.jobs.filter)
-  const dispatch = useDispatch()
+  const filterState = useSelector(state => state.jobs.filter);
+  const dispatch = useDispatch();
 
   const [filters, setFilters] = useState({...filterState});
 
@@ -20,11 +26,11 @@ export const JobsFilterScreen = ({navigation}) => {
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
 
-  const apply = async() => {
+  const apply = async () => {
     await dispatch(setFilter(filters));
     navigation.navigate('Jobs');
   };
-  const getData = async() => {
+  const getData = async () => {
     const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
       getCategories(hhToken),
@@ -32,24 +38,31 @@ export const JobsFilterScreen = ({navigation}) => {
       getPositions(hhToken),
       getGenders(hhToken),
       getSchedules(hhToken),
-    ])
+    ]);
   };
 
   useEffect(() => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
         getData()
-          .then(([categoriesData, citiesData, positionsData, gendersData, schedulesData]) => {
-            setPositions(positionsData);
-            setCategories(categoriesData);
-            setCities(citiesData);
-            setGenders(gendersData);
-            setSchedules(schedulesData);
-          })
-          .catch(err =>{
+          .then(
+            ([
+              categoriesData,
+              citiesData,
+              positionsData,
+              gendersData,
+              schedulesData,
+            ]) => {
+              setPositions(positionsData);
+              setCategories(categoriesData);
+              setCities(citiesData);
+              setGenders(gendersData);
+              setSchedules(schedulesData);
+            },
+          )
+          .catch(err => {
             console.log(err);
-          })
-
+          });
       });
       return unsubscribe;
     }
@@ -104,7 +117,7 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, salaryMin: val})
+                setFilters({...filters, salaryMin: val});
               }}
               value={filters.salaryMin ? filters.salaryMin.toString() : null}
             />
@@ -115,7 +128,7 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, salaryMax: val})
+                setFilters({...filters, salaryMax: val});
               }}
               value={filters.salaryMax ? filters.salaryMax.toString() : null}
             />
@@ -145,7 +158,7 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, ageMin: val})
+                setFilters({...filters, ageMin: val});
               }}
               value={filters.ageMin ? filters.ageMin.toString() : null}
             />
@@ -156,7 +169,7 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, ageMax: val})
+                setFilters({...filters, ageMax: val});
               }}
               value={filters.ageMax ? filters.ageMax.toString() : null}
             />
@@ -186,9 +199,11 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, experienceMin: val})
+                setFilters({...filters, experienceMin: val});
               }}
-              value={filters.experienceMin ? filters.experienceMin.toString() : null}
+              value={
+                filters.experienceMin ? filters.experienceMin.toString() : null
+              }
             />
           </View>
           <View style={styles.col}>
@@ -197,18 +212,19 @@ export const JobsFilterScreen = ({navigation}) => {
               keyboardType={'number-pad'}
               style={globalStyles.primaryInput}
               onChangeText={val => {
-                setFilters({...filters, experienceMax: val})
+                setFilters({...filters, experienceMax: val});
               }}
-              value={filters.experienceMax ? filters.experienceMax.toString() : null}
+              value={
+                filters.experienceMax ? filters.experienceMax.toString() : null
+              }
             />
           </View>
         </View>
       </View>
 
       <View style={styles.btn}>
-        <PrimaryButton label={'Save'} onPress={() => apply()} />
+        <PrimaryButton label={'Apply'} onPress={() => apply()} />
       </View>
-
     </ScrollView>
   );
 };
@@ -218,15 +234,15 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   row: {
-  marginRight: -5,
+    marginRight: -5,
     marginLeft: -5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   col: {
     marginLeft: 5,
-      marginRight: 5,
-      flex: 1,
+    marginRight: 5,
+    flex: 1,
   },
   btn: {
     marginBottom: 42,

@@ -20,34 +20,9 @@ export const searchJobs = async (data, hhToken) => {
 };
 
 export const getJobById = async (id, hhToken) => {
-  const r = await axios.get(`${baseUrl}/er/jobs/${id}`, {
+  const r = await axios.get(`${baseUrl}/ee/jobs/${id}`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
   console.log('getJobById result: ', r.data);
-  return r;
-};
-
-export const updateJobById = async (id, data, hhToken) => {
-  const r = await axios.patch(`${baseUrl}/er/jobs/${id}`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
-  console.log('updateJobById result: ', r.data);
-  return r;
-};
-
-export const postJob = async (data, hhToken) => {
-  console.log('job item : ', data);
-  const r = await axios.post(`${baseUrl}/er/jobs`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
-  console.log('postJob result: ', r);
-  return r;
-};
-
-export const deleteJobById = async (id, hhToken) => {
-  const r = await axios.delete(`${baseUrl}/er/jobs/${id}`, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
-  console.log('deleteJobById result: ', r);
   return r;
 };
