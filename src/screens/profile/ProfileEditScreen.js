@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,31 +29,42 @@ export const ProfileEditScreen = ({route, navigation}) => {
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
 
+  const [isValidFirstName, setIsValidFirstName] = useState(false);
+
+  function firstNameChanged(val) {
+    setIsValidFirstName(val && val.length >= 2);
+    setEmployee({...employee, firstName: val});
+  }
+
   const save = async () => {
-    const hhToken = await AsyncStorage.getItem('hhToken');
-    const data = {
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      email: employee.email,
-      photoUrl: employee.photoUrl,
-      googleId: employee.googleId,
-      positionId: employee.position ? employee.position.id : null,
-      description: employee.position ? employee.description : '',
-      cityId: employee.city ? employee.city.id : null,
-      birthDate: employee.birthDate,
-      genderId: employee.gender ? employee.gender.id : null,
-      experience: employee.experience,
-      scheduleId: employee.schedule ? employee.schedule.id : null,
-      salary: employee.salary,
-    };
-    updateEmployee(data, hhToken).then(() => {
-      navigation.navigate('Profile');
-    });
+    if (isValidFirstName) {
+      const hhToken = await AsyncStorage.getItem('hhToken');
+      const data = {
+        firstName: employee.firstName,
+        lastName: employee.lastName,
+        email: employee.email,
+        photoUrl: employee.photoUrl,
+        googleId: employee.googleId,
+        positionId: employee.position ? employee.position.id : null,
+        description: employee.position ? employee.description : '',
+        cityId: employee.city ? employee.city.id : null,
+        birthDate: employee.birthDate,
+        genderId: employee.gender ? employee.gender.id : null,
+        experience: employee.experience,
+        scheduleId: employee.schedule ? employee.schedule.id : null,
+        salary: employee.salary,
+      };
+      updateEmployee(data, hhToken).then(() => {
+        navigation.navigate('Profile');
+      });
+    } else {
+      Alert.alert('Warning', 'Username must be at least 2 characters');
+    }
   };
 
   useEffect(() => {
     async function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
+      return navigation.addListener('focus', async () => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getCities(hhToken)
           .then(citiesData => {
@@ -86,13 +98,14 @@ export const ProfileEditScreen = ({route, navigation}) => {
           .catch(e => {
             console.log('getSchedules err:', e);
           });
-      });
 
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
+        setIsValidFirstName(
+          employee.firstName && employee.firstName.length >= 2,
+        );
+      });
     }
     fetchData().then();
-  }, [navigation]);
+  }, [employee.firstName, navigation]);
 
   return (
     <ScrollView style={styles.container}>
@@ -103,13 +116,20 @@ export const ProfileEditScreen = ({route, navigation}) => {
       </View>
 
       <Text style={globalStyles.label}>First name</Text>
-      <TextInput
-        style={globalStyles.primaryInput}
-        onChangeText={val => {
-          setEmployee({...employee, firstName: val});
-        }}
-        value={employee.firstName}
-      />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={styles.input}
+          onChangeText={val => {
+            firstNameChanged(val);
+          }}
+          value={employee.firstName}
+        />
+        {!isValidFirstName && (
+          <Text style={styles.warningText}>
+            Username must be at least 2 characters
+          </Text>
+        )}
+      </View>
 
       <Text style={globalStyles.label}>Last name</Text>
       <TextInput
@@ -212,5 +232,21 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginBottom: 42,
+  },
+  inputWrapper: {
+    marginBottom: 16,
+  },
+  input: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    color: '#000000',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+  },
+  warningText: {
+    color: '#F50057',
   },
 });

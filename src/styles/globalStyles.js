@@ -8,7 +8,7 @@ export const globalStyles = StyleSheet.create({
   label: {
     marginBottom: 8,
     fontFamily: 'Roboto-Medium',
-    fontSize: 16
+    fontSize: 16,
   },
   primaryInput: {
     marginBottom: 16,
@@ -19,7 +19,7 @@ export const globalStyles = StyleSheet.create({
     color: '#000000',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#CCCCCC'
+    borderColor: '#CCCCCC',
   },
   multiline: {
     height: 100,
@@ -37,7 +37,7 @@ export const globalStyles = StyleSheet.create({
     color: '#000000',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#CCCCCC'
+    borderColor: '#CCCCCC',
   },
 
   // --- start of Filters TopBar --- //
@@ -61,6 +61,4 @@ export const globalStyles = StyleSheet.create({
     fontSize: 14,
   },
   // --- end of Filters TopBar --- //
-
-
 });

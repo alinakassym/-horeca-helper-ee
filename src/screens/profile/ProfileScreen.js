@@ -163,7 +163,7 @@ export const ProfileScreen = ({navigation}) => {
 
         <View style={styles.row}>
           <View style={styles.iconWrapper}>
-            <IconSearch color={'#185AB7'} size={24} width={1.5} />
+            <IconSearch color={'#185AB7'} size={24} width={2} />
           </View>
           <PlainButton
             label={'Find job'}
@@ -188,7 +188,7 @@ export const ProfileScreen = ({navigation}) => {
             }}>
             <PlainButton label={'Add work experience'}>
               <View style={styles.btnIcon}>
-                <IconAdd color={'#185AB7'} size={24} width={1.5} />
+                <IconAdd color={'#185AB7'} size={24} width={2} />
               </View>
             </PlainButton>
           </TouchableOpacity>
