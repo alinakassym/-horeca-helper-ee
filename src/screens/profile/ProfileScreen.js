@@ -26,6 +26,8 @@ import {setFilter} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
 import {IconSearch} from '../../assets/icons/main/IconSearch';
 
+import moment from 'moment';
+
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
 
@@ -74,6 +76,10 @@ export const ProfileScreen = ({navigation}) => {
   const toggleNotification = () =>
     setIsNotification(previousNotificationState => !previousNotificationState);
 
+  const getAge = birthDate => {
+    return moment().diff(birthDate, 'years', false);
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
@@ -116,6 +122,7 @@ export const ProfileScreen = ({navigation}) => {
         <View style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
           <Text style={styles.text}>
             {me.firstName || 'Is not entered'} {me.lastName || ''}
+            {me.birthDate && <Text>, {getAge(me.birthDate)} years</Text>}
           </Text>
           <TouchableOpacity
             onPress={() => {

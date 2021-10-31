@@ -16,6 +16,7 @@ import {updateEmployee} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 
 import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 
 import {
   getCities,
@@ -149,11 +150,12 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
       <Text style={globalStyles.label}>Date of birth {typeof date}</Text>
       <Pressable
-
         onPress={() => {
           setOpen(true);
         }}>
-        <Text style={globalStyles.select}>{employee.birthDate.toString()}</Text>
+        <Text style={globalStyles.select}>
+          {moment(employee.birthDate).format('YYYY-MM-DD')}
+        </Text>
       </Pressable>
       <DatePicker
         modal
