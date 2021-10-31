@@ -5,14 +5,18 @@ import {
   TextInput,
   ScrollView,
   Image,
-  StyleSheet,
   Alert,
+  Pressable,
+  StyleSheet,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {updateEmployee} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
+
+import DatePicker from 'react-native-date-picker';
+
 import {
   getCities,
   getGenders,
@@ -30,6 +34,9 @@ export const ProfileEditScreen = ({route, navigation}) => {
   const [schedules, setSchedules] = useState([]);
 
   const [isValidFirstName, setIsValidFirstName] = useState(false);
+
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
 
   function firstNameChanged(val) {
     setIsValidFirstName(val && val.length >= 2);
@@ -138,6 +145,28 @@ export const ProfileEditScreen = ({route, navigation}) => {
           setEmployee({...employee, lastName: val});
         }}
         value={employee.lastName}
+      />
+
+      <Text style={globalStyles.label}>Date of birth {typeof date}</Text>
+      <Pressable
+
+        onPress={() => {
+          setOpen(true);
+        }}>
+        <Text style={globalStyles.select}>{employee.birthDate.toString()}</Text>
+      </Pressable>
+      <DatePicker
+        modal
+        mode={'date'}
+        open={open}
+        date={new Date(employee.birthDate)}
+        onConfirm={date => {
+          setOpen(false);
+          setEmployee({...employee, birthDate: date});
+        }}
+        onCancel={() => {
+          setOpen(false);
+        }}
       />
 
       <ModalSelect

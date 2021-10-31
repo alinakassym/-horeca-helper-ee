@@ -30,9 +30,9 @@ export const ModalSelect = ({
     setVisible(false);
   };
 
-  const clearValue = val => {
-    setItem(val);
-    value[valueKey] = val;
+  const clearValue = () => {
+    setItem(null);
+    value[valueKey] = null;
     setVisible(false);
   };
 
@@ -47,7 +47,7 @@ export const ModalSelect = ({
         </Pressable>
         <Pressable
           onPress={() => {
-            clearValue(null);
+            clearValue();
           }}
           style={styles.clearBtn}>
           <IconClose color={'#898989'} />
