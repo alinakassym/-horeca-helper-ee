@@ -136,10 +136,10 @@ export const ProfileScreen = ({navigation}) => {
 
         {(me.position || me.gender || me.schedule) && (
           <View style={[styles.row, styles.paddingTop0]}>
-            {me.schedule && <Text>{me.schedule.title}</Text>}
-            {me.schedule && me.position && <Text>, </Text>}
             {me.position && <Text>{me.position.title}</Text>}
-            {me.position && me.gender && <Text>, </Text>}
+            {me.position && me.schedule && <Text>, </Text>}
+            {me.schedule && <Text>{me.schedule.title}</Text>}
+            {me.schedule && me.gender && <Text>, </Text>}
             {me.gender && <Text>{me.gender.title}</Text>}
           </View>
         )}

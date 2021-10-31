@@ -14,6 +14,7 @@ import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import {getCities, getPositions} from '../../services/DictionariesService';
 import {getCompanies} from '../../services/CompaniesService';
+import {DateSelect} from '../../components/selects/DateSelect';
 
 export const EditWorkScreen = ({route, navigation}) => {
   const [work, setWork] = useState(route.params.value);
@@ -22,7 +23,12 @@ export const EditWorkScreen = ({route, navigation}) => {
   const [positions, setPositions] = useState([]);
 
   const save = async () => {
-    const isValid = work.company && work.position && work.city;
+    const isValid =
+      work.company &&
+      work.position &&
+      work.city &&
+      work.startDate &&
+      work.endDate;
     if (isValid) {
       const hhToken = await AsyncStorage.getItem('hhToken');
       const data = {
@@ -38,7 +44,7 @@ export const EditWorkScreen = ({route, navigation}) => {
         navigation.navigate('Profile');
       });
     } else {
-      Alert.alert('Warning', 'Location, company & position are required');
+      Alert.alert('Warning', 'Please fill in all the required fields');
     }
   };
 
@@ -128,6 +134,20 @@ export const EditWorkScreen = ({route, navigation}) => {
         valueKey={'position'}
         items={positions}
         itemTitle={'title'}
+        required={true}
+      />
+
+      <DateSelect
+        label={'Start Date'}
+        value={work}
+        valueKey={'startDate'}
+        required={true}
+      />
+      <DateSelect
+        label={'End Date'}
+        value={work}
+        valueKey={'endDate'}
+        minimumDate={new Date(work.startDate)}
         required={true}
       />
 

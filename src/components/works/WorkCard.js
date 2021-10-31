@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Image, Text, View} from 'react-native';
 import {IconExpandRightLight} from '../../assets/icons/main/IconExpandRightLight';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import moment from 'moment';
 
 export const WorkCard = ({item, onPress}) => {
   return (
@@ -18,11 +19,13 @@ export const WorkCard = ({item, onPress}) => {
           <Text style={styles.title}>{item.position.title}</Text>
           <Text style={styles.text}>{item.company.title}</Text>
           {item.startDate && (
-            <Text style={styles.text}>
-              {item.startDate} {item.endDate ? `- ${item.endDate}` : ''}
+            <Text>
+              {moment(item.startDate).format('MMM YYYY')}{' '}
+              {item.endDate
+                ? `- ${moment(item.endDate).format('MMM YYYY')}`
+                : ''}
             </Text>
           )}
-          <Text>Feb 2021 - Jan 2022</Text>
         </View>
       </View>
       <IconExpandRightLight color={'#767676'} size={24} width={1.5} />
