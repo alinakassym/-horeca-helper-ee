@@ -23,7 +23,7 @@ import {
 } from '../../services/DictionariesService';
 
 export const ProfileEditScreen = ({route, navigation}) => {
-  console.log('ProfileEdit Screen params', route.params);
+  // console.log('ProfileEdit Screen params', route.params);
 
   const [employee, setEmployee] = useState(route.params.value);
   const [cities, setCities] = useState([]);
@@ -70,7 +70,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getCities(hhToken)
           .then(citiesData => {
-            console.log('cities: ', citiesData);
+            // console.log('cities: ', citiesData);
             setCities(citiesData);
           })
           .catch(e => {
@@ -78,7 +78,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           });
         getPositions(hhToken)
           .then(positionsData => {
-            console.log('positions: ', positionsData);
+            // console.log('positions: ', positionsData);
             setPositions(positionsData);
           })
           .catch(e => {
@@ -86,7 +86,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           });
         getGenders(hhToken)
           .then(gendersData => {
-            console.log('genders: ', gendersData);
+            // console.log('genders: ', gendersData);
             setGenders(gendersData);
           })
           .catch(e => {
@@ -94,7 +94,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           });
         getSchedules(hhToken)
           .then(schedulesData => {
-            console.log('schedules: ', schedulesData);
+            // console.log('schedules: ', schedulesData);
             setSchedules(schedulesData);
           })
           .catch(e => {
@@ -190,6 +190,18 @@ export const ProfileEditScreen = ({route, navigation}) => {
         valueKey={'schedule'}
         items={schedules}
         itemTitle={'title'}
+      />
+
+      <Text style={globalStyles.label}>Salary</Text>
+      <TextInput
+        style={globalStyles.primaryInput}
+        onChangeText={val => {
+          setEmployee({
+            ...employee,
+            salary: val.length > 0 ? Number(val) : null,
+          });
+        }}
+        value={employee.salary ? employee.salary.toString() : null}
       />
 
       <Text style={globalStyles.label}>E-mail</Text>

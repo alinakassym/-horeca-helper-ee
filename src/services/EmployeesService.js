@@ -15,7 +15,7 @@ export const getEmployee = async hhToken => {
   const r = await axios.get(`${baseUrl}/ee/employees/me`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('Employees Service getEmployee result:', r.data);
+  // console.log('Employees Service getEmployee result:', r.data);
   return r;
 };
 
@@ -23,7 +23,7 @@ export const updateEmployee = async (data, hhToken) => {
   const r = await axios.patch(`${baseUrl}/ee/employees/me`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('Employees Service updateEmployee result:', r.data);
+  // console.log('Employees Service updateEmployee result:', r.data);
   return r;
 };
 
@@ -31,7 +31,7 @@ export const postWork = async (data, hhToken) => {
   const r = await axios.post(`${baseUrl}/ee/works`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('Employees Service setWork result:', r.data);
+  // console.log('Employees Service setWork result:', r.data);
   return r;
 };
 
@@ -39,7 +39,7 @@ export const updateWork = async (data, hhToken) => {
   const r = await axios.patch(`${baseUrl}/ee/works/${data.id}`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('Employees Service setWork result:', r.data);
+  // console.log('Employees Service setWork result:', r.data);
   return r;
 };
 
@@ -47,6 +47,6 @@ export const deleteWork = async (id, hhToken) => {
   const r = await axios.delete(`${baseUrl}/ee/works/${id}`, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},
   });
-  console.log('Employees Service deleteWork result:', r.data);
+  // console.log('Employees Service deleteWork result:', r.data);
   return r;
 };

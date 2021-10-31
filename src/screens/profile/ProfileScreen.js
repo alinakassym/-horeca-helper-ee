@@ -87,7 +87,7 @@ export const ProfileScreen = ({navigation}) => {
         const hhToken = await AsyncStorage.getItem('hhToken');
         getEmployee(hhToken)
           .then(res => {
-            console.log('ProfileScreen employee/me:', res.data);
+            // console.log('ProfileScreen employee/me:', res.data);
             setMe(res.data);
             setLoading(false);
           })
@@ -135,12 +135,18 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         {(me.position || me.gender || me.schedule) && (
-          <View style={[styles.row, styles.paddingTop0]}>
+          <View style={[styles.row, styles.paddingTop0, styles.paddingBottom0]}>
             {me.position && <Text>{me.position.title}</Text>}
             {me.position && me.schedule && <Text>, </Text>}
             {me.schedule && <Text>{me.schedule.title}</Text>}
             {me.schedule && me.gender && <Text>, </Text>}
             {me.gender && <Text>{me.gender.title}</Text>}
+          </View>
+        )}
+
+        {me.salary && (
+          <View style={styles.row}>
+            <Text style={styles.text}>{me.salary.toString()} KZT</Text>
           </View>
         )}
 
