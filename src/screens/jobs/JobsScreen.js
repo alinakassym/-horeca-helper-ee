@@ -77,20 +77,26 @@ export const JobsScreen = ({navigation}) => {
         </View>
       </View>
 
-      <ScrollView>
-        <View style={styles.section}>
-          {jobs &&
-            jobs.map((item, index) => (
-              <JobCard
-                onPress={() => {
-                  navigation.navigate('JobScreen', {jobId: item.id});
-                }}
-                key={index}
-                item={item}
-              />
-            ))}
+      {jobs.length > 0 ? (
+        <ScrollView>
+          <View style={styles.section}>
+            {jobs &&
+              jobs.map((item, index) => (
+                <JobCard
+                  onPress={() => {
+                    navigation.navigate('JobScreen', {jobId: item.id});
+                  }}
+                  key={index}
+                  item={item}
+                />
+              ))}
+          </View>
+        </ScrollView>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.text}>No matches found</Text>
         </View>
-      </ScrollView>
+      )}
     </View>
   );
 };
@@ -113,6 +119,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#000000',
+  },
+  text: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 18,
   },
   section: {
     paddingTop: 14,

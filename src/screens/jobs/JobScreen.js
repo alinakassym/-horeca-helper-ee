@@ -45,6 +45,7 @@ export const JobScreen = ({route, navigation}) => {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <ScrollView>

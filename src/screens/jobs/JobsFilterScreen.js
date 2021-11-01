@@ -84,12 +84,12 @@ export const JobsFilterScreen = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
-      {/*sortBy*/}
+      {/*Order by*/}
       <ModalSelect
         onChangeText={val => {
           setFilters({...filters, orderBy: val});
         }}
-        label={'Sort by'}
+        label={'Order by'}
         value={filters}
         valueKey={'orderBy'}
         items={listSortBy}
