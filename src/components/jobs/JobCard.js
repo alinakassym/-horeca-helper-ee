@@ -36,7 +36,9 @@ export const JobCard = ({item, onPress}) => {
               {item.description}
             </Text>
           )}
-          <Text style={styles.createdAt}>Updated at: {moment(item.updatedAt).format('MMM YYYY')}</Text>
+          <Text style={styles.createdAt}>
+            Last updated on: {moment(item.updatedAt).format('MMM YYYY')}
+          </Text>
         </View>
 
         <View style={[styles.col, styles.floatLeftTop]}>
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   imageWrapper: {
     height: 40,
     width: 40,
-    borderRadius: 30,
+    borderRadius: 4,
     backgroundColor: '#767676',
     overflow: 'hidden',
   },

@@ -69,8 +69,8 @@ export const ProfileScreen = ({navigation}) => {
         experienceMin: me.experienceMin,
         experienceMax: me.experienceMax,
         scheduleId: me.scheduleId,
-        salaryMin: me.salaryMin,
-        salaryMax: me.salaryMax,
+        salaryMin: me.salary,
+        salaryMax: me.salary,
         sortBy: 'relevance',
         orderBy: {
           title: 'Relevance',
@@ -146,7 +146,7 @@ export const ProfileScreen = ({navigation}) => {
         <View style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
           <Text style={styles.text}>
             {me.firstName || 'Is not entered'} {me.lastName || ''}
-            {me.birthDate && <Text>, {getAge(me.birthDate)} years</Text>}
+            {me.birthDate && <Text>, {getAge(me.birthDate)} y.o.</Text>}
           </Text>
           <TouchableOpacity
             onPress={() => {
