@@ -1,3 +1,6 @@
+// have to load 'react-native-gesture-handler' at the beginning
+// to avoid e.g. "unsupported top level event type onGuestureHandlerEvent" crashes
+import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import {AuthContext} from './src/store/context';
