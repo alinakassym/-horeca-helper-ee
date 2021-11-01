@@ -25,6 +25,8 @@ GoogleSignin.configure({
     '80837938097-68a9l5aphmdccseksn9mr0scil5moimt.apps.googleusercontent.com',
   androidClientId:
     '80837938097-5prvgmdnbmsain6on7k1nss2fhhgtr0h.apps.googleusercontent.com',
+  iosClientId:
+    '80837938097-pld9kvi5epu69pm9ehqm411kifa2fq68.apps.googleusercontent.com',
   offlineAccess: true,
 });
 
