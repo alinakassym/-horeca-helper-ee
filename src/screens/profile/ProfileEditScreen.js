@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  ScrollView,
-  Image,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import {Text, View, TextInput, Image, Alert, StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
@@ -110,7 +103,9 @@ export const ProfileEditScreen = ({route, navigation}) => {
   }, [employee.firstName, navigation]);
 
   return (
-    <ScrollView style={styles.container}>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      enableResetScrollToCoords={false}>
       <View style={styles.profilePhoto}>
         <View style={styles.imageWrapper}>
           <Image style={styles.image} source={{uri: employee.photoUrl}} />
@@ -215,6 +210,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
       <Text style={globalStyles.label}>Description</Text>
       <TextInput
+        multiline={true}
         style={[globalStyles.primaryInput, globalStyles.multiline]}
         onChangeText={val => {
           setEmployee({...employee, description: val});
@@ -225,7 +221,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
       <View style={styles.btn}>
         <PrimaryButton label={'Save'} onPress={() => save()} />
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

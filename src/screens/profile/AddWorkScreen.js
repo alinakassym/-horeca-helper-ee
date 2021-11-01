@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Alert} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
@@ -88,7 +82,9 @@ export const AddWorkScreen = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      enableResetScrollToCoords={false}>
       <ModalSelect
         label={'Location'}
         onChangeText={val => {
@@ -141,6 +137,7 @@ export const AddWorkScreen = ({navigation}) => {
 
       <Text style={globalStyles.label}>Description</Text>
       <TextInput
+        multiline={true}
         style={[globalStyles.primaryInput, globalStyles.multiline]}
         onChangeText={val => {
           setWork({...work, description: val});
@@ -151,7 +148,7 @@ export const AddWorkScreen = ({navigation}) => {
       <View style={styles.btn}>
         <PrimaryButton label={'Save'} onPress={() => save()} />
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
