@@ -204,7 +204,7 @@ export const ProfileScreen = ({navigation}) => {
             <IconSearch color={'#185AB7'} size={24} width={2} />
           </View>
           <PlainButton
-            label={'Find job'}
+            label={'Find relevant jobs'}
             onPress={() =>
               apply().then(() => {
                 navigation.navigate('Jobs');
