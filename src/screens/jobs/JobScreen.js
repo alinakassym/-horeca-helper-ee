@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '92%',
   },
   col: {
     flexDirection: 'column',
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
   floatLeftTop: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    marginRight: -28,
   },
   imageWrapper: {
     height: 40,

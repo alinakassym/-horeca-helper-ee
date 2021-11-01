@@ -49,8 +49,18 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
   },
   filterBtn: {
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  filterApplied: {
+    position: 'absolute',
+    top: 1,
+    left: 22,
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: '#E74C3C',
   },
   filterBtnRightText: {
     marginLeft: 6,

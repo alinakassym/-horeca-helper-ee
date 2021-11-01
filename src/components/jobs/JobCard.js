@@ -2,6 +2,11 @@ import React from 'react';
 import {Text, View, Pressable, StyleSheet, Image} from 'react-native';
 
 export const JobCard = ({item, onPress}) => {
+  const numberWithSpaces = val => {
+    let parts = val.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return parts.join('.');
+  };
   return (
     <Pressable style={styles.card} onPress={onPress}>
       <View style={styles.row}>
@@ -11,16 +16,25 @@ export const JobCard = ({item, onPress}) => {
           </Text>
           {item.salaryMin && item.salaryMax ? (
             <Text style={styles.salary}>
-              {item.salaryMin} - {item.salaryMax} KZT
+              {numberWithSpaces(item.salaryMin)} -{' '}
+              {numberWithSpaces(item.salaryMax)} KZT
             </Text>
           ) : item.salaryMin ? (
-            <Text style={styles.salary}>From {item.salaryMin} KZT</Text>
+            <Text style={styles.salary}>
+              From {numberWithSpaces(item.salaryMin)} KZT
+            </Text>
           ) : (
-            <Text style={styles.salary}>To {item.salaryMax} KZT</Text>
+            <Text style={styles.salary}>
+              To {numberWithSpaces(item.salaryMax)} KZT
+            </Text>
           )}
           {item.city && <Text style={styles.cityTitle}>{item.city.title}</Text>}
           <Text style={styles.companyTitle}>{item.company.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          {!!item.description && (
+            <Text numberOfLines={1} style={styles.description}>
+              {item.description}
+            </Text>
+          )}
           <Text style={styles.createdAt}>{item.createdAt}</Text>
         </View>
 

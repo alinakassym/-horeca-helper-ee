@@ -1,10 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 export const jobsSlice = createSlice({
   name: 'jobs',
   initialState: {
-    filter: {
-      test: 'Test 1',
+    isFilterApplied: false,
+    sortBy: [
+      {
+        title: 'Date',
+        key: 'updatedAt',
+      },
+      {
+        title: 'Relevance',
+        key: 'relevance',
+      },
+      {
+        title: 'Min salary',
+        key: 'salaryMin',
+      },
+      {
+        title: 'Max salary',
+        key: 'salaryMax',
+      },
+    ],
+    filterReset: {
       positionId: null,
       position: null,
       companyCategory: null,
@@ -23,17 +41,42 @@ export const jobsSlice = createSlice({
       salaryMax: null,
       sortBy: 'updatedAt',
       sortOrder: 'DESC',
+      orderBy: null,
       pageSize: 10,
-      pageNum: 1
+      pageNum: 1,
+    },
+    filter: {
+      positionId: null,
+      position: null,
+      companyCategory: null,
+      companyCategoryId: null,
+      cityId: null,
+      city: null,
+      ageMin: null,
+      ageMax: null,
+      genderId: null,
+      gender: null,
+      experienceMin: null,
+      experienceMax: null,
+      scheduleId: null,
+      schedule: null,
+      salaryMin: null,
+      salaryMax: null,
+      sortBy: 'updatedAt',
+      orderBy: null,
+      sortOrder: 'DESC',
+      pageSize: 10,
+      pageNum: 1,
     },
   },
   reducers: {
     setFilter: (state, action) => {
       state.filter = {
-        test: action.payload.test,
         position: action.payload.position,
         positionId: action.payload.position ? action.payload.position.id : null,
-        companyCategoryId: action.payload.companyCategory ? action.payload.companyCategory.id : null,
+        companyCategoryId: action.payload.companyCategory
+          ? action.payload.companyCategory.id
+          : null,
         companyCategory: action.payload.companyCategory,
         cityId: action.payload.city ? action.payload.city.id : null,
         city: action.payload.city,
@@ -47,16 +90,22 @@ export const jobsSlice = createSlice({
         schedule: action.payload.schedule,
         salaryMin: action.payload.salaryMin,
         salaryMax: action.payload.salaryMax,
-        sortBy: 'updatedAt',
+        sortBy: action.payload.orderBy
+          ? action.payload.orderBy.key
+          : 'updatedAt',
+        orderBy: action.payload.orderBy,
         sortOrder: 'DESC',
         pageSize: 10,
-        pageNum: 1
-      }
+        pageNum: 1,
+      };
+    },
+    setFilterApplied: (state, action) => {
+      state.isFilterApplied = action.payload;
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setFilter } = jobsSlice.actions
+export const {setFilter, setFilterApplied} = jobsSlice.actions;
 
-export default jobsSlice.reducer
+export default jobsSlice.reducer;

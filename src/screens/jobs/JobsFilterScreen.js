@@ -11,11 +11,15 @@ import {
 import {ModalSelect} from '../../components/selects/ModalSelect';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {useSelector, useDispatch} from 'react-redux';
-import {setFilter} from '../../store/slices/jobs';
+import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {globalStyles} from '../../styles/globalStyles';
+import PlainButton from '../../components/buttons/PlainButton';
 
 export const JobsFilterScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
+  const filterResetState = useSelector(state => state.jobs.filterReset);
+  const sortBy = useSelector(state => state.jobs.sortBy);
+
   const dispatch = useDispatch();
 
   const [filters, setFilters] = useState({...filterState});
@@ -25,11 +29,20 @@ export const JobsFilterScreen = ({navigation}) => {
   const [cities, setCities] = useState([]);
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [listSortBy, setSortBy] = useState(sortBy);
 
   const apply = async () => {
     await dispatch(setFilter(filters));
+    await dispatch(setFilterApplied(true));
     navigation.navigate('Jobs');
   };
+
+  const resetFilter = async () => {
+    await dispatch(setFilter(filterResetState));
+    await dispatch(setFilterApplied(false));
+    navigation.navigate('Jobs');
+  };
+
   const getData = async () => {
     const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
@@ -71,6 +84,18 @@ export const JobsFilterScreen = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
+      {/*sortBy*/}
+      <ModalSelect
+        onChangeText={val => {
+          setFilters({...filters, orderBy: val});
+        }}
+        label={'Sort by'}
+        value={filters}
+        valueKey={'orderBy'}
+        items={listSortBy}
+        itemTitle={'title'}
+      />
+
       {/*City*/}
       <ModalSelect
         onChangeText={val => {
@@ -240,8 +265,11 @@ export const JobsFilterScreen = ({navigation}) => {
         </View>
       </View>
 
-      <View style={styles.btn}>
-        <PrimaryButton label={'Apply'} onPress={() => apply()} />
+      <View style={styles.btnSection}>
+        <View style={styles.btn}>
+          <PrimaryButton label={'Apply'} onPress={() => apply()} />
+        </View>
+        <PlainButton label={'Reset filters'} onPress={() => resetFilter()} />
       </View>
     </ScrollView>
   );
@@ -262,7 +290,10 @@ const styles = StyleSheet.create({
     marginRight: 5,
     flex: 1,
   },
-  btn: {
+  btnSection: {
     marginBottom: 42,
+  },
+  btn: {
+    marginBottom: 16,
   },
 });

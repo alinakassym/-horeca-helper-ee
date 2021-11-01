@@ -22,7 +22,7 @@ import PlainButton from '../../components/buttons/PlainButton';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WorkCard} from '../../components/works/WorkCard';
-import {setFilter} from '../../store/slices/jobs';
+import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
 import {IconSearch} from '../../assets/icons/main/IconSearch';
 
@@ -31,7 +31,26 @@ import moment from 'moment';
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
 
-  const [me, setMe] = useState({});
+  const [me, setMe] = useState({
+    positionId: null,
+    position: null,
+    companyCategoryId: null,
+    cityId: null,
+    city: null,
+    ageMin: null,
+    ageMax: null,
+    genderId: null,
+    gender: null,
+    experienceMin: null,
+    experienceMax: null,
+    scheduleId: null,
+    salaryMin: null,
+    salaryMax: null,
+    sortBy: 'relevance',
+    sortOrder: 'DESC',
+    pageSize: 10,
+    pageNum: 1,
+  });
   const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -53,11 +72,16 @@ export const ProfileScreen = ({navigation}) => {
         salaryMin: me.salaryMin,
         salaryMax: me.salaryMax,
         sortBy: 'relevance',
+        orderBy: {
+          title: 'Relevance',
+          key: 'relevance',
+        },
         sortOrder: 'DESC',
         pageSize: 10,
         pageNum: 1,
       }),
     );
+    await dispatch(setFilterApplied(true));
     navigation.navigate('Jobs');
   };
 

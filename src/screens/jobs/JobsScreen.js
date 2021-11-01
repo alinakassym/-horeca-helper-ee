@@ -12,14 +12,21 @@ import {searchJobs} from '../../services/JobsService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
-import {IconArrowDown} from '../../assets/icons/main/IconArrowDown';
 import {useSelector} from 'react-redux';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
+  const isFilterApplied = useSelector(state => state.jobs.isFilterApplied);
 
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const sortBy = {
+    updatedAt: 'date',
+    relevance: 'relevance',
+    salaryMin: 'min salary',
+    salaryMax: 'max salary',
+  };
 
   useEffect(() => {
     function fetchData() {
@@ -59,13 +66,15 @@ export const JobsScreen = ({navigation}) => {
             navigation.navigate('JobsFilterScreen');
           }}>
           <IconFilter color={'#185AB7'} size={32} width={1.5} />
+          {isFilterApplied && <View style={globalStyles.filterApplied} />}
           <Text style={globalStyles.filterBtnRightText}>Filters</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={globalStyles.filterBtn}>
-          <Text style={globalStyles.filterBtnLeftText}>Order by</Text>
-          <IconArrowDown color={'#767676'} size={24} width={1.5} />
-        </TouchableOpacity>
+        <View style={globalStyles.filterBtn}>
+          <Text style={globalStyles.filterBtnLeftText}>
+            Order by {sortBy[filterState.sortBy]}
+          </Text>
+        </View>
       </View>
 
       <ScrollView>
