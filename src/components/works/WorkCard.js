@@ -12,7 +12,7 @@ export const WorkCard = ({item, onPress}) => {
       <View style={styles.row}>
         <View style={styles.column}>
           <View style={styles.imageWrapper}>
-            <Image style={styles.image} source={{uri: item.company.photo}} />
+            <Image style={styles.image} source={{uri: item.company.photoUrl}} />
           </View>
         </View>
         <View style={styles.column}>

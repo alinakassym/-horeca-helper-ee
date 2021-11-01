@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, Pressable, StyleSheet, Image} from 'react-native';
+import moment from 'moment';
 
 export const JobCard = ({item, onPress}) => {
   const numberWithSpaces = val => {
@@ -35,7 +36,7 @@ export const JobCard = ({item, onPress}) => {
               {item.description}
             </Text>
           )}
-          <Text style={styles.createdAt}>{item.createdAt}</Text>
+          <Text style={styles.createdAt}>Updated at: {moment(item.updatedAt).format('MMM YYYY')}</Text>
         </View>
 
         <View style={[styles.col, styles.floatLeftTop]}>
