@@ -11,7 +11,7 @@ export const JobCard = ({item, onPress}) => {
   return (
     <Pressable style={styles.card} onPress={onPress}>
       <View style={styles.row}>
-        <View style={styles.col}>
+        <View style={[styles.col, styles.textData]}>
           <Text style={styles.positionTitle}>
             {item.position.title} {item.schedule && `(${item.schedule.title})`}
           </Text>
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
   },
   col: {
     flexDirection: 'column',
+  },
+  textData: {
+    maxWidth: 280,
   },
   floatLeftTop: {
     justifyContent: 'flex-start',
