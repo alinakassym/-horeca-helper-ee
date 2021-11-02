@@ -37,11 +37,11 @@ export const Navigator = () => {
         screenOptions={{
           headerShown: false,
           tabBarLabelStyle: {
-            bottom: 12,
+            bottom: 0, // TODO: Android might need 12 here
           },
           tabBarActiveTintColor: '#185AB7',
           tabBarStyle: {
-            height: 68,
+            height: 72, // TODO: Android might need 68 here
           },
           tabBarBadgeStyle: {
             top: 12,
