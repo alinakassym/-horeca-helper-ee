@@ -72,7 +72,7 @@ export const JobsScreen = ({navigation}) => {
 
         <View style={globalStyles.filterBtn}>
           <Text style={globalStyles.filterBtnLeftText}>
-            Order by {sortBy[filterState.sortBy]}
+            Ordered by {sortBy[filterState.sortBy]}
           </Text>
         </View>
       </View>
