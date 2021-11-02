@@ -42,6 +42,7 @@ export const Navigator = () => {
           tabBarActiveTintColor: '#185AB7',
           tabBarStyle: {
             // note: don't set height, or set screen-specific heights
+            marginBottom: 2,
           },
           tabBarBadgeStyle: {
             top: 12,
