@@ -93,12 +93,19 @@ export const Navigator = () => {
     );
   };
   return (
-    <Stack.Navigator initialRouteName="App">
+    <Stack.Navigator
+      initialRouteName="App"
+      screenOptions={{
+        headerTintColor: '#185AB7',
+        headerTitleStyle: {
+          color: '#333333',
+        },
+      }}>
       <Stack.Group
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Tab" component={TabStack} />
+        <Stack.Screen name="Back" component={TabStack} />
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen
