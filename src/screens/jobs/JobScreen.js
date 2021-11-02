@@ -54,7 +54,7 @@ export const JobScreen = ({route, navigation}) => {
             <Text style={styles.positionTitle}>{job.position.title}</Text>
           )}
           <View style={styles.row}>
-            <View style={styles.col}>
+            <View style={[styles.col, {width: '20%'}]}>
               <View style={styles.imageWrapper}>
                 <Image
                   style={styles.img}
@@ -62,7 +62,7 @@ export const JobScreen = ({route, navigation}) => {
                 />
               </View>
             </View>
-            <View style={styles.col}>
+            <View style={[styles.col, {width: '80%'}]}>
               <Text style={styles.companyTitle}>{job.company.title}</Text>
               <Text style={styles.companyDescription}>
                 {job.company.description}
