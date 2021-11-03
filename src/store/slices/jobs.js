@@ -73,20 +73,18 @@ export const jobsSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = {
         position: action.payload.position,
-        positionId: action.payload.position ? action.payload.position.id : null,
-        companyCategoryId: action.payload.companyCategory
-          ? action.payload.companyCategory.id
-          : null,
+        positionId: action.payload.position?.id,
+        companyCategoryId: action.payload.companyCategory?.id,
         companyCategory: action.payload.companyCategory,
-        cityId: action.payload.city ? action.payload.city.id : null,
+        cityId: action.payload.city?.id,
         city: action.payload.city,
         ageMin: action.payload.ageMin,
         ageMax: action.payload.ageMax,
-        genderId: action.payload.gender ? action.payload.gender.id : null,
+        genderId: action.payload.gender?.id,
         gender: action.payload.gender,
         experienceMin: action.payload.experienceMin,
         experienceMax: action.payload.experienceMax,
-        scheduleId: action.payload.schedule ? action.payload.schedule.id : null,
+        scheduleId: action.payload.schedule?.id,
         schedule: action.payload.schedule,
         salaryMin: action.payload.salaryMin,
         salaryMax: action.payload.salaryMax,
@@ -95,7 +93,7 @@ export const jobsSlice = createSlice({
           : 'updatedAt',
         orderBy: action.payload.orderBy,
         sortOrder: 'DESC',
-        pageSize: 10,
+        pageSize: 20,
         pageNum: 1,
       };
     },

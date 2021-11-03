@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
+import {Platform} from 'react-native';
 
 export const globalStyles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    marginTop: Platform.OS === 'ios' ? 40 : 0,
     flex: 1,
     backgroundColor: '#FFFFFF',
   },

@@ -77,7 +77,7 @@ export const ProfileScreen = ({navigation}) => {
           key: 'relevance',
         },
         sortOrder: 'DESC',
-        pageSize: 10,
+        pageSize: 20,
         pageNum: 1,
       }),
     );
