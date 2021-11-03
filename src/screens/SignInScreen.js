@@ -172,7 +172,9 @@ export const SignInScreen = () => {
       return;
     }
     storeData(foundUser[0]).then(() => {});
-    signIn(foundUser);
+    AsyncStorage.setItem('hhToken', foundUser[0].hhToken).then(() => {
+      signIn(foundUser);
+    });
   };
 
   return (

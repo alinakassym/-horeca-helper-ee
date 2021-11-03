@@ -42,7 +42,7 @@ export const jobsSlice = createSlice({
       sortBy: 'updatedAt',
       sortOrder: 'DESC',
       orderBy: null,
-      pageSize: 10,
+      pageSize: 20,
       pageNum: 1,
     },
     filter: {
@@ -65,7 +65,7 @@ export const jobsSlice = createSlice({
       sortBy: 'updatedAt',
       orderBy: null,
       sortOrder: 'DESC',
-      pageSize: 10,
+      pageSize: 20,
       pageNum: 1,
     },
   },

@@ -19,7 +19,7 @@ export const JobScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
 
   const formatDate = date => {
-    return moment(date).format('DD MMM YYYY');
+    return moment(date).format('MMM-D, YYYY');
   };
 
   useEffect(() => {

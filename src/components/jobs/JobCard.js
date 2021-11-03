@@ -37,7 +37,7 @@ export const JobCard = ({item, onPress}) => {
             </Text>
           )}
           <Text style={styles.createdAt}>
-            Last updated on: {moment(item.updatedAt).format('MMM YYYY')}
+            Last updated on: {moment(item.updatedAt).format('MMM-D, YYYY')}
           </Text>
         </View>
 
