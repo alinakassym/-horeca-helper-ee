@@ -130,6 +130,10 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    lintOptions {
+            checkReleaseBuilds false
+        }
+
     defaultConfig {
         applicationId "kz.horecahelper.ee"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -152,6 +156,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+              storeFile file('hh.keystore')
+              storePassword 'hh2021'
+              keyAlias 'hh_key_alias'
+              keyPassword 'hh2021'
+            }
     }
     buildTypes {
         debug {
@@ -165,9 +175,9 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+//             minifyEnabled enableProguardInReleaseBuilds
+//             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 
