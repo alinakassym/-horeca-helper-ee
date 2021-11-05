@@ -7,8 +7,10 @@ import {
   StyleSheet,
   Switch,
   ActivityIndicator,
+  Modal,
+  Pressable,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
 import {IconAdd} from '../../assets/icons/main/IconAdd';
@@ -17,7 +19,10 @@ import {IconAddress} from '../../assets/icons/main/IconAddress';
 import {IconMail} from '../../assets/icons/main/IconMail';
 import {IconPencil} from '../../assets/icons/main/IconPencil';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {getEmployee} from '../../services/EmployeesService';
+import {
+  getEmployee,
+  updateEmployeePhoto,
+} from '../../services/EmployeesService';
 import PlainButton from '../../components/buttons/PlainButton';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,10 +32,12 @@ import {useDispatch} from 'react-redux';
 import {IconSearch} from '../../assets/icons/main/IconSearch';
 
 import moment from 'moment';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
 
+  const [hhToken, setToken] = useState('');
   const [me, setMe] = useState({
     positionId: null,
     position: null,
@@ -52,6 +59,7 @@ export const ProfileScreen = ({navigation}) => {
     pageNum: 1,
   });
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
   const apply = async () => {
@@ -104,12 +112,56 @@ export const ProfileScreen = ({navigation}) => {
     return moment().diff(birthDate, 'years', false);
   };
 
+  const openCamera = () => {
+    let options = {
+      storageOption: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+    };
+    launchCamera(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        updateEmployeePhoto(response.assets[0], hhToken).then(r => {
+          setMe(r.data);
+        });
+      }
+    });
+  };
+
+  const openGallery = () => {
+    let options = {
+      storageOption: {
+        path: 'images',
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        updateEmployeePhoto(response.assets[0], hhToken).then(r => {
+          setMe(r.data);
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        // The screen is focused
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        getEmployee(hhToken)
+        const token = await AsyncStorage.getItem('hhToken');
+        setToken(token);
+        getEmployee(token)
           .then(res => {
             // console.log('ProfileScreen employee/me:', res.data);
             setMe(res.data);
@@ -134,10 +186,36 @@ export const ProfileScreen = ({navigation}) => {
 
   return (
     <ScrollView style={globalStyles.container}>
+      <Modal visible={open} animationType="slide" transparent={true}>
+        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
+          <View style={styles.wrap}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                openGallery();
+                setOpen(false);
+              }}>
+              <Text style={globalStyles.text}>Open Gallery</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                openCamera();
+                setOpen(false);
+              }}>
+              <Text style={globalStyles.text}>Open Camera</Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
       <View style={styles.profilePhoto}>
-        <View style={styles.imageWrapper}>
+        <TouchableOpacity
+          onPress={() => {
+            setOpen(true);
+          }}
+          style={styles.imageWrapper}>
           <Image style={styles.image} source={{uri: me.photoUrl}} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/*About*/}
@@ -380,5 +458,22 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomColor: '#cccccc',
     borderBottomWidth: 1,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  wrap: {
+    padding: 16,
+    width: '80%',
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+  },
+  item: {
+    padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

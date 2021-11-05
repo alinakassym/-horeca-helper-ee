@@ -27,6 +27,27 @@ export const updateEmployee = async (data, hhToken) => {
   return r;
 };
 
+export const updateEmployeePhoto = async (img, hhToken) => {
+  const data = new FormData();
+  data.append('file', {
+    name: img.fileName,
+    type: img.type,
+    uri: Platform.OS === 'android' ? img.uri : img.uri.replace('file://', ''),
+  });
+
+  const url = `${baseUrl}/ee/employees/me/photo`;
+
+  const r = await axios.post(url, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Accept: 'application/json',
+      Authorization: `Bearer ${hhToken || ''}`,
+    },
+  });
+  console.log('Employees Service updateEmployeePhoto result:', r.data);
+  return r;
+};
+
 export const postWork = async (data, hhToken) => {
   const r = await axios.post(`${baseUrl}/ee/works`, data, {
     headers: {Authorization: `Bearer ${hhToken || ''}`},

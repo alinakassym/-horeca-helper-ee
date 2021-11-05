@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, TextInput, Image, Alert, StyleSheet} from 'react-native';
+import {Text, View, TextInput, Alert, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -106,12 +106,6 @@ export const ProfileEditScreen = ({route, navigation}) => {
     <KeyboardAwareScrollView
       style={styles.container}
       enableResetScrollToCoords={false}>
-      <View style={styles.profilePhoto}>
-        <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={{uri: employee.photoUrl}} />
-        </View>
-      </View>
-
       <Text style={globalStyles.label}>First name</Text>
       <View style={styles.inputWrapper}>
         <TextInput
