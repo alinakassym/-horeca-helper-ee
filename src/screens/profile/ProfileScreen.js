@@ -18,6 +18,10 @@ import {IconComment} from '../../assets/icons/main/IconComment';
 import {IconAddress} from '../../assets/icons/main/IconAddress';
 import {IconMail} from '../../assets/icons/main/IconMail';
 import {IconPencil} from '../../assets/icons/main/IconPencil';
+import {IconWallet} from '../../assets/icons/main/IconWallet';
+import {IconAccount} from '../../assets/icons/main/IconAccount';
+import {IconCake} from '../../assets/icons/main/IconCake';
+
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   getEmployee,
@@ -242,7 +246,7 @@ export const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        {(me.position || me.gender || me.schedule) && (
+        {/*{(me.position || me.gender || me.schedule) && (
           <View style={[styles.row, styles.paddingTop0, styles.paddingBottom0]}>
             {me.position && <Text>{me.position.title}</Text>}
             {me.position && me.schedule && <Text>, </Text>}
@@ -250,14 +254,47 @@ export const ProfileScreen = ({navigation}) => {
             {me.schedule && me.gender && <Text>, </Text>}
             {me.gender && <Text>{me.gender.title}</Text>}
           </View>
+        )}*/}
+
+        {/*Birth Date and Gender*/}
+        {(me.birthDate || me.gender) && (
+          <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconCake color={'#767676'} size={24} width={1.5} />
+            </View>
+            {me.birthDate && <Text style={styles.text}>{me.birthDate}</Text>}
+            {me.birthDate && me.gender && <Text style={styles.text}>, </Text>}
+            {me.gender && <Text style={styles.text}>{me.gender.title}</Text>}
+          </View>
         )}
 
+        {/*Position & Schedule*/}
+        {(me.position || me.schedule) && (
+          <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconAccount color={'#767676'} size={24} width={1.5} />
+            </View>
+            {me.position && (
+              <Text style={styles.text}>{me.position.title}</Text>
+            )}
+            {me.position && me.schedule && <Text style={styles.text}>, </Text>}
+            {me.schedule && (
+              <Text style={styles.text}>{me.schedule.title}</Text>
+            )}
+          </View>
+        )}
+
+        {/*Salary*/}
         {me.salary && (
           <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconWallet color={'#767676'} size={24} width={1.5} />
+            </View>
             <Text style={styles.text}>{numberWithSpaces(me.salary)} KZT</Text>
           </View>
         )}
 
+        {/*Location*/}
         <View style={styles.row}>
           <View style={styles.iconWrapper}>
             <IconAddress color={'#767676'} size={24} width={1.5} />
