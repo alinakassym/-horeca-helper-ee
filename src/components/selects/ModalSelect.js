@@ -79,7 +79,7 @@ export const ModalSelect = ({
         <Text style={globalStyles.label}>{label}</Text>
         {value[valueKey] ? <ValueSection /> : <PlaceHolder />}
       </View>
-      <Modal visible={visible} animationType="slide" transparent={true}>
+      <Modal visible={visible} animationType="fade" transparent={true}>
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
           <View style={styles.wrap}>
             {items.map((listItem, index) => (

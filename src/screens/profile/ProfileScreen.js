@@ -270,11 +270,13 @@ export const ProfileScreen = ({navigation}) => {
           <Text style={styles.text}>{me.email}</Text>
         </View>
 
-        <View style={styles.row}>
+        <View style={[styles.row, styles.descriptionSection]}>
           <View style={styles.iconWrapper}>
             <IconComment color={'#767676'} size={24} width={1.5} />
           </View>
-          <Text style={styles.text}>{me.description || 'About me ...'}</Text>
+          <View style={styles.description}>
+            <Text style={styles.text}>{me.description || 'About me ...'}</Text>
+          </View>
         </View>
 
         <View style={styles.row}>
@@ -298,16 +300,15 @@ export const ProfileScreen = ({navigation}) => {
       {/*Works*/}
       <View style={styles.block}>
         <View style={[styles.row, styles.spaceBetween]}>
-          <TouchableOpacity
+          <PlainButton
             onPress={() => {
               navigation.navigate('AddWorkScreen');
-            }}>
-            <PlainButton label={'Add work experience'}>
-              <View style={styles.btnIcon}>
-                <IconAdd color={'#185AB7'} size={24} width={2} />
-              </View>
-            </PlainButton>
-          </TouchableOpacity>
+            }}
+            label={'Add work experience'}>
+            <View style={styles.btnIcon}>
+              <IconAdd color={'#185AB7'} size={24} width={2} />
+            </View>
+          </PlainButton>
         </View>
         <View style={styles.column}>
           {me.works.map((item, index) => (
@@ -409,7 +410,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontWeight: '500',
-    lineHeight: 16,
+    lineHeight: 24,
     color: '#000000',
   },
   block: {
@@ -475,5 +476,11 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  descriptionSection: {
+    alignItems: 'flex-start',
+  },
+  description: {
+    width: '90%',
   },
 });

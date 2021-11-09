@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, TextInput, Alert, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,10 +21,9 @@ import {
   getPositions,
   getSchedules,
 } from '../../services/DictionariesService';
+import {Autocomplete} from '../../components/selects/Autocomplete';
 
 export const ProfileEditScreen = ({route, navigation}) => {
-  // console.log('ProfileEdit Screen params', route.params);
-
   const [employee, setEmployee] = useState(route.params.value);
   const [cities, setCities] = useState([]);
   const [positions, setPositions] = useState([]);
@@ -25,6 +31,8 @@ export const ProfileEditScreen = ({route, navigation}) => {
   const [schedules, setSchedules] = useState([]);
 
   const [isValidFirstName, setIsValidFirstName] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   function firstNameChanged(val) {
     setIsValidFirstName(val && val.length >= 2);
@@ -89,6 +97,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           .then(schedulesData => {
             // console.log('schedules: ', schedulesData);
             setSchedules(schedulesData);
+            setLoading(false);
           })
           .catch(e => {
             console.log('getSchedules err:', e);
@@ -101,6 +110,14 @@ export const ProfileEditScreen = ({route, navigation}) => {
     }
     fetchData().then();
   }, [employee.firstName, navigation]);
+
+  if (loading) {
+    return (
+      <View style={styles.fullScreenSection}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -148,7 +165,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         itemTitle={'title'}
       />
 
-      <ModalSelect
+      <Autocomplete
         label={'Location'}
         onChangeText={val => {
           setEmployee({...employee, city: val});
@@ -159,7 +176,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         itemTitle={'title'}
       />
 
-      <ModalSelect
+      <Autocomplete
         label={'Position'}
         onChangeText={val => {
           setEmployee({...employee, position: val});
@@ -184,6 +201,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
       <Text style={globalStyles.label}>Salary</Text>
       <TextInput
         style={globalStyles.primaryInput}
+        keyboardType={'number-pad'}
         onChangeText={val => {
           setEmployee({
             ...employee,
@@ -220,6 +238,11 @@ export const ProfileEditScreen = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  fullScreenSection: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     padding: 16,
   },
