@@ -14,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {globalStyles} from '../../styles/globalStyles';
 import PlainButton from '../../components/buttons/PlainButton';
+import {Autocomplete} from '../../components/selects/Autocomplete';
 
 export const JobsFilterScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
@@ -97,7 +98,7 @@ export const JobsFilterScreen = ({navigation}) => {
       />
 
       {/*City*/}
-      <ModalSelect
+      <Autocomplete
         onChangeText={val => {
           setFilters({...filters, city: val});
         }}
@@ -121,7 +122,7 @@ export const JobsFilterScreen = ({navigation}) => {
       />
 
       {/*Position*/}
-      <ModalSelect
+      <Autocomplete
         onChangeText={val => {
           setFilters({...filters, position: val});
         }}
