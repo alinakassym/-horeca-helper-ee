@@ -5,10 +5,10 @@ import {globalStyles} from '../../styles/globalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {postWork} from '../../services/EmployeesService';
-import {ModalSelect} from '../../components/selects/ModalSelect';
 import {getCities, getPositions} from '../../services/DictionariesService';
 import {getCompanies} from '../../services/CompaniesService';
 import {DateSelect} from '../../components/selects/DateSelect';
+import {Autocomplete} from '../../components/selects/Autocomplete';
 
 export const AddWorkScreen = ({navigation}) => {
   const [work, setWork] = useState({
@@ -16,8 +16,8 @@ export const AddWorkScreen = ({navigation}) => {
     position: null,
     description: null,
     city: null,
-    startDate: null,
-    endDate: null,
+    startDate: new Date('2020-01-01'),
+    endDate: new Date(),
   });
   const [companies, setCompanies] = useState([]);
   const [cities, setCities] = useState([]);
@@ -85,7 +85,7 @@ export const AddWorkScreen = ({navigation}) => {
     <KeyboardAwareScrollView
       style={styles.container}
       enableResetScrollToCoords={false}>
-      <ModalSelect
+      <Autocomplete
         label={'Location'}
         onChangeText={val => {
           setWork({...work, city: val});
@@ -97,7 +97,7 @@ export const AddWorkScreen = ({navigation}) => {
         required={true}
       />
 
-      <ModalSelect
+      <Autocomplete
         label={'Company'}
         onChangeText={val => {
           setWork({...work, company: val});
@@ -109,7 +109,7 @@ export const AddWorkScreen = ({navigation}) => {
         required={true}
       />
 
-      <ModalSelect
+      <Autocomplete
         label={'Position'}
         onChangeText={val => {
           setWork({...work, position: val});
@@ -126,6 +126,7 @@ export const AddWorkScreen = ({navigation}) => {
         value={work}
         valueKey={'startDate'}
         required={true}
+        androidVariant="nativeAndroid"
       />
       <DateSelect
         label={'End Date'}
@@ -133,6 +134,7 @@ export const AddWorkScreen = ({navigation}) => {
         valueKey={'endDate'}
         minimumDate={new Date(work.startDate)}
         required={true}
+        androidVariant="nativeAndroid"
       />
 
       <Text style={globalStyles.label}>Description</Text>
