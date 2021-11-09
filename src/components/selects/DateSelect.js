@@ -12,6 +12,7 @@ export const DateSelect = ({
   valueKey,
   minimumDate,
   placeholder,
+  clearable,
 }) => {
   const [open, setOpen] = useState(false);
   const [item, setItem] = useState(value[valueKey]);
@@ -41,13 +42,15 @@ export const DateSelect = ({
             {moment(item).format('YYYY-MM-DD')}
           </Text>
         </Pressable>
-        <Pressable
-          onPress={() => {
-            clearValue();
-          }}
-          style={styles.clearBtn}>
-          <IconClose color={'#898989'} />
-        </Pressable>
+        {clearable && (
+          <Pressable
+            onPress={() => {
+              clearValue();
+            }}
+            style={styles.clearBtn}>
+            <IconClose color={'#898989'} />
+          </Pressable>
+        )}
       </View>
     );
   };
