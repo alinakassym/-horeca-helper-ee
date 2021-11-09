@@ -22,6 +22,12 @@ export const JobScreen = ({route, navigation}) => {
     return moment(date).format('MMM-D, YYYY');
   };
 
+  const numberWithSpaces = val => {
+    let parts = val.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return parts.join('.');
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
@@ -83,18 +89,25 @@ export const JobScreen = ({route, navigation}) => {
               <Text style={[styles.text, styles.textBold]}>Salary:</Text>
               <Text style={styles.salary}>
                 {' '}
-                {job.salaryMin} - {job.salaryMax} KZT
+                {numberWithSpaces(job.salaryMin)} -{' '}
+                {numberWithSpaces(job.salaryMax)} KZT
               </Text>
             </View>
           ) : job.salaryMin ? (
             <View style={styles.row}>
               <Text style={[styles.text, styles.textBold]}>Salary:</Text>
-              <Text style={styles.salary}> from {job.salaryMin} KZT</Text>
+              <Text style={styles.salary}>
+                {' '}
+                from {numberWithSpaces(job.salaryMin)} KZT
+              </Text>
             </View>
           ) : (
             <View style={styles.row}>
               <Text style={[styles.text, styles.textBold]}>Salary:</Text>
-              <Text style={styles.salary}> to {job.salaryMax} KZT</Text>
+              <Text style={styles.salary}>
+                {' '}
+                to {numberWithSpaces(job.salaryMax)} KZT
+              </Text>
             </View>
           )}
         </View>

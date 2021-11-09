@@ -156,6 +156,12 @@ export const ProfileScreen = ({navigation}) => {
     });
   };
 
+  const numberWithSpaces = val => {
+    let parts = val.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return parts.join('.');
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
@@ -248,7 +254,7 @@ export const ProfileScreen = ({navigation}) => {
 
         {me.salary && (
           <View style={styles.row}>
-            <Text style={styles.text}>{me.salary.toString()} KZT</Text>
+            <Text style={styles.text}>{numberWithSpaces(me.salary)} KZT</Text>
           </View>
         )}
 
