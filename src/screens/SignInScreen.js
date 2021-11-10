@@ -21,12 +21,9 @@ import {
 import {getHhToken} from '../services/AuthService';
 
 GoogleSignin.configure({
+  // webClientId is taken from android/app/google-services.json
   webClientId:
-    '80837938097-68a9l5aphmdccseksn9mr0scil5moimt.apps.googleusercontent.com',
-  androidClientId:
-    '80837938097-5prvgmdnbmsain6on7k1nss2fhhgtr0h.apps.googleusercontent.com',
-  iosClientId:
-    '80837938097-pld9kvi5epu69pm9ehqm411kifa2fq68.apps.googleusercontent.com',
+    '929223236001-cn8ig9bh06moiafbop0t48afcrnraej3.apps.googleusercontent.com',
   offlineAccess: true,
 });
 

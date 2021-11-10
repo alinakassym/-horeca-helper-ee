@@ -225,6 +225,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    apply plugin: 'com.google.gms.google-services' // this should be the last line according to google-signin lib tutorials
 }
 
 // Run this once to be able to run the application with BUCK
