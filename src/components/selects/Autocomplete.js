@@ -86,7 +86,7 @@ export const Autocomplete = ({
   };
 
   const getItem = (filteredList, index) => ({
-    id: index,
+    id: filteredList[index].id,
     title: filteredList[index].title,
   });
 
