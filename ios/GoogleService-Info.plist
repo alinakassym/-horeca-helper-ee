@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>929223236001-5s5g3hkhot231o3tf7vrtr0uhva3vslf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.929223236001-5s5g3hkhot231o3tf7vrtr0uhva3vslf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>929223236001-0f2eugl3jduii93eofnfkd9b4u44td6f.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDC0oJbx2nrTSBQC2NPVH3aRudewF2zE0M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>929223236001</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kz.horecahelper.ee</string>
+	<key>PROJECT_ID</key>
+	<string>horecahelperdev</string>
+	<key>STORAGE_BUCKET</key>
+	<string>horecahelperdev.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:929223236001:ios:d91ac7b7f2afbebd87d3e0</string>
+</dict>
+</plist>

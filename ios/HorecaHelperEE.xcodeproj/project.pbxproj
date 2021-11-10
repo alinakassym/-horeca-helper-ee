@@ -20,6 +20,7 @@
 		8F5ECA4C1959491C8B15C326 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0744567917049A18FF9F343 /* Montserrat-Regular.ttf */; };
 		DA29811F97E085A13C0AD86A /* libPods-HorecaHelperEE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E9A1EC3C7FF21B96A3A7D2 /* libPods-HorecaHelperEE.a */; };
 		DD19BB0C64A649D8820F7978 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED4F9BEA5DB9479C91951DE2 /* Montserrat-Medium.ttf */; };
+		F13CD533273BD07300190396 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F13CD532273BD07300190396 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		E73DAD21AC7A4D2287B4A12E /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../src/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED4F9BEA5DB9479C91951DE2 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.ttf"; path = "../src/assets/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		F13CD532273BD07300190396 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 		13B07FAE1A68108700A75B9A /* HorecaHelperEE */ = {
 			isa = PBXGroup;
 			children = (
+				F13CD532273BD07300190396 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -270,6 +273,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F13CD533273BD07300190396 /* GoogleService-Info.plist in Resources */,
 				DD19BB0C64A649D8820F7978 /* Montserrat-Medium.ttf in Resources */,
 				8F5ECA4C1959491C8B15C326 /* Montserrat-Regular.ttf in Resources */,
 				76B1DD03CD2645E4AFBFCD98 /* Montserrat-SemiBold.ttf in Resources */,
