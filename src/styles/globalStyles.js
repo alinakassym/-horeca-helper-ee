@@ -7,6 +7,9 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  modalTopBar: {
+    marginTop: Platform.OS === 'ios' ? 40 : 0,
+  },
   label: {
     marginBottom: 8,
     fontFamily: 'Roboto-Medium',
