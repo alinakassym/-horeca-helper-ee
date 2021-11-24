@@ -20,6 +20,9 @@ import {
 
 import {getHhToken} from '../services/AuthService';
 
+import {useDispatch} from 'react-redux';
+import {setToken} from '../store/slices/auth';
+
 GoogleSignin.configure({
   // webClientId is taken from android/app/google-services.json
   webClientId:
@@ -28,6 +31,8 @@ GoogleSignin.configure({
 });
 
 export const SignInScreen = () => {
+  const dispatch = useDispatch();
+
   const [data, setData] = React.useState({
     username: '',
     password: '',
@@ -77,6 +82,8 @@ export const SignInScreen = () => {
                 photoUrl: userInfo.user.photoUrl,
               },
             ];
+
+            await dispatch(setToken(authData.hhToken));
             await storeData(foundUser[0]);
             AsyncStorage.setItem('hhToken', authData.hhToken).then(() => {
               signIn(foundUser);

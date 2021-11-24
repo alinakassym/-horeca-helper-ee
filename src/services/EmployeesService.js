@@ -1,33 +1,19 @@
-import axios from 'axios';
 import {Platform} from 'react-native';
+import http from '../http-common';
 
-// emulator
-// const baseUrl =
-//   Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
-
-// android device
-// const baseUrl = 'http://localhost:3000';
-
-// cloud BE
-const baseUrl = 'https://horecahelper.kz/backend';
-
-export const getEmployee = async hhToken => {
-  const r = await axios.get(`${baseUrl}/ee/employees/me`, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const getEmployee = async () => {
+  const r = await http.get('/ee/employees/me');
   // console.log('Employees Service getEmployee result:', r.data);
   return r;
 };
 
-export const updateEmployee = async (data, hhToken) => {
-  const r = await axios.patch(`${baseUrl}/ee/employees/me`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const updateEmployee = async data => {
+  const r = await http.patch('/ee/employees/me', data);
   // console.log('Employees Service updateEmployee result:', r.data);
   return r;
 };
 
-export const updateEmployeePhoto = async (img, hhToken) => {
+export const updateEmployeePhoto = async img => {
   const data = new FormData();
   data.append('file', {
     name: img.fileName,
@@ -35,39 +21,32 @@ export const updateEmployeePhoto = async (img, hhToken) => {
     uri: Platform.OS === 'android' ? img.uri : img.uri.replace('file://', ''),
   });
 
-  const url = `${baseUrl}/ee/employees/me/photo`;
+  const url = '/ee/employees/me/photo';
 
-  const r = await axios.post(url, data, {
+  const r = await http.post(url, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Accept: 'application/json',
-      Authorization: `Bearer ${hhToken || ''}`,
     },
   });
   console.log('Employees Service updateEmployeePhoto result:', r.data);
   return r;
 };
 
-export const postWork = async (data, hhToken) => {
-  const r = await axios.post(`${baseUrl}/ee/works`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const postWork = async data => {
+  const r = await http.post('/ee/works', data);
   // console.log('Employees Service setWork result:', r.data);
   return r;
 };
 
-export const updateWork = async (data, hhToken) => {
-  const r = await axios.patch(`${baseUrl}/ee/works/${data.id}`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const updateWork = async data => {
+  const r = await http.patch(`/ee/works/${data.id}`, data);
   // console.log('Employees Service setWork result:', r.data);
   return r;
 };
 
-export const deleteWork = async (id, hhToken) => {
-  const r = await axios.delete(`${baseUrl}/ee/works/${id}`, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const deleteWork = async id => {
+  const r = await http.delete(`/ee/works/${id}`);
   // console.log('Employees Service deleteWork result:', r.data);
   return r;
 };

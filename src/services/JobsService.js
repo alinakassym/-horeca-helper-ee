@@ -1,28 +1,13 @@
-import axios from 'axios';
-import {Platform} from 'react-native';
+import http from '../http-common';
 
-// emulator
-// const baseUrl =
-//   Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
-
-// android device
-// const baseUrl = 'http://localhost:3000';
-
-// cloud BE
-const baseUrl = 'https://horecahelper.kz/backend';
-
-export const searchJobs = async (data, hhToken) => {
-  const r = await axios.post(`${baseUrl}/ee/jobs/search`, data, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const searchJobs = async data => {
+  const r = await http.post('/ee/jobs/search', data);
   // console.log('getJobs result: ', r.data)
   return r;
 };
 
-export const getJobById = async (id, hhToken) => {
-  const r = await axios.get(`${baseUrl}/ee/jobs/${id}`, {
-    headers: {Authorization: `Bearer ${hhToken || ''}`},
-  });
+export const getJobById = async id => {
+  const r = await http.get(`/ee/jobs/${id}`);
   console.log('getJobById result: ', r.data);
   return r;
 };
