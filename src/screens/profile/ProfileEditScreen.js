@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {updateEmployee} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
@@ -41,7 +40,6 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
   const save = async () => {
     if (isValidFirstName) {
-      const hhToken = await AsyncStorage.getItem('hhToken');
       const data = {
         firstName: employee.firstName,
         lastName: employee.lastName,
@@ -57,52 +55,40 @@ export const ProfileEditScreen = ({route, navigation}) => {
         scheduleId: employee.schedule ? employee.schedule.id : null,
         salary: employee.salary,
       };
-      updateEmployee(data, hhToken).then(() => {
+      try {
+        await updateEmployee(data);
         navigation.navigate('Profile');
-      });
+      } catch (e) {
+        console.log('updateEmployee err: ', e);
+      }
     } else {
       Alert.alert('Warning', 'Username must be at least 2 characters');
     }
   };
 
+  const getData = async () => {
+    return Promise.all([
+      getCities(),
+      getPositions(),
+      getGenders(),
+      getSchedules(),
+    ]);
+  };
+
   useEffect(() => {
     async function fetchData() {
       return navigation.addListener('focus', async () => {
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        getCities(hhToken)
-          .then(citiesData => {
-            // console.log('cities: ', citiesData);
-            setCities(citiesData);
-          })
-          .catch(e => {
-            console.log('getCities err:', e);
-          });
-        getPositions(hhToken)
-          .then(positionsData => {
-            // console.log('positions: ', positionsData);
-            setPositions(positionsData);
-          })
-          .catch(e => {
-            console.log('getPositions err:', e);
-          });
-        getGenders(hhToken)
-          .then(gendersData => {
-            // console.log('genders: ', gendersData);
-            setGenders(gendersData);
-          })
-          .catch(e => {
-            console.log('getGenders err:', e);
-          });
-        getSchedules(hhToken)
-          .then(schedulesData => {
-            // console.log('schedules: ', schedulesData);
-            setSchedules(schedulesData);
-            setLoading(false);
-          })
-          .catch(e => {
-            console.log('getSchedules err:', e);
-          });
-
+        try {
+          const [citiesData, positionsData, gendersData, schedulesData] =
+            await getData();
+          setCities(citiesData);
+          setPositions(positionsData);
+          setGenders(gendersData);
+          setSchedules(schedulesData);
+          setLoading(false);
+        } catch (e) {
+          console.log('getData err:', e);
+        }
         setIsValidFirstName(
           employee.firstName && employee.firstName.length >= 2,
         );

@@ -29,7 +29,6 @@ import {
 } from '../../services/EmployeesService';
 import PlainButton from '../../components/buttons/PlainButton';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WorkCard} from '../../components/works/WorkCard';
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
@@ -40,8 +39,6 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
-
-  const [hhToken, setToken] = useState('');
   const [me, setMe] = useState({
     positionId: null,
     position: null,
@@ -97,10 +94,10 @@ export const ProfileScreen = ({navigation}) => {
     navigation.navigate('Jobs');
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     console.log('AuthContext', AuthContext);
     try {
-      GoogleSignin.signOut().then(() => {});
+      await GoogleSignin.signOut();
       signOut();
     } catch (error) {
       console.error(error);
@@ -116,7 +113,7 @@ export const ProfileScreen = ({navigation}) => {
     return moment().diff(birthDate, 'years', false);
   };
 
-  const openCamera = () => {
+  const openCamera = async () => {
     let options = {
       storageOption: {
         path: 'images',
@@ -131,14 +128,17 @@ export const ProfileScreen = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        updateEmployeePhoto(response.assets[0], hhToken).then(r => {
+        try {
+          const r = updateEmployeePhoto(response.assets[0]);
           setMe(r.data);
-        });
+        } catch (e) {
+          console.log('updateEmployeePhoto err: ', e);
+        }
       }
     });
   };
 
-  const openGallery = () => {
+  const openGallery = async () => {
     let options = {
       storageOption: {
         path: 'images',
@@ -153,9 +153,12 @@ export const ProfileScreen = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        updateEmployeePhoto(response.assets[0], hhToken).then(r => {
+        try {
+          const r = updateEmployeePhoto(response.assets[0]);
           setMe(r.data);
-        });
+        } catch (e) {
+          console.log('updateEmployeePhoto err: ', e);
+        }
       }
     });
   };
@@ -169,18 +172,13 @@ export const ProfileScreen = ({navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        const token = await AsyncStorage.getItem('hhToken');
-        setToken(token);
-        getEmployee(token)
-          .then(res => {
-            // console.log('ProfileScreen employee/me:', res.data);
-            setMe(res.data);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error('ProfileScreen error');
-            console.log(err);
-          });
+        try {
+          const res = getEmployee();
+          setMe(res.data);
+          setLoading(false);
+        } catch (e) {
+          console.log('ProfileScreen err: ', e);
+        }
       });
     }
     fetchData();

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getPositions,
   getCategories,
@@ -45,38 +44,35 @@ export const JobsFilterScreen = ({navigation}) => {
   };
 
   const getData = async () => {
-    const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
-      getCategories(hhToken),
-      getCities(hhToken),
-      getPositions(hhToken),
-      getGenders(hhToken),
-      getSchedules(hhToken),
+      getCategories(),
+      getCities(),
+      getPositions(),
+      getGenders(),
+      getSchedules(),
     ]);
   };
 
   useEffect(() => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
-        getData()
-          .then(
-            ([
-              categoriesData,
-              citiesData,
-              positionsData,
-              gendersData,
-              schedulesData,
-            ]) => {
-              setPositions(positionsData);
-              setCategories(categoriesData);
-              setCities(citiesData);
-              setGenders(gendersData);
-              setSchedules(schedulesData);
-            },
-          )
-          .catch(err => {
-            console.log(err);
-          });
+        try {
+          const [
+            categoriesData,
+            citiesData,
+            positionsData,
+            gendersData,
+            schedulesData,
+          ] = await getData();
+
+          setPositions(positionsData);
+          setCategories(categoriesData);
+          setCities(citiesData);
+          setGenders(gendersData);
+          setSchedules(schedulesData);
+        } catch (e) {
+          console.log('getData err: ', e);
+        }
       });
       return unsubscribe;
     }

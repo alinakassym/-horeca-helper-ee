@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Text, View, TextInput, StyleSheet, Alert} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {getCities, getPositions} from '../../services/DictionariesService';
@@ -24,7 +23,6 @@ export const EditWorkScreen = ({route, navigation}) => {
       work.startDate &&
       work.endDate;
     if (isValid) {
-      const hhToken = await AsyncStorage.getItem('hhToken');
       const data = {
         id: work.id,
         companyId: work.company ? work.company.id : null,
@@ -34,52 +32,44 @@ export const EditWorkScreen = ({route, navigation}) => {
         startDate: work.startDate,
         endDate: work.endDate,
       };
-      updateWork(data, hhToken).then(() => {
+      try {
+        await updateWork(data);
         navigation.navigate('Profile');
-      });
+      } catch (e) {
+        console.log('updateWork err: ', e);
+      }
     } else {
       Alert.alert('Warning', 'Please fill in all the required fields');
     }
   };
 
+  const getData = async () => {
+    return Promise.all([getCompanies(), getCities(), getPositions()]);
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        getCompanies(hhToken)
-          .then(companiesData => {
-            console.log('companies: ', companiesData);
-            setCompanies(companiesData);
-          })
-          .catch(e => {
-            console.log('getCompanies err:', e);
-          });
-        getCities(hhToken)
-          .then(citiesData => {
-            console.log('cities: ', citiesData);
-            setCities(citiesData);
-          })
-          .catch(e => {
-            console.log('getCities err:', e);
-          });
-        getPositions(hhToken)
-          .then(positionsData => {
-            console.log('positions: ', positionsData);
-            setPositions(positionsData);
-          })
-          .catch(e => {
-            console.log('getPositions err:', e);
-          });
+        try {
+          const [companiesData, citiesData, positionsData] = await getData();
+          setCompanies(companiesData);
+          setCities(citiesData);
+          setPositions(positionsData);
+        } catch (e) {
+          console.log('getData err: ', e);
+        }
       });
     }
     fetchData();
   }, [navigation]);
 
   const removeWork = async () => {
-    const hhToken = await AsyncStorage.getItem('hhToken');
-    deleteWork(work.id, hhToken).then(() => {
+    try {
+      await deleteWork(work.id);
       navigation.navigate('Profile');
-    });
+    } catch (e) {
+      console.log('deleteWork err: ', e);
+    }
   };
 
   const confirmDeletion = () => {
