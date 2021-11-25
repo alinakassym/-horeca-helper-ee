@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {globalStyles} from '../../styles/globalStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {updateEmployee} from '../../services/EmployeesService';
 import {ModalSelect} from '../../components/selects/ModalSelect';
@@ -41,7 +40,6 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
   const save = async () => {
     if (isValidFirstName) {
-      const hhToken = await AsyncStorage.getItem('hhToken');
       const data = {
         firstName: employee.firstName,
         lastName: employee.lastName,
@@ -57,7 +55,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         scheduleId: employee.schedule ? employee.schedule.id : null,
         salary: employee.salary,
       };
-      updateEmployee(data, hhToken).then(() => {
+      updateEmployee(data).then(() => {
         navigation.navigate('Profile');
       });
     } else {
@@ -68,8 +66,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
   useEffect(() => {
     async function fetchData() {
       return navigation.addListener('focus', async () => {
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        getCities(hhToken)
+        getCities()
           .then(citiesData => {
             // console.log('cities: ', citiesData);
             setCities(citiesData);
@@ -77,7 +74,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           .catch(e => {
             console.log('getCities err:', e);
           });
-        getPositions(hhToken)
+        getPositions()
           .then(positionsData => {
             // console.log('positions: ', positionsData);
             setPositions(positionsData);
@@ -85,7 +82,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           .catch(e => {
             console.log('getPositions err:', e);
           });
-        getGenders(hhToken)
+        getGenders()
           .then(gendersData => {
             // console.log('genders: ', gendersData);
             setGenders(gendersData);
@@ -93,7 +90,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           .catch(e => {
             console.log('getGenders err:', e);
           });
-        getSchedules(hhToken)
+        getSchedules()
           .then(schedulesData => {
             // console.log('schedules: ', schedulesData);
             setSchedules(schedulesData);
