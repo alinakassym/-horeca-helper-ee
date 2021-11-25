@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {searchJobs} from '../../services/JobsService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JobCard} from '../../components/jobs/JobCard';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
 import {useSelector} from 'react-redux';
@@ -17,7 +16,6 @@ import {useSelector} from 'react-redux';
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
   const isFilterApplied = useSelector(state => state.jobs.isFilterApplied);
-
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +29,7 @@ export const JobsScreen = ({navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        const hhToken = await AsyncStorage.getItem('hhToken');
-        searchJobs(filterState, hhToken)
+        searchJobs(filterState)
           .then(result => {
             setJobs(result.data.items);
             setLoading(false);

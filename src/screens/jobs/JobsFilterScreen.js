@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getPositions,
   getCategories,
@@ -45,13 +44,12 @@ export const JobsFilterScreen = ({navigation}) => {
   };
 
   const getData = async () => {
-    const hhToken = await AsyncStorage.getItem('hhToken');
     return Promise.all([
-      getCategories(hhToken),
-      getCities(hhToken),
-      getPositions(hhToken),
-      getGenders(hhToken),
-      getSchedules(hhToken),
+      getCategories(),
+      getCities(),
+      getPositions(),
+      getGenders(),
+      getSchedules(),
     ]);
   };
 

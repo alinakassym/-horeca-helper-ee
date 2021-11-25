@@ -8,7 +8,6 @@ import {
   Image,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getJobById} from '../../services/JobsService';
 import moment from 'moment';
 
@@ -31,11 +30,7 @@ export const JobScreen = ({route, navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        // The screen is focused
-        const hhToken = await AsyncStorage.getItem('hhToken');
-
-        console.log('jobId', jobId);
-        getJobById(jobId, hhToken).then(data => {
+        getJobById(jobId).then(data => {
           onChange(data.data);
           setLoading(false);
         });
