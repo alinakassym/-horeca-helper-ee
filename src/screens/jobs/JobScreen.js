@@ -30,10 +30,13 @@ export const JobScreen = ({route, navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        getJobById(jobId).then(data => {
+        try {
+          const data = await getJobById(jobId);
           onChange(data.data);
           setLoading(false);
-        });
+        } catch (e) {
+          console.log('getJobById err: ', e);
+        }
       });
     }
     fetchData();

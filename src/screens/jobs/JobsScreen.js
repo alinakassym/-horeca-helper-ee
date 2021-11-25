@@ -29,14 +29,13 @@ export const JobsScreen = ({navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        searchJobs(filterState)
-          .then(result => {
-            setJobs(result.data.items);
-            setLoading(false);
-          })
-          .catch(e => {
-            console.log('searchJobs err:', e);
-          });
+        try {
+          const result = await searchJobs(filterState);
+          setJobs(result.data.items);
+          setLoading(false);
+        } catch (e) {
+          console.log('searchJobs err:', e);
+        }
       });
     }
     fetchData();

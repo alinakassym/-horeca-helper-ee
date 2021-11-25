@@ -56,25 +56,23 @@ export const JobsFilterScreen = ({navigation}) => {
   useEffect(() => {
     function fetchData() {
       const unsubscribe = navigation.addListener('focus', async () => {
-        getData()
-          .then(
-            ([
-              categoriesData,
-              citiesData,
-              positionsData,
-              gendersData,
-              schedulesData,
-            ]) => {
-              setPositions(positionsData);
-              setCategories(categoriesData);
-              setCities(citiesData);
-              setGenders(gendersData);
-              setSchedules(schedulesData);
-            },
-          )
-          .catch(err => {
-            console.log(err);
-          });
+        try {
+          const [
+            categoriesData,
+            citiesData,
+            positionsData,
+            gendersData,
+            schedulesData,
+          ] = await getData();
+
+          setPositions(positionsData);
+          setCategories(categoriesData);
+          setCities(citiesData);
+          setGenders(gendersData);
+          setSchedules(schedulesData);
+        } catch (e) {
+          console.log('getData err: ', e);
+        }
       });
       return unsubscribe;
     }
