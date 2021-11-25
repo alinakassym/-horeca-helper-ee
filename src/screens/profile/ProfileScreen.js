@@ -94,10 +94,10 @@ export const ProfileScreen = ({navigation}) => {
     navigation.navigate('Jobs');
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     console.log('AuthContext', AuthContext);
     try {
-      GoogleSignin.signOut().then(() => {});
+      await GoogleSignin.signOut();
       signOut();
     } catch (error) {
       console.error(error);
@@ -113,7 +113,7 @@ export const ProfileScreen = ({navigation}) => {
     return moment().diff(birthDate, 'years', false);
   };
 
-  const openCamera = () => {
+  const openCamera = async () => {
     let options = {
       storageOption: {
         path: 'images',
@@ -128,14 +128,17 @@ export const ProfileScreen = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        updateEmployeePhoto(response.assets[0]).then(r => {
+        try {
+          const r = updateEmployeePhoto(response.assets[0]);
           setMe(r.data);
-        });
+        } catch (e) {
+          console.log('updateEmployeePhoto err: ', e);
+        }
       }
     });
   };
 
-  const openGallery = () => {
+  const openGallery = async () => {
     let options = {
       storageOption: {
         path: 'images',
@@ -150,9 +153,12 @@ export const ProfileScreen = ({navigation}) => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        updateEmployeePhoto(response.assets[0]).then(r => {
+        try {
+          const r = updateEmployeePhoto(response.assets[0]);
           setMe(r.data);
-        });
+        } catch (e) {
+          console.log('updateEmployeePhoto err: ', e);
+        }
       }
     });
   };
@@ -166,16 +172,13 @@ export const ProfileScreen = ({navigation}) => {
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        getEmployee()
-          .then(res => {
-            // console.log('ProfileScreen employee/me:', res.data);
-            setMe(res.data);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error('ProfileScreen error');
-            console.log(err);
-          });
+        try {
+          const res = getEmployee();
+          setMe(res.data);
+          setLoading(false);
+        } catch (e) {
+          console.log('ProfileScreen err: ', e);
+        }
       });
     }
     fetchData();

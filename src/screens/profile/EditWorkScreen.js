@@ -32,50 +32,44 @@ export const EditWorkScreen = ({route, navigation}) => {
         startDate: work.startDate,
         endDate: work.endDate,
       };
-      updateWork(data).then(() => {
+      try {
+        await updateWork(data);
         navigation.navigate('Profile');
-      });
+      } catch (e) {
+        console.log('updateWork err: ', e);
+      }
     } else {
       Alert.alert('Warning', 'Please fill in all the required fields');
     }
   };
 
+  const getData = async () => {
+    return Promise.all([getCompanies(), getCities(), getPositions()]);
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        getCompanies()
-          .then(companiesData => {
-            console.log('companies: ', companiesData);
-            setCompanies(companiesData);
-          })
-          .catch(e => {
-            console.log('getCompanies err:', e);
-          });
-        getCities()
-          .then(citiesData => {
-            console.log('cities: ', citiesData);
-            setCities(citiesData);
-          })
-          .catch(e => {
-            console.log('getCities err:', e);
-          });
-        getPositions()
-          .then(positionsData => {
-            console.log('positions: ', positionsData);
-            setPositions(positionsData);
-          })
-          .catch(e => {
-            console.log('getPositions err:', e);
-          });
+        try {
+          const [companiesData, citiesData, positionsData] = await getData();
+          setCompanies(companiesData);
+          setCities(citiesData);
+          setPositions(positionsData);
+        } catch (e) {
+          console.log('getData err: ', e);
+        }
       });
     }
     fetchData();
   }, [navigation]);
 
   const removeWork = async () => {
-    deleteWork(work.id).then(() => {
+    try {
+      await deleteWork(work.id);
       navigation.navigate('Profile');
-    });
+    } catch (e) {
+      console.log('deleteWork err: ', e);
+    }
   };
 
   const confirmDeletion = () => {

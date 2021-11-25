@@ -55,51 +55,40 @@ export const ProfileEditScreen = ({route, navigation}) => {
         scheduleId: employee.schedule ? employee.schedule.id : null,
         salary: employee.salary,
       };
-      updateEmployee(data).then(() => {
+      try {
+        await updateEmployee(data);
         navigation.navigate('Profile');
-      });
+      } catch (e) {
+        console.log('updateEmployee err: ', e);
+      }
     } else {
       Alert.alert('Warning', 'Username must be at least 2 characters');
     }
   };
 
+  const getData = async () => {
+    return Promise.all([
+      getCities(),
+      getPositions(),
+      getGenders(),
+      getSchedules(),
+    ]);
+  };
+
   useEffect(() => {
     async function fetchData() {
       return navigation.addListener('focus', async () => {
-        getCities()
-          .then(citiesData => {
-            // console.log('cities: ', citiesData);
-            setCities(citiesData);
-          })
-          .catch(e => {
-            console.log('getCities err:', e);
-          });
-        getPositions()
-          .then(positionsData => {
-            // console.log('positions: ', positionsData);
-            setPositions(positionsData);
-          })
-          .catch(e => {
-            console.log('getPositions err:', e);
-          });
-        getGenders()
-          .then(gendersData => {
-            // console.log('genders: ', gendersData);
-            setGenders(gendersData);
-          })
-          .catch(e => {
-            console.log('getGenders err:', e);
-          });
-        getSchedules()
-          .then(schedulesData => {
-            // console.log('schedules: ', schedulesData);
-            setSchedules(schedulesData);
-            setLoading(false);
-          })
-          .catch(e => {
-            console.log('getSchedules err:', e);
-          });
-
+        try {
+          const [citiesData, positionsData, gendersData, schedulesData] =
+            await getData();
+          setCities(citiesData);
+          setPositions(positionsData);
+          setGenders(gendersData);
+          setSchedules(schedulesData);
+          setLoading(false);
+        } catch (e) {
+          console.log('getData err:', e);
+        }
         setIsValidFirstName(
           employee.firstName && employee.firstName.length >= 2,
         );

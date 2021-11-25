@@ -38,41 +38,32 @@ export const AddWorkScreen = ({navigation}) => {
         startDate: work.startDate,
         endDate: work.endDate,
       };
-      postWork(data).then(() => {
+      try {
+        await postWork(data);
         navigation.navigate('Profile');
-      });
+      } catch (e) {
+        console.log('postWork err: ', e);
+      }
     } else {
       Alert.alert('Warning', 'Please fill in all the required fields');
     }
   };
 
+  const getData = async () => {
+    return Promise.all([getCompanies(), getCities(), getPositions()]);
+  };
+
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
-        getCompanies()
-          .then(companiesData => {
-            console.log('companies: ', companiesData);
-            setCompanies(companiesData);
-          })
-          .catch(e => {
-            console.log('getCompanies err:', e);
-          });
-        getCities()
-          .then(citiesData => {
-            console.log('cities: ', citiesData);
-            setCities(citiesData);
-          })
-          .catch(e => {
-            console.log('getCities err:', e);
-          });
-        getPositions()
-          .then(positionsData => {
-            console.log('positions: ', positionsData);
-            setPositions(positionsData);
-          })
-          .catch(e => {
-            console.log('getPositions err:', e);
-          });
+        try {
+          const [companiesData, citiesData, positionsData] = await getData();
+          setCompanies(companiesData);
+          setCities(citiesData);
+          setPositions(positionsData);
+        } catch (e) {
+          console.log('getData err: ', e);
+        }
       });
     }
     fetchData();
