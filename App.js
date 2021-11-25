@@ -8,7 +8,7 @@ import {RootStackScreen} from './src/screens/RootStackScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigator} from './src/navigation/Navigator';
 import store from './src/store/index';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
 import {
   NavigationContainer,
@@ -22,13 +22,16 @@ import {
   DarkTheme as PaperDarkTheme,
 } from 'react-native-paper';
 
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
+import {setToken} from './src/store/slices/auth';
+
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
 
   const initialLoginState = {
     isLoading: true,
     userName: null,
-    hhToken: null,
   };
 
   const CustomDefaultTheme = {
@@ -60,28 +63,28 @@ const App = () => {
       case 'RETRIEVE_TOKEN':
         return {
           ...prevState,
-          userToken: action.token,
+          hhToken: action.token,
           isLoading: false,
         };
       case 'LOGIN':
         return {
           ...prevState,
           userName: action.id,
-          userToken: action.token,
+          hhToken: action.token,
           isLoading: false,
         };
       case 'LOGOUT':
         return {
           ...prevState,
           userName: null,
-          userToken: null,
+          hhToken: null,
           isLoading: false,
         };
       case 'REGISTER':
         return {
           ...prevState,
           userName: action.id,
-          userToken: action.token,
+          hhToken: action.token,
           isLoading: false,
         };
     }
@@ -95,23 +98,24 @@ const App = () => {
   const authContext = React.useMemo(
     () => ({
       signIn: async foundUser => {
-        const userToken = String(foundUser[0].userToken);
+        const hhToken = String(foundUser[0].hhToken);
         const userName = foundUser[0].username;
 
         try {
-          await AsyncStorage.setItem('userToken', userToken);
+          await AsyncStorage.setItem('hhToken', hhToken);
+          store.dispatch(setToken(hhToken));
         } catch (e) {
           console.log(e);
         }
 
-        dispatch({type: 'LOGIN', id: userName, token: userToken});
+        dispatch({type: 'LOGIN', id: userName, token: hhToken});
       },
       signOut: async () => {
         try {
-          await AsyncStorage.removeItem('userToken');
+          await GoogleSignin.signOut();
           await AsyncStorage.removeItem('hhToken');
         } catch (e) {
-          console.log(e);
+          console.log('signOut err:', e);
         }
         dispatch({type: 'LOGOUT'});
       },
@@ -126,15 +130,16 @@ const App = () => {
   useEffect(() => {
     setTimeout(async () => {
       // setIsLoading(false);
-      let userToken;
-      userToken = null;
+      let hhToken;
+      hhToken = null;
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        hhToken = await AsyncStorage.getItem('hhToken');
+        store.dispatch(setToken(hhToken));
       } catch (e) {
         console.log(e);
       }
 
-      dispatch({type: 'RETRIEVE_TOKEN', token: userToken});
+      dispatch({type: 'RETRIEVE_TOKEN', token: hhToken});
     }, 1000);
   }, []);
 
@@ -150,7 +155,7 @@ const App = () => {
       <PaperProvider theme={theme}>
         <AuthContext.Provider value={authContext}>
           <NavigationContainer theme={theme}>
-            {loginState.userToken !== null ? <Navigator /> : <RootStackScreen />}
+            {loginState.hhToken !== null ? <Navigator /> : <RootStackScreen />}
           </NavigationContainer>
         </AuthContext.Provider>
       </PaperProvider>

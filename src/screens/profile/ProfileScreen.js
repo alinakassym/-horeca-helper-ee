@@ -173,7 +173,7 @@ export const ProfileScreen = ({navigation}) => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
         try {
-          const res = getEmployee();
+          const res = await getEmployee();
           setMe(res.data);
           setLoading(false);
         } catch (e) {
@@ -222,7 +222,9 @@ export const ProfileScreen = ({navigation}) => {
             setOpen(true);
           }}
           style={styles.imageWrapper}>
-          <Image style={styles.image} source={{uri: me.photoUrl}} />
+          {me?.photoUrl && (
+            <Image style={styles.image} source={{uri: me.photoUrl}} />
+          )}
         </TouchableOpacity>
       </View>
 
@@ -408,7 +410,7 @@ export const ProfileScreen = ({navigation}) => {
         <View style={styles.row}>
           <TouchableOpacity
             onPress={() => {
-              logOut();
+              signOut();
             }}>
             <Text style={styles.text}>Sign Out</Text>
           </TouchableOpacity>
