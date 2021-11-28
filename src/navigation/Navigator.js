@@ -16,9 +16,13 @@ import {IconNotifications} from '../assets/icons/tabs/IconNotifications';
 import {IconProfile} from '../assets/icons/tabs/IconProfile';
 import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
+import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
 
 export const Navigator = () => {
-  useSelector(state => state.jobs.filter);
+  useSelector(state => {
+    const {jobs} = state;
+    return jobs.filter;
+  });
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
@@ -138,6 +142,13 @@ export const Navigator = () => {
           }}
           name="AddWorkScreen"
           component={AddWorkScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle: 'Work Information',
+          }}
+          name="ProfileWorkScreen"
+          component={ProfileWorkScreen}
         />
         <Stack.Screen
           options={{

@@ -360,7 +360,7 @@ export const ProfileScreen = ({navigation}) => {
               <WorkCard
                 item={item}
                 onPress={() => {
-                  navigation.navigate('EditWorkScreen', {value: item});
+                  navigation.navigate('ProfileWorkScreen', {id: item.id});
                 }}
               />
             </View>

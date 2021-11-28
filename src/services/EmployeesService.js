@@ -3,7 +3,7 @@ import http from '../http-common';
 
 export const getEmployee = async () => {
   const r = await http.get('/ee/employees/me');
-  // console.log('Employees Service getEmployee result:', r.data);
+  // console.log('Employees Service getEmployee/me result:', r.data);
   return r;
 };
 
@@ -35,17 +35,26 @@ export const updateEmployeePhoto = async img => {
 
 export const postWork = async data => {
   const r = await http.post('/ee/works', data);
-  // console.log('Employees Service setWork result:', r.data);
+  // console.log('Employees Service postWork result:', r.data);
   return r;
 };
 
 export const updateWork = async data => {
   const r = await http.patch(`/ee/works/${data.id}`, data);
-  // console.log('Employees Service setWork result:', r.data);
+  console.log('Employees Service updateWork result:', r.data);
+  return r;
+};
+
+export const sendCompanyReview = async (id, data) => {
+  console.log('id', id);
+  console.log('data', data);
+  const r = await http.put(`/ee/works/${id}/review`, data);
+  console.log('Employees Service sendCompanyReview result:', r.data);
   return r;
 };
 
 export const deleteWork = async id => {
+  console.log('work id', id);
   const r = await http.delete(`/ee/works/${id}`);
   // console.log('Employees Service deleteWork result:', r.data);
   return r;
