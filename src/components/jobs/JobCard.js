@@ -1,6 +1,15 @@
 import React from 'react';
-import {Text, View, Pressable, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  View,
+  Pressable,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
 import moment from 'moment';
+import {IconStar} from '../../assets/icons/main/IconStar';
+const dimensions = Dimensions.get('screen');
 
 export const JobCard = ({item, onPress}) => {
   const numberWithSpaces = val => {
@@ -9,79 +18,88 @@ export const JobCard = ({item, onPress}) => {
     return parts.join('.');
   };
   return (
-    <Pressable style={styles.card} onPress={onPress}>
-      <View style={styles.row}>
-        <View style={[styles.col, styles.textData]}>
-          <Text style={styles.positionTitle}>
-            {item.position.title} {item.schedule && `(${item.schedule.title})`}
+    <Pressable style={[styles.card, styles.row]} onPress={onPress}>
+      <View style={[styles.leftCol]}>
+        <Text style={styles.positionTitle}>
+          {item.position.title} {item.schedule && `(${item.schedule.title})`}
+        </Text>
+        {item.salaryMin && item.salaryMax ? (
+          <Text style={styles.salary}>
+            {numberWithSpaces(item.salaryMin)} -{' '}
+            {numberWithSpaces(item.salaryMax)} KZT
           </Text>
-          {item.salaryMin && item.salaryMax ? (
-            <Text style={styles.salary}>
-              {numberWithSpaces(item.salaryMin)} -{' '}
-              {numberWithSpaces(item.salaryMax)} KZT
-            </Text>
-          ) : item.salaryMin ? (
-            <Text style={styles.salary}>
-              From {numberWithSpaces(item.salaryMin)} KZT
-            </Text>
-          ) : (
-            <Text style={styles.salary}>
-              To {numberWithSpaces(item.salaryMax)} KZT
-            </Text>
-          )}
-          {item.city && <Text style={styles.cityTitle}>{item.city.title}</Text>}
-          <Text style={styles.companyTitle}>{item.company.title}</Text>
-          {!!item.description && (
-            <Text numberOfLines={1} style={styles.description}>
-              {item.description}
-            </Text>
-          )}
-          <Text style={styles.createdAt}>
-            Last updated on: {moment(item.updatedAt).format('MMM-D, YYYY')}
+        ) : item.salaryMin ? (
+          <Text style={styles.salary}>
+            From {numberWithSpaces(item.salaryMin)} KZT
           </Text>
-        </View>
+        ) : (
+          <Text style={styles.salary}>
+            To {numberWithSpaces(item.salaryMax)} KZT
+          </Text>
+        )}
+        {item.city && <Text style={styles.cityTitle}>{item.city.title}</Text>}
+        <Text style={styles.companyTitle}>{item.company.title}</Text>
+        {!!item.description && (
+          <Text numberOfLines={1} style={styles.description}>
+            {item.description}
+          </Text>
+        )}
+        <Text style={styles.createdAt}>
+          Last updated on: {moment(item.updatedAt).format('MMM-D, YYYY')}
+        </Text>
+      </View>
 
-        <View style={[styles.col, styles.floatLeftTop]}>
-          <View style={styles.imageWrapper}>
-            <Image style={styles.img} source={{uri: item.company.photoUrl}} />
-          </View>
+      <View style={[styles.rightCol]}>
+        <View style={styles.imageWrapper}>
+          <Image style={styles.img} source={{uri: item.company.photoUrl}} />
         </View>
+        {item.company.avgAvgScore && (
+          <View style={[styles.row, styles.alignCenter]}>
+            <View style={styles.scoreIcon}>
+              <IconStar color={'#F1C40F'} fillColor={'#F1C40F'} size={14} />
+            </View>
+            <Text style={styles.text}>{item.company.avgAvgScore} </Text>
+          </View>
+        )}
       </View>
     </Pressable>
   );
 };
 
+const imageSize = dimensions.width * 0.16;
+
 const styles = StyleSheet.create({
   card: {
-    paddingVertical: 16,
-    padding: 8,
+    width: dimensions.width,
+    padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
-  col: {
+  alignCenter: {
+    alignItems: 'center',
+  },
+  leftCol: {
+    paddingRight: 8,
+    width: dimensions.width - imageSize - 32,
+  },
+  rightCol: {
+    width: imageSize,
     flexDirection: 'column',
-  },
-  textData: {
-    maxWidth: 280,
-  },
-  floatLeftTop: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   imageWrapper: {
-    height: 40,
-    width: 40,
-    borderRadius: 4,
-    backgroundColor: '#767676',
-    overflow: 'hidden',
+    marginBottom: 8,
+    height: imageSize,
+    width: imageSize,
   },
   img: {
     height: '100%',
     width: '100%',
+    borderRadius: 4,
+    backgroundColor: '#767676',
   },
   positionTitle: {
     marginBottom: 8,
@@ -104,5 +122,11 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 4,
   },
-  createdAt: {},
+  text: {
+    color: '#000000',
+  },
+  scoreIcon: {
+    marginRight: 4,
+    alignItems: 'center',
+  },
 });
