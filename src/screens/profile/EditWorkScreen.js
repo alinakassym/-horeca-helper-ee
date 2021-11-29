@@ -34,7 +34,7 @@ export const EditWorkScreen = ({route, navigation}) => {
       };
       try {
         await updateWork(data);
-        navigation.navigate('Profile');
+        navigation.navigate('ProfileWorkScreen', {id: work.id});
       } catch (e) {
         console.log('updateWork err: ', e);
       }

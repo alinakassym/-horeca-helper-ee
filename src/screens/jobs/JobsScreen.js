@@ -75,18 +75,16 @@ export const JobsScreen = ({navigation}) => {
 
       {jobs.length > 0 ? (
         <ScrollView>
-          <View style={styles.section}>
-            {jobs &&
-              jobs.map((item, index) => (
-                <JobCard
-                  onPress={() => {
-                    navigation.navigate('JobScreen', {jobId: item.id});
-                  }}
-                  key={index}
-                  item={item}
-                />
-              ))}
-          </View>
+          {jobs &&
+            jobs.map((item, index) => (
+              <JobCard
+                onPress={() => {
+                  navigation.navigate('JobScreen', {jobId: item.id});
+                }}
+                key={index}
+                item={item}
+              />
+            ))}
         </ScrollView>
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -118,11 +116,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
-  },
-  section: {
-    paddingTop: 14,
-    paddingLeft: 14,
-    paddingRight: 14,
   },
   btn: {
     marginBottom: 16,
