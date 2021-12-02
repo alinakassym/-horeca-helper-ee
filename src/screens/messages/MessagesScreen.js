@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, View, StyleSheet} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {MessagePreview} from './components/MessagePreview';
 import {getChats} from '../../services/ChatService';
@@ -19,16 +19,22 @@ export const MessagesScreen = ({navigation}) => {
   }, [navigation]);
   return (
     <View style={globalStyles.container}>
-      <ScrollView>
-        {chats.map((item, index) => (
-          <MessagePreview
-            key={index}
-            item={item}
-            divider={index < chats.length - 1}
-            navigation={navigation}
-          />
-        ))}
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.chats}>
+          {chats.map((item, index) => (
+            <MessagePreview key={index} item={item} navigation={navigation} />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: '#F5F8FE',
+  },
+  chats: {
+    backgroundColor: '#FFFFFF',
+  },
+});

@@ -14,7 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const dimensions = Dimensions.get('screen');
 
 export const MessageBubble = ({item}) => {
-  const {senderType, body} = item;
+  const {senderType, body, createdAt, isRead} = item;
   const formatDate = date => {
     let fromNow = moment(date).fromNow();
     return moment(date).calendar(null, {
@@ -27,11 +27,20 @@ export const MessageBubble = ({item}) => {
     });
   };
 
+  const formatedTime = val => {
+    return moment(val).format('HH:MM');
+  };
+
   return (
     <View style={styles.bubbleWrapper}>
       {senderType === 'er' ? (
         <View style={[styles.bubble, styles.er]}>
           <Text style={styles.erText}>{body}</Text>
+          <View style={styles.rightBottom}>
+            <Text style={styles.rightBottomTextER}>
+              {formatedTime(createdAt)}
+            </Text>
+          </View>
         </View>
       ) : (
         <LinearGradient
@@ -40,6 +49,12 @@ export const MessageBubble = ({item}) => {
           end={{x: 1, y: 1}}
           style={[styles.bubble, styles.ee]}>
           <Text style={styles.eeText}>{body}</Text>
+          <View style={styles.rightBottom}>
+            <Text style={styles.rightBottomTextEE}>
+              {formatedTime(createdAt)}
+            </Text>
+            <IconMessageStatus color={isRead ? '#FFFFFF' : '#6CB5ED'} />
+          </View>
         </LinearGradient>
       )}
     </View>
@@ -47,16 +62,18 @@ export const MessageBubble = ({item}) => {
 };
 
 const width = dimensions.width;
+const bubbleWidth = dimensions.width * 0.8;
 
 const styles = StyleSheet.create({
   bubbleWrapper: {
     flex: 1,
     width: width - 40,
-    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   bubble: {
+    position: 'relative',
     padding: 16,
-    maxWidth: width * 0.8,
+    maxWidth: bubbleWidth,
   },
   er: {
     marginBottom: 6,
@@ -76,11 +93,32 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   erText: {
+    paddingRight: 44,
     fontSize: 16,
     color: '#151F47',
   },
   eeText: {
+    paddingRight: 72,
     fontSize: 16,
+    color: '#FFFFFF',
+  },
+  rightBottom: {
+    position: 'absolute',
+    right: 8,
+    bottom: 12,
+    flexDirection: 'row',
+    fontSize: 15,
+  },
+  rightBottomTextER: {
+    marginRight: 4,
+    fontSize: 16,
+    lineHeight: 26,
+    color: '#8391A1',
+  },
+  rightBottomTextEE: {
+    marginRight: 4,
+    fontSize: 16,
+    lineHeight: 20,
     color: '#FFFFFF',
   },
 });

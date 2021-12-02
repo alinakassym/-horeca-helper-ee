@@ -12,7 +12,7 @@ import moment from 'moment';
 
 const dimensions = Dimensions.get('screen');
 
-export const MessagePreview = ({item, divider, navigation}) => {
+export const MessagePreview = ({item, navigation}) => {
   const {id, company, lastMessage} = item;
 
   const formatDate = date => {
@@ -59,7 +59,7 @@ export const MessagePreview = ({item, divider, navigation}) => {
             {lastMessage.body}
           </Text>
         </View>
-        {divider && <View style={styles.divider} />}
+        <View style={styles.divider} />
       </View>
     </Pressable>
   );
@@ -78,9 +78,10 @@ const styles = StyleSheet.create({
   card: {
     width: dimensions.width,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   leftCol: {
-    padding: 16,
+    paddingHorizontal: 16,
     width: leftColWidth,
   },
   rightCol: {
@@ -118,13 +119,13 @@ const styles = StyleSheet.create({
   },
   textRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   text: {
-    marginBottom: 4,
+    marginLeft: 4,
     width: rightColWidth - 60,
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     color: '#8391A1',
   },
   divider: {
