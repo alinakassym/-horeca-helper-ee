@@ -1,44 +1,35 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Image,
-  Text,
-  Pressable,
-} from 'react-native';
+import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {IconMessageStatus} from '../../../assets/icons/main/IconMessageStatus';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 
 const dimensions = Dimensions.get('screen');
 
-export const MessageBubble = ({item}) => {
+export const MessageBubble = ({item, prev, isLast}) => {
   const {senderType, body, createdAt, isRead} = item;
-  const formatDate = date => {
-    let fromNow = moment(date).fromNow();
-    return moment(date).calendar(null, {
-      lastWeek: 'DD MMM',
-      lastDay: '[Yesterday]',
-      sameDay: 'HH:MM',
-      sameElse: function () {
-        return `[${fromNow}]`;
-      },
-    });
-  };
 
-  const formatedTime = val => {
+  const formattedTime = val => {
     return moment(val).format('HH:MM');
   };
 
   return (
     <View style={styles.bubbleWrapper}>
       {senderType === 'er' ? (
-        <View style={[styles.bubble, styles.er]}>
+        <View
+          style={[
+            styles.bubble,
+            styles.er,
+            {marginTop: prev && prev.senderType === senderType ? 8 : 16},
+            {
+              borderTopLeftRadius:
+                prev && prev.senderType === senderType ? 5 : 20,
+            },
+          ]}>
           <Text style={styles.erText}>{body}</Text>
           <View style={styles.rightBottom}>
             <Text style={styles.rightBottomTextER}>
-              {formatedTime(createdAt)}
+              {formattedTime(createdAt)}
             </Text>
           </View>
         </View>
@@ -47,11 +38,19 @@ export const MessageBubble = ({item}) => {
           colors={['#38B6EC', '#31A0E8', '#2A8BE4']}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
-          style={[styles.bubble, styles.ee]}>
+          style={[
+            styles.bubble,
+            styles.ee,
+            {marginTop: prev && prev.senderType === senderType ? 8 : 16},
+            {
+              borderTopRightRadius:
+                prev && prev.senderType === senderType ? 5 : 20,
+            },
+          ]}>
           <Text style={styles.eeText}>{body}</Text>
           <View style={styles.rightBottom}>
             <Text style={styles.rightBottomTextEE}>
-              {formatedTime(createdAt)}
+              {formattedTime(createdAt)}
             </Text>
             <IconMessageStatus color={isRead ? '#FFFFFF' : '#6CB5ED'} />
           </View>
@@ -76,7 +75,6 @@ const styles = StyleSheet.create({
     maxWidth: bubbleWidth,
   },
   er: {
-    marginBottom: 6,
     alignSelf: 'flex-start',
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 5,
@@ -85,7 +83,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#E2E5E8',
   },
   ee: {
-    marginBottom: 6,
     alignSelf: 'flex-end',
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
