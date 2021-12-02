@@ -29,17 +29,17 @@ export const MessageBubble = ({item}) => {
 
   return (
     <View style={styles.bubbleWrapper}>
-      {senderType === 'ee' ? (
-        <View style={[styles.bubble, styles.ee]}>
-          <Text style={styles.eeText}>{body}</Text>
+      {senderType === 'er' ? (
+        <View style={[styles.bubble, styles.er]}>
+          <Text style={styles.erText}>{body}</Text>
         </View>
       ) : (
         <LinearGradient
           colors={['#38B6EC', '#31A0E8', '#2A8BE4']}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
-          style={[styles.bubble, styles.er]}>
-          <Text style={styles.erText}>{body}</Text>
+          style={[styles.bubble, styles.ee]}>
+          <Text style={styles.eeText}>{body}</Text>
         </LinearGradient>
       )}
     </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     padding: 16,
     maxWidth: width * 0.8,
   },
-  ee: {
+  er: {
     marginBottom: 6,
     alignSelf: 'flex-start',
     borderTopLeftRadius: 20,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: '#E2E5E8',
   },
-  er: {
+  ee: {
     marginBottom: 6,
     alignSelf: 'flex-end',
     borderTopLeftRadius: 20,
@@ -75,11 +75,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     borderTopRightRadius: 20,
   },
-  eeText: {
+  erText: {
     fontSize: 16,
     color: '#151F47',
   },
-  erText: {
+  eeText: {
     fontSize: 16,
     color: '#FFFFFF',
   },
