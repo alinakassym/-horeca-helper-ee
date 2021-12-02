@@ -1,22 +1,37 @@
 import React from 'react';
+
+// Screens
+// jobs screens
 import {JobsScreen} from '../screens/jobs/JobsScreen';
 import {JobsFilterScreen} from '../screens/jobs/JobsFilterScreen';
 import {JobScreen} from '../screens/jobs/JobScreen';
+
+// rating screens
 import {RatingScreen} from '../screens/rating/RatingScreen';
+
+// messages screens
 import {MessagesScreen} from '../screens/messages/MessagesScreen';
-import {ProfileScreen} from '../screens/profile/ProfileScreen';
-import {ProfileEditScreen} from '../screens/profile/ProfileEditScreen';
+import {MessagesChatScreen} from '../screens/messages/MessagesChatScreen';
+
+// profile screens
 import {AddWorkScreen} from '../screens/profile/AddWorkScreen';
 import {EditWorkScreen} from '../screens/profile/EditWorkScreen';
+import {ProfileEditScreen} from '../screens/profile/ProfileEditScreen';
+import {ProfileScreen} from '../screens/profile/ProfileScreen';
+import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
+
+// Icons
+import {IconSearch} from '../assets/icons/tabs/IconSearch';
+import {IconRating} from '../assets/icons/tabs/IconRating';
+import {IconMessages} from '../assets/icons/tabs/IconMessages';
+import {IconProfile} from '../assets/icons/tabs/IconProfile';
+
+// Navigation
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {IconVacancies} from '../assets/icons/tabs/IconVacancies';
-import {IconRating} from '../assets/icons/tabs/IconRating';
-import {IconNotifications} from '../assets/icons/tabs/IconNotifications';
-import {IconProfile} from '../assets/icons/tabs/IconProfile';
-import {StyleSheet} from 'react-native';
+
+// Redux
 import {useSelector} from 'react-redux';
-import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
 
 export const Navigator = () => {
   useSelector(state => {
@@ -26,27 +41,31 @@ export const Navigator = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
+  const screenOptions = {
+    headerTintColor: '#185AB7',
+    headerTitleStyle: {
+      color: '#333333',
+    },
+  };
+
   const TabStack = () => {
     return (
       <Tab.Navigator
         initialRouteName="Profile"
-        screenListeners={{
-          state: e => {
-            console.log('state changed', e.data.state.history);
-          },
-          blur: e => {
-            console.log('blur: ', e);
-          },
-        }}
         screenOptions={{
-          headerShown: false,
-          tabBarLabelStyle: {
-            bottom: 0, // note: 0 is for iOS, Android might need 12 here
-          },
-          tabBarActiveTintColor: '#185AB7',
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: '#151F47',
+          tabBarInactiveTintColor: '#B9C1CA',
           tabBarStyle: {
             // note: don't set height, or set screen-specific heights
             marginBottom: 2,
+            shadowColor: '#151F47',
+            shadowOpacity: 0.5,
+            shadowRadius: 5,
+            shadowOffset: {
+              height: 5,
+            },
+            elevation: 4,
           },
           tabBarBadgeStyle: {
             top: 12,
@@ -57,9 +76,10 @@ export const Navigator = () => {
           name="Jobs"
           component={JobsScreen}
           options={{
+            headerShown: false,
             tabBarLabel: 'Jobs',
-            tabBarIcon: ({focused, color}) => {
-              return <IconVacancies color={color} size={28} width={1.5} />;
+            tabBarIcon: ({color}) => {
+              return <IconSearch color={color} size={24} width={3} />;
             },
           }}
         />
@@ -68,8 +88,8 @@ export const Navigator = () => {
           component={RatingScreen}
           options={{
             tabBarLabel: 'Rating',
-            tabBarIcon: ({focused, color}) => {
-              return <IconRating color={color} size={28} width={1.5} />;
+            tabBarIcon: ({color}) => {
+              return <IconRating color={color} size={24} width={1.5} />;
             },
           }}
         />
@@ -79,8 +99,13 @@ export const Navigator = () => {
           options={{
             tabBarLabel: 'Messages',
             tabBarBadge: 10,
-            tabBarIcon: ({focused, color}) => {
-              return <IconNotifications color={color} size={28} width={1.5} />;
+            tabBarBadgeStyle: {
+              top: 4,
+              left: 0,
+              backgroundColor: '#EC4C47',
+            },
+            tabBarIcon: ({color}) => {
+              return <IconMessages color={color} size={24} width={1.5} />;
             },
           }}
         />
@@ -89,8 +114,8 @@ export const Navigator = () => {
           component={ProfileScreen}
           options={{
             tabBarLabel: 'Profile',
-            tabBarIcon: ({focused, color}) => {
-              return <IconProfile color={color} size={28} width={1.5} />;
+            tabBarIcon: ({color}) => {
+              return <IconProfile color={color} size={24} width={1.5} />;
             },
           }}
         />
@@ -99,19 +124,24 @@ export const Navigator = () => {
   };
   return (
     <Stack.Navigator
-      initialRouteName="App"
-      screenOptions={{
-        headerTintColor: '#185AB7',
-        headerTitleStyle: {
-          color: '#333333',
+      initialRouteName="Tabs"
+      screenOptions={screenOptions}
+      screenListeners={{
+        state: e => {
+          console.log('state changed', e.data.state.history);
+        },
+        blur: e => {
+          console.log('blur: ', e);
         },
       }}>
       <Stack.Group
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Back" component={TabStack} />
+        <Stack.Screen name="Tabs" component={TabStack} />
       </Stack.Group>
+
+      {/*JOBS SCREENS*/}
       <Stack.Group>
         <Stack.Screen
           options={{
@@ -128,6 +158,19 @@ export const Navigator = () => {
           component={JobScreen}
         />
       </Stack.Group>
+
+      {/*MESSAGES SCREENS*/}
+      <Stack.Group>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="MessagesChatScreen"
+          component={MessagesChatScreen}
+        />
+      </Stack.Group>
+
+      {/*PROFILE SCREENS*/}
       <Stack.Group>
         <Stack.Screen
           options={{
@@ -161,27 +204,3 @@ export const Navigator = () => {
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  gradientButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 54,
-    width: 54,
-    borderRadius: 27,
-  },
-  shadow: {
-    shadowColor: '#777777',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 5,
-  },
-});
