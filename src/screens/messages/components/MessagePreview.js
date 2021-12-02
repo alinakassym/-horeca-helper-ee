@@ -13,6 +13,8 @@ import moment from 'moment';
 const dimensions = Dimensions.get('screen');
 
 export const MessagePreview = ({item, divider, navigation}) => {
+  const {id, company, lastMessage} = item;
+
   const formatDate = date => {
     let fromNow = moment(date).fromNow();
     return moment(date).calendar(null, {
@@ -30,29 +32,31 @@ export const MessagePreview = ({item, divider, navigation}) => {
       style={styles.card}
       onPress={() =>
         navigation.navigate('MessagesChatScreen', {
-          chatId: item.id,
-          company: item.company,
+          chatId: id,
+          company: company,
         })
       }>
       <View style={styles.leftCol}>
         <View style={styles.imageWrapper}>
-          <Image style={styles.img} source={{uri: item.company.photoUrl}} />
+          <Image style={styles.img} source={{uri: company.photoUrl}} />
         </View>
       </View>
       <View style={styles.rightCol}>
         <View style={styles.titleRow}>
           <Text style={styles.title} numberOfLines={1}>
-            {item.company.title}
+            {company.title}
           </Text>
-          <Text style={styles.date}>{formatDate(item.createdAt)}</Text>
+          <Text style={styles.date}>{formatDate(lastMessage.createdAt)}</Text>
         </View>
         <View style={styles.textRow}>
-          <IconMessageStatus
-            color={item.isRead ? '#2A8BE4' : '#8391A1'}
-            size={20}
-          />
+          {lastMessage.senderType === 'ee' && (
+            <IconMessageStatus
+              color={lastMessage.isRead ? '#2A8BE4' : '#8391A1'}
+              size={20}
+            />
+          )}
           <Text style={styles.text} numberOfLines={1}>
-            {item.text}
+            {lastMessage.body}
           </Text>
         </View>
         {divider && <View style={styles.divider} />}
