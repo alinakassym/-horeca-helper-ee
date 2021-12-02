@@ -16,6 +16,7 @@ import BackButton from '../../components/buttons/BackButton';
 import {MessageBubble} from './components/MessageBubble';
 import SendButton from '../../components/buttons/SendButton';
 import lodash from 'lodash';
+import moment from 'moment';
 
 const dimensions = Dimensions.get('screen');
 
@@ -28,17 +29,28 @@ export const MessagesChatScreen = ({route, navigation}) => {
   });
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
+  const [groupNames, setGroupNames] = useState([]);
   const [viewHeight, setHeight] = useState(0);
 
   const [message, setMessage] = useState(null);
+
+  const fetchData = async () => {
+    const res = await getChatById(route.params?.chatId);
+    const orderedList = lodash.orderBy(res, 'createdAt');
+    const groups = lodash.groupBy(orderedList, el => formatDate(el.createdAt));
+    const groupNameList = Object.keys(groups);
+    return Promise.all([groupNameList, groups]);
+  };
 
   const send = async () => {
     try {
       await postMessage(route.params?.chatId, {
         body: message,
       });
-      const res = await getChatById(route.params?.chatId);
-      setMessages(lodash.orderBy(res, 'createdAt'));
+      const [groupNameList, groups] = await fetchData();
+      setGroupNames(groupNameList);
+      setMessages(groups);
+
       setMessage(null);
     } catch (e) {
       console.error('postMessage err: ', e);
@@ -47,21 +59,50 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const getViewDimensions = layout => {
     const {height} = layout;
-    setHeight(dimensions.height - height - 230);
+    setHeight(dimensions.height - height - 200);
+  };
+
+  const formatDate = date => {
+    return moment(date).calendar(null, {
+      lastWeek: 'DD.MM.YYYY',
+      lastDay: '[Yesterday]',
+      sameDay: '[Today]',
+      sameElse: 'DD.MM.YYYY',
+    });
   };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
       try {
-        const res = await getChatById(route.params?.chatId);
-        setMessages(lodash.orderBy(res, 'createdAt'));
+        const [groupNameList, groups] = await fetchData();
+        setGroupNames(groupNameList);
+        setMessages(groups);
+
         setCompany(route.params?.company);
         setLoading(false);
       } catch (e) {
         console.error('MessagesChatScreen err: ', e);
       }
     });
-  }, [navigation, route]);
+  }, [fetchData, navigation, route]);
+
+  const Group = ({item}) => {
+    return (
+      <>
+        <View style={styles.date}>
+          <Text style={styles.dateText}>{item}</Text>
+        </View>
+        {messages[item].map((messageItem, index) => (
+          <MessageBubble
+            key={index}
+            item={messageItem}
+            prev={index !== 0 ? messages[item][index - 1] : null}
+            isLast={index + 1 === messages[item].length}
+          />
+        ))}
+      </>
+    );
+  };
 
   if (loading) {
     return (
@@ -100,8 +141,8 @@ export const MessagesChatScreen = ({route, navigation}) => {
             getViewDimensions(event.nativeEvent.layout);
           }}
           style={styles.scrollViewInnerBlock}>
-          {messages.map((messageItem, index) => (
-            <MessageBubble key={index} item={messageItem} />
+          {groupNames.map((groupNameItem, index) => (
+            <Group item={groupNameItem} key={index} />
           ))}
         </View>
       </ScrollView>
@@ -144,7 +185,7 @@ const styles = StyleSheet.create({
     borderColor: '#8391A1',
   },
   scrollView: {
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: '#F5F8FE',
   },
   scrollViewInnerBlock: {
@@ -182,5 +223,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
     color: '#151F47',
+  },
+  date: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  dateText: {
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    lineHeight: 20,
+    borderRadius: 40,
+    backgroundColor: '#8391A1',
+    color: '#FFFFFF',
   },
 });
