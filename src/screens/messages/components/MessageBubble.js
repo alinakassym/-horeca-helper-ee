@@ -6,7 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const dimensions = Dimensions.get('screen');
 
-export const MessageBubble = ({item, prev, isLast}) => {
+export const MessageBubble = ({item, prev}) => {
   const {senderType, body, createdAt, isRead} = item;
 
   const formattedTime = val => {

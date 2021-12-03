@@ -34,7 +34,8 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const [message, setMessage] = useState(null);
 
-  const fetchData = async () => {
+  let fetchData: function;
+  fetchData = async () => {
     const res = await getChatById(route.params?.chatId);
     const orderedList = lodash.orderBy(res, 'createdAt');
     const groups = lodash.groupBy(orderedList, el => formatDate(el.createdAt));
@@ -97,7 +98,6 @@ export const MessagesChatScreen = ({route, navigation}) => {
             key={index}
             item={messageItem}
             prev={index !== 0 ? messages[item][index - 1] : null}
-            isLast={index + 1 === messages[item].length}
           />
         ))}
       </>
