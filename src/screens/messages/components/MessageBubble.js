@@ -6,11 +6,89 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const dimensions = Dimensions.get('screen');
 
-export const MessageBubble = ({item, prev}) => {
-  const {senderType, body, createdAt, isRead} = item;
+export const MessageBubble = ({item, company, prev}) => {
+  const {senderType, bodyType, body, createdAt, isRead, job} = item;
 
   const formattedTime = val => {
     return moment(val).format('HH:MM');
+  };
+
+  const jobInviteMessage = () => {
+    return (
+      <>
+        <View style={styles.article}>
+          <Text style={styles.erText}>
+            <Text style={styles.textBold}>{job.company.title}</Text> invited you
+            to job:
+          </Text>
+        </View>
+        {job.position && (
+          <View style={styles.article}>
+            <Text style={styles.erText}>
+              <Text style={styles.textBold}>Position: </Text>
+              {job.position.title}
+            </Text>
+          </View>
+        )}
+        {job.schedule && (
+          <View style={styles.article}>
+            <Text style={styles.erText}>
+              <Text style={styles.textBold}>Schedule: </Text>
+              {job.schedule.title}
+            </Text>
+          </View>
+        )}
+        {job.city && (
+          <View style={styles.article}>
+            <Text style={styles.erText}>
+              <Text style={styles.textBold}>Location: </Text>
+              {job.city.title}
+            </Text>
+          </View>
+        )}
+        <View style={styles.article}>
+          <Text style={styles.erText}>{body}</Text>
+        </View>
+      </>
+    );
+  };
+  const jobApplyMessage = () => {
+    return (
+      <>
+        <View style={styles.article}>
+          <Text style={styles.eeText}>
+            <Text style={styles.textBold}>You</Text> applied for job:
+          </Text>
+        </View>
+        {job.position && (
+          <View style={styles.article}>
+            <Text style={styles.eeText}>
+              <Text style={styles.textBold}>Position: </Text>
+              {job.position.title}
+            </Text>
+          </View>
+        )}
+        {job.schedule && (
+          <View style={styles.article}>
+            <Text style={styles.eeText}>
+              <Text style={styles.textBold}>Schedule: </Text>
+              {job.schedule.title}
+            </Text>
+          </View>
+        )}
+        {job.city && (
+          <View style={styles.article}>
+            <Text style={styles.eeText}>
+              <Text style={styles.textBold}>Location: </Text>
+              {job.city.title}
+            </Text>
+          </View>
+        )}
+        <View style={styles.article}>
+          <Text style={styles.eeText}>{body}</Text>
+        </View>
+      </>
+    );
   };
 
   return (
@@ -26,7 +104,11 @@ export const MessageBubble = ({item, prev}) => {
                 prev && prev.senderType === senderType ? 5 : 20,
             },
           ]}>
-          <Text style={styles.erText}>{body}</Text>
+          {bodyType === 'JOB_INVITE' ? (
+            jobInviteMessage()
+          ) : (
+            <Text style={styles.erText}>{body}</Text>
+          )}
           <View style={styles.rightBottom}>
             <Text style={styles.rightBottomTextER}>
               {formattedTime(createdAt)}
@@ -47,7 +129,12 @@ export const MessageBubble = ({item, prev}) => {
                 prev && prev.senderType === senderType ? 5 : 20,
             },
           ]}>
-          <Text style={styles.eeText}>{body}</Text>
+          {bodyType === 'JOB_APPLY' ? (
+            jobApplyMessage()
+          ) : (
+            <Text style={styles.eeText}>{body}</Text>
+          )}
+
           <View style={styles.rightBottom}>
             <Text style={styles.rightBottomTextEE}>
               {formattedTime(createdAt)}
@@ -91,13 +178,20 @@ const styles = StyleSheet.create({
   },
   erText: {
     paddingRight: 44,
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
+    lineHeight: 20,
     color: '#151F47',
   },
   eeText: {
     paddingRight: 72,
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
+    lineHeight: 20,
     color: '#FFFFFF',
+  },
+  textBold: {
+    fontFamily: 'Roboto-Bold',
   },
   rightBottom: {
     position: 'absolute',

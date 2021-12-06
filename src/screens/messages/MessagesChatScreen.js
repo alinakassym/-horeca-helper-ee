@@ -97,6 +97,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
           <MessageBubble
             key={index}
             item={messageItem}
+            company={company}
             prev={index !== 0 ? messages[item][index - 1] : null}
           />
         ))}
