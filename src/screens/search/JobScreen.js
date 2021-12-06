@@ -13,10 +13,12 @@ import {BottomModal} from './components/BottomModal';
 
 import moment from 'moment';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
+import {getChatsLookup} from '../../services/ChatService';
 
 export const JobScreen = ({route, navigation}) => {
   const jobId = route.params ? route.params.jobId : null;
 
+  const [chatId, setChatId] = useState(null);
   const [job, onChange] = React.useState({});
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -57,9 +59,14 @@ export const JobScreen = ({route, navigation}) => {
         try {
           const data = await getJobById(jobId);
           onChange(data.data);
+
+          const companyId = data.data?.company?.id;
+          const chatLookup = await getChatsLookup(companyId);
+          setChatId(chatLookup);
+
           setLoading(false);
         } catch (e) {
-          console.log('getJobById err: ', e);
+          console.log('fetch err: ', e);
         }
       });
     }
@@ -149,7 +156,7 @@ export const JobScreen = ({route, navigation}) => {
           )}
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, styles.bottomSection]}>
           <Text style={styles.createdAt}>
             Created on: {formatDate(job.createdAt)}
           </Text>
@@ -158,9 +165,23 @@ export const JobScreen = ({route, navigation}) => {
           </Text>
         </View>
 
-        <View style={[styles.section, styles.bottomSection]}>
+        <View style={[styles.section]}>
           <PrimaryButton onPress={() => setVisible(true)} label={'Apply'} />
         </View>
+
+        {!!chatId && (
+          <View style={[styles.section, styles.bottomSection]}>
+            <PrimaryButton
+              label={'Open chat'}
+              onPress={() =>
+                navigation.navigate('MessagesChatScreen', {
+                  chatId: chatId,
+                  company: job.company,
+                })
+              }
+            />
+          </View>
+        )}
 
         <BottomModal
           visible={visible}
