@@ -8,14 +8,40 @@ import {
   Image,
 } from 'react-native';
 
-import {getJobById} from '../../services/JobsService';
+import {getJobById, postJobApply} from '../../services/JobsService';
+import {BottomModal} from './components/BottomModal';
+
 import moment from 'moment';
+import PrimaryButton from '../../components/buttons/PrimaryButton';
+import {getChatsLookup} from '../../services/ChatService';
 
 export const JobScreen = ({route, navigation}) => {
   const jobId = route.params ? route.params.jobId : null;
 
+  const [chatId, setChatId] = useState(null);
   const [job, onChange] = React.useState({});
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [applyMessage, setApplyMessage] = useState();
+
+  const sendApply = async () => {
+    const id = job.id;
+    const data = {
+      body: applyMessage,
+    };
+
+    console.log({
+      id: id,
+      data: data,
+    });
+
+    await postJobApply(id, data);
+    setVisible(false);
+  };
+
+  const isValid = () => {
+    return applyMessage && applyMessage.length > 0;
+  };
 
   const formatDate = date => {
     return moment(date).format('MMM-D, YYYY');
@@ -33,9 +59,14 @@ export const JobScreen = ({route, navigation}) => {
         try {
           const data = await getJobById(jobId);
           onChange(data.data);
+
+          const companyId = data.data?.company?.id;
+          const chatLookup = await getChatsLookup(companyId);
+          setChatId(chatLookup);
+
           setLoading(false);
         } catch (e) {
-          console.log('getJobById err: ', e);
+          console.log('fetch err: ', e);
         }
       });
     }
@@ -125,7 +156,7 @@ export const JobScreen = ({route, navigation}) => {
           )}
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, styles.bottomSection]}>
           <Text style={styles.createdAt}>
             Created on: {formatDate(job.createdAt)}
           </Text>
@@ -133,6 +164,33 @@ export const JobScreen = ({route, navigation}) => {
             Last updated on: {formatDate(job.updatedAt)}
           </Text>
         </View>
+
+        <View style={[styles.section]}>
+          <PrimaryButton onPress={() => setVisible(true)} label={'Apply'} />
+        </View>
+
+        {!!chatId && (
+          <View style={[styles.section, styles.bottomSection]}>
+            <PrimaryButton
+              label={'Open chat'}
+              onPress={() =>
+                navigation.navigate('MessagesChatScreen', {
+                  chatId: chatId,
+                  company: job.company,
+                })
+              }
+            />
+          </View>
+        )}
+
+        <BottomModal
+          visible={visible}
+          onClose={() => setVisible(false)}
+          text={applyMessage}
+          onSend={() => sendApply()}
+          isValid={isValid()}
+          onChangeText={val => setApplyMessage(val)}
+        />
       </ScrollView>
     </View>
   );
@@ -146,6 +204,9 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 16,
     flexDirection: 'column',
+  },
+  bottomSection: {
+    marginVertical: 20,
   },
   row: {
     flexDirection: 'row',

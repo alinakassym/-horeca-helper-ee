@@ -2,9 +2,9 @@ import React from 'react';
 
 // Screens
 // jobs screens
-import {JobsScreen} from '../screens/jobs/JobsScreen';
-import {JobsFilterScreen} from '../screens/jobs/JobsFilterScreen';
-import {JobScreen} from '../screens/jobs/JobScreen';
+import {JobsScreen} from '../screens/search/JobsScreen';
+import {JobsFilterScreen} from '../screens/search/JobsFilterScreen';
+import {JobScreen} from '../screens/search/JobScreen';
 
 // rating screens
 import {RatingScreen} from '../screens/rating/RatingScreen';

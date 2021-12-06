@@ -34,7 +34,8 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const [message, setMessage] = useState(null);
 
-  const fetchData = async () => {
+  let fetchData: function;
+  fetchData = async () => {
     const res = await getChatById(route.params?.chatId);
     const orderedList = lodash.orderBy(res, 'createdAt');
     const groups = lodash.groupBy(orderedList, el => formatDate(el.createdAt));
@@ -59,7 +60,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const getViewDimensions = layout => {
     const {height} = layout;
-    setHeight(dimensions.height - height - 200);
+    setHeight(dimensions.height - height - 232);
   };
 
   const formatDate = date => {
@@ -96,8 +97,8 @@ export const MessagesChatScreen = ({route, navigation}) => {
           <MessageBubble
             key={index}
             item={messageItem}
+            company={company}
             prev={index !== 0 ? messages[item][index - 1] : null}
-            isLast={index + 1 === messages[item].length}
           />
         ))}
       </>

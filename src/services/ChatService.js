@@ -12,6 +12,12 @@ export const getChatById = async id => {
   return r.data;
 };
 
+export const getChatsLookup = async companyId => {
+  const r = await http.get(`/ee/chats/lookup?companyId=${companyId}`);
+  console.log('getChatsLookup: ', r.data);
+  return r.data;
+};
+
 export const postMessage = async (id, data) => {
   const r = await http.post(`/ee/chats/${id}/messages`, data);
   return r.data;
