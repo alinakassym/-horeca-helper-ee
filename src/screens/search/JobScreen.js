@@ -8,14 +8,38 @@ import {
   Image,
 } from 'react-native';
 
-import {getJobById} from '../../services/JobsService';
+import {getJobById, postJobApply} from '../../services/JobsService';
+import {BottomModal} from './components/BottomModal';
+
 import moment from 'moment';
+import PrimaryButton from '../../components/buttons/PrimaryButton';
 
 export const JobScreen = ({route, navigation}) => {
   const jobId = route.params ? route.params.jobId : null;
 
   const [job, onChange] = React.useState({});
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [applyMessage, setApplyMessage] = useState();
+
+  const sendApply = async () => {
+    const id = job.id;
+    const data = {
+      body: applyMessage,
+    };
+
+    console.log({
+      id: id,
+      data: data,
+    });
+
+    await postJobApply(id, data);
+    setVisible(false);
+  };
+
+  const isValid = () => {
+    return applyMessage && applyMessage.length > 0;
+  };
 
   const formatDate = date => {
     return moment(date).format('MMM-D, YYYY');
@@ -133,6 +157,19 @@ export const JobScreen = ({route, navigation}) => {
             Last updated on: {formatDate(job.updatedAt)}
           </Text>
         </View>
+
+        <View style={[styles.section, styles.bottomSection]}>
+          <PrimaryButton onPress={() => setVisible(true)} label={'Apply'} />
+        </View>
+
+        <BottomModal
+          visible={visible}
+          onClose={() => setVisible(false)}
+          text={applyMessage}
+          onSend={() => sendApply()}
+          isValid={isValid()}
+          onChangeText={val => setApplyMessage(val)}
+        />
       </ScrollView>
     </View>
   );
@@ -146,6 +183,9 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 16,
     flexDirection: 'column',
+  },
+  bottomSection: {
+    marginVertical: 20,
   },
   row: {
     flexDirection: 'row',

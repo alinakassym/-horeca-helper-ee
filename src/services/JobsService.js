@@ -8,6 +8,12 @@ export const searchJobs = async data => {
 
 export const getJobById = async id => {
   const r = await http.get(`/ee/jobs/${id}`);
-  console.log('getJobById result: ', r.data);
+  // console.log('getJobById result: ', r.data);
+  return r;
+};
+
+export const postJobApply = async (id, data) => {
+  const r = await http.post(`/ee/jobs/${id}/apply`, data);
+  // console.log('postJobApply result: ', r.data)
   return r;
 };
