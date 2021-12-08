@@ -98,7 +98,7 @@ export const MessageBubble = ({item, company, prev}) => {
           style={[
             styles.bubble,
             styles.er,
-            {marginTop: prev && prev.senderType === senderType ? 8 : 16},
+            {marginTop: prev && prev.senderType === senderType ? 4 : 16},
             {
               borderTopLeftRadius:
                 prev && prev.senderType === senderType ? 5 : 20,
@@ -123,7 +123,7 @@ export const MessageBubble = ({item, company, prev}) => {
           style={[
             styles.bubble,
             styles.ee,
-            {marginTop: prev && prev.senderType === senderType ? 8 : 16},
+            {marginTop: prev && prev.senderType === senderType ? 4 : 16},
             {
               borderTopRightRadius:
                 prev && prev.senderType === senderType ? 5 : 20,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   bubble: {
     position: 'relative',
-    padding: 16,
+    padding: 12,
     maxWidth: bubbleWidth,
   },
   er: {
@@ -176,18 +176,21 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     borderTopRightRadius: 20,
   },
+  article: {
+    marginBottom: 8,
+  },
   erText: {
     paddingRight: 44,
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 20,
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 18,
     color: '#151F47',
   },
   eeText: {
     paddingRight: 72,
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    lineHeight: 20,
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 18,
     color: '#FFFFFF',
   },
   textBold: {
@@ -196,19 +199,19 @@ const styles = StyleSheet.create({
   rightBottom: {
     position: 'absolute',
     right: 8,
-    bottom: 12,
+    bottom: 10,
     flexDirection: 'row',
-    fontSize: 15,
+    alignItems: 'center',
   },
   rightBottomTextER: {
     marginRight: 4,
-    fontSize: 16,
-    lineHeight: 26,
+    fontSize: 13,
+    lineHeight: 22,
     color: '#8391A1',
   },
   rightBottomTextEE: {
     marginRight: 4,
-    fontSize: 16,
+    fontSize: 13,
     lineHeight: 20,
     color: '#FFFFFF',
   },

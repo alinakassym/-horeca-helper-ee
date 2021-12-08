@@ -62,7 +62,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const getViewDimensions = layout => {
     const {height} = layout;
-    setHeight(dimensions.height - height - 232);
+    setHeight(dimensions.height - height - 100);
   };
 
   const formatDate = date => {
