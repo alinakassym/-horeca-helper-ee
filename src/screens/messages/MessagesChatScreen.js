@@ -45,14 +45,16 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   const send = async () => {
     try {
-      await postMessage(route.params?.chatId, {
-        body: message,
-      });
-      const [groupNameList, groups] = await fetchData();
-      setGroupNames(groupNameList);
-      setMessages(groups);
+      if (message && message.length > 0) {
+        await postMessage(route.params?.chatId, {
+          body: message,
+        });
+        const [groupNameList, groups] = await fetchData();
+        setGroupNames(groupNameList);
+        setMessages(groups);
 
-      setMessage(null);
+        setMessage(null);
+      }
     } catch (e) {
       console.error('postMessage err: ', e);
     }
