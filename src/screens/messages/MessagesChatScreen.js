@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Dimensions,
   Image,
-  Platform,
   TextInput,
   ActivityIndicator,
   SafeAreaView,
@@ -163,9 +162,9 @@ export const MessagesChatScreen = ({route, navigation}) => {
   );
 };
 
-const imageSize = 58;
+const imageSize = 44;
 const headerSectionPadding = 20;
-const leftColWidth = 52 + 20;
+const leftColWidth = 40 + 16;
 const rightColWidth =
   dimensions.width - leftColWidth - headerSectionPadding * 2;
 
@@ -196,9 +195,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   headerSection: {
-    paddingTop: Platform.OS === 'ios' ? 60 : 20,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
+    padding: 20,
     width: dimensions.width,
     flexDirection: 'row',
     alignItems: 'center',
@@ -212,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageWrapper: {
-    marginRight: 16,
+    marginRight: 12,
     height: imageSize,
     width: imageSize,
   },
@@ -224,8 +221,9 @@ const styles = StyleSheet.create({
   },
   userName: {
     width: rightColWidth - imageSize - 16,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 14,
+    lineHeight: 18,
     color: '#151F47',
   },
   date: {
@@ -234,10 +232,11 @@ const styles = StyleSheet.create({
   },
   dateText: {
     marginTop: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    lineHeight: 20,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 18,
     borderRadius: 40,
     backgroundColor: '#8391A1',
     color: '#FFFFFF',
