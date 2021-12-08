@@ -97,6 +97,7 @@ export const Navigator = () => {
           name="Messages"
           component={MessagesScreen}
           options={{
+            headerShown: false,
             tabBarLabel: 'Messages',
             tabBarBadge: 10,
             tabBarBadgeStyle: {
