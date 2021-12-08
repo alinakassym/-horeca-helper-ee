@@ -9,6 +9,7 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {getChatById, postMessage} from '../../services/ChatService';
@@ -116,7 +117,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
   }
 
   return (
-    <View style={globalStyles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <View style={styles.headerSection}>
         <View style={styles.leftCol}>
           <BackButton onPress={() => navigation.goBack()} />
@@ -158,7 +159,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
         />
         <SendButton onPress={() => send()} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

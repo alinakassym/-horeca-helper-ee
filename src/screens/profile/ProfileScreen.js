@@ -10,6 +10,7 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
@@ -193,60 +194,62 @@ export const ProfileScreen = ({navigation}) => {
   }
 
   return (
-    <ScrollView style={globalStyles.container}>
-      <Modal visible={open} animationType="slide" transparent={true}>
-        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
-          <View style={styles.wrap}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                openGallery();
-                setOpen(false);
-              }}>
-              <Text style={globalStyles.text}>Open Gallery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                openCamera();
-                setOpen(false);
-              }}>
-              <Text style={globalStyles.text}>Open Camera</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </Modal>
-      <View style={styles.profilePhoto}>
-        <TouchableOpacity
-          onPress={() => {
-            setOpen(true);
-          }}
-          style={styles.imageWrapper}>
-          {me?.photoUrl && (
-            <Image style={styles.image} source={{uri: me.photoUrl}} />
-          )}
-        </TouchableOpacity>
-      </View>
-
-      {/*About*/}
-      <Text style={styles.label}>About</Text>
-      <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
-          <Text style={styles.text}>
-            {me.firstName || 'Is not entered'} {me.lastName || ''}
-            {me.birthDate && <Text>, {getAge(me.birthDate)} y.o.</Text>}
-          </Text>
+    <SafeAreaView style={globalStyles.container}>
+      <ScrollView>
+        <Modal visible={open} animationType="slide" transparent={true}>
+          <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
+            <View style={styles.wrap}>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => {
+                  openGallery();
+                  setOpen(false);
+                }}>
+                <Text style={globalStyles.text}>Open Gallery</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => {
+                  openCamera();
+                  setOpen(false);
+                }}>
+                <Text style={globalStyles.text}>Open Camera</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Modal>
+        <View style={styles.profilePhoto}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ProfileEditScreen', {
-                value: me,
-              });
-            }}>
-            <IconPencil color={'#767676'} size={24} width={1.5} />
+              setOpen(true);
+            }}
+            style={styles.imageWrapper}>
+            {me?.photoUrl && (
+              <Image style={styles.image} source={{uri: me.photoUrl}} />
+            )}
           </TouchableOpacity>
         </View>
 
-        {/*{(me.position || me.gender || me.schedule) && (
+        {/*About*/}
+        <Text style={styles.label}>About</Text>
+        <View style={styles.block}>
+          <View
+            style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
+            <Text style={styles.text}>
+              {me.firstName || 'Is not entered'} {me.lastName || ''}
+              {me.birthDate && <Text>, {getAge(me.birthDate)} y.o.</Text>}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('ProfileEditScreen', {
+                  value: me,
+                });
+              }}>
+              <IconPencil color={'#767676'} size={24} width={1.5} />
+            </TouchableOpacity>
+          </View>
+
+          {/*{(me.position || me.gender || me.schedule) && (
           <View style={[styles.row, styles.paddingTop0, styles.paddingBottom0]}>
             {me.position && <Text>{me.position.title}</Text>}
             {me.position && me.schedule && <Text>, </Text>}
@@ -256,167 +259,172 @@ export const ProfileScreen = ({navigation}) => {
           </View>
         )}*/}
 
-        {/*Birth Date and Gender*/}
-        {(me.birthDate || me.gender) && (
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconCake color={'#767676'} size={24} width={1.5} />
+          {/*Birth Date and Gender*/}
+          {(me.birthDate || me.gender) && (
+            <View style={styles.row}>
+              <View style={styles.iconWrapper}>
+                <IconCake color={'#767676'} size={24} width={1.5} />
+              </View>
+              {me.birthDate && <Text style={styles.text}>{me.birthDate}</Text>}
+              {me.birthDate && me.gender && <Text style={styles.text}>, </Text>}
+              {me.gender && <Text style={styles.text}>{me.gender.title}</Text>}
             </View>
-            {me.birthDate && <Text style={styles.text}>{me.birthDate}</Text>}
-            {me.birthDate && me.gender && <Text style={styles.text}>, </Text>}
-            {me.gender && <Text style={styles.text}>{me.gender.title}</Text>}
-          </View>
-        )}
-
-        {/*Position & Schedule*/}
-        {(me.position || me.schedule) && (
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconAccount color={'#767676'} size={24} width={1.5} />
-            </View>
-            {me.position && (
-              <Text style={styles.text}>{me.position.title}</Text>
-            )}
-            {me.position && me.schedule && <Text style={styles.text}>, </Text>}
-            {me.schedule && (
-              <Text style={styles.text}>{me.schedule.title}</Text>
-            )}
-          </View>
-        )}
-
-        {/*Salary*/}
-        {me.salary && (
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconWallet color={'#767676'} size={24} width={1.5} />
-            </View>
-            <Text style={styles.text}>{numberWithSpaces(me.salary)} KZT</Text>
-          </View>
-        )}
-
-        {/*Location*/}
-        <View style={styles.row}>
-          <View style={styles.iconWrapper}>
-            <IconAddress color={'#767676'} size={24} width={1.5} />
-          </View>
-          {me.city ? (
-            <Text style={styles.text}>{me.city.title}</Text>
-          ) : (
-            <Text>Is not entered</Text>
           )}
-        </View>
 
-        <View style={styles.row}>
-          <View style={styles.iconWrapper}>
-            <IconMail color={'#767676'} size={24} width={1.5} />
-          </View>
-          <Text style={styles.text}>{me.email}</Text>
-        </View>
-
-        <View style={[styles.row, styles.descriptionSection]}>
-          <View style={styles.iconWrapper}>
-            <IconComment color={'#767676'} size={24} width={1.5} />
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.text}>{me.description || 'About me ...'}</Text>
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.iconWrapper}>
-            <IconSearch color={'#185AB7'} size={24} width={2} />
-          </View>
-          <PlainButton
-            label={'Find relevant jobs'}
-            onPress={() =>
-              apply().then(() => {
-                navigation.navigate('Jobs');
-              })
-            }
-          />
-        </View>
-      </View>
-
-      {/*Works*/}
-      <Text style={styles.label}>Past Experience</Text>
-
-      {/*Works*/}
-      <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween]}>
-          <PlainButton
-            onPress={() => {
-              navigation.navigate('AddWorkScreen');
-            }}
-            label={'Add work experience'}>
-            <View style={styles.btnIcon}>
-              <IconAdd color={'#185AB7'} size={24} width={2} />
+          {/*Position & Schedule*/}
+          {(me.position || me.schedule) && (
+            <View style={styles.row}>
+              <View style={styles.iconWrapper}>
+                <IconAccount color={'#767676'} size={24} width={1.5} />
+              </View>
+              {me.position && (
+                <Text style={styles.text}>{me.position.title}</Text>
+              )}
+              {me.position && me.schedule && (
+                <Text style={styles.text}>, </Text>
+              )}
+              {me.schedule && (
+                <Text style={styles.text}>{me.schedule.title}</Text>
+              )}
             </View>
-          </PlainButton>
-        </View>
-        <View style={styles.column}>
-          {me.works.map((item, index) => (
-            <View key={index}>
-              <View style={styles.divider} />
-              <WorkCard
-                item={item}
-                onPress={() => {
-                  navigation.navigate('ProfileWorkScreen', {id: item.id});
-                }}
-              />
+          )}
+
+          {/*Salary*/}
+          {me.salary && (
+            <View style={styles.row}>
+              <View style={styles.iconWrapper}>
+                <IconWallet color={'#767676'} size={24} width={1.5} />
+              </View>
+              <Text style={styles.text}>{numberWithSpaces(me.salary)} KZT</Text>
             </View>
-          ))}
-        </View>
-      </View>
+          )}
 
-      {/*Settings*/}
-      <Text style={styles.label}>Settings</Text>
+          {/*Location*/}
+          <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconAddress color={'#767676'} size={24} width={1.5} />
+            </View>
+            {me.city ? (
+              <Text style={styles.text}>{me.city.title}</Text>
+            ) : (
+              <Text>Is not entered</Text>
+            )}
+          </View>
 
-      {/*Notification*/}
-      <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween]}>
-          <Text style={styles.text}>Push notifications</Text>
-          <View>
-            <Switch
-              trackColor={{false: '#AAAAAA', true: '#4136F1'}}
-              thumbColor={isNotification ? '#f4f3f4' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleNotification}
-              value={isNotification}
+          <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconMail color={'#767676'} size={24} width={1.5} />
+            </View>
+            <Text style={styles.text}>{me.email}</Text>
+          </View>
+
+          <View style={[styles.row, styles.descriptionSection]}>
+            <View style={styles.iconWrapper}>
+              <IconComment color={'#767676'} size={24} width={1.5} />
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.text}>
+                {me.description || 'About me ...'}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.iconWrapper}>
+              <IconSearch color={'#185AB7'} size={24} width={2} />
+            </View>
+            <PlainButton
+              label={'Find relevant jobs'}
+              onPress={() =>
+                apply().then(() => {
+                  navigation.navigate('Jobs');
+                })
+              }
             />
           </View>
         </View>
-      </View>
 
-      {/*Support*/}
-      <Text style={styles.label}>Support</Text>
+        {/*Works*/}
+        <Text style={styles.label}>Past Experience</Text>
 
-      {/*Contact*/}
-      <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween]}>
-          <Text style={styles.text}>Contact support</Text>
+        {/*Works*/}
+        <View style={styles.block}>
+          <View style={[styles.row, styles.spaceBetween]}>
+            <PlainButton
+              onPress={() => {
+                navigation.navigate('AddWorkScreen');
+              }}
+              label={'Add work experience'}>
+              <View style={styles.btnIcon}>
+                <IconAdd color={'#185AB7'} size={24} width={2} />
+              </View>
+            </PlainButton>
+          </View>
+          <View style={styles.column}>
+            {me.works.map((item, index) => (
+              <View key={index}>
+                <View style={styles.divider} />
+                <WorkCard
+                  item={item}
+                  onPress={() => {
+                    navigation.navigate('ProfileWorkScreen', {id: item.id});
+                  }}
+                />
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-      {/*FAQ*/}
-      <View style={styles.block}>
-        <View style={[styles.row, styles.spaceBetween]}>
-          <Text style={styles.text}>FAQ</Text>
-        </View>
-      </View>
+        {/*Settings*/}
+        <Text style={styles.label}>Settings</Text>
 
-      {/*Sign Out*/}
-      <Text style={styles.label}>Sign Out</Text>
-      <View style={styles.block}>
-        <View style={styles.row}>
-          <TouchableOpacity
-            onPress={() => {
-              signOut();
-            }}>
-            <Text style={styles.text}>Sign Out</Text>
-          </TouchableOpacity>
+        {/*Notification*/}
+        <View style={styles.block}>
+          <View style={[styles.row, styles.spaceBetween]}>
+            <Text style={styles.text}>Push notifications</Text>
+            <View>
+              <Switch
+                trackColor={{false: '#AAAAAA', true: '#4136F1'}}
+                thumbColor={isNotification ? '#f4f3f4' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleNotification}
+                value={isNotification}
+              />
+            </View>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+
+        {/*Support*/}
+        <Text style={styles.label}>Support</Text>
+
+        {/*Contact*/}
+        <View style={styles.block}>
+          <View style={[styles.row, styles.spaceBetween]}>
+            <Text style={styles.text}>Contact support</Text>
+          </View>
+        </View>
+
+        {/*FAQ*/}
+        <View style={styles.block}>
+          <View style={[styles.row, styles.spaceBetween]}>
+            <Text style={styles.text}>FAQ</Text>
+          </View>
+        </View>
+
+        {/*Sign Out*/}
+        <Text style={styles.label}>Sign Out</Text>
+        <View style={styles.block}>
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => {
+                signOut();
+              }}>
+              <Text style={styles.text}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

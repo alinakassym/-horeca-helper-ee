@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, View, StyleSheet} from 'react-native';
+import {ScrollView, View, StyleSheet, SafeAreaView} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {MessagePreview} from './components/MessagePreview';
 import {getChats} from '../../services/ChatService';
@@ -18,7 +18,7 @@ export const MessagesScreen = ({navigation}) => {
     });
   }, [navigation]);
   return (
-    <View style={globalStyles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.chats}>
           {chats.map((item, index) => (
@@ -26,7 +26,7 @@ export const MessagesScreen = ({navigation}) => {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

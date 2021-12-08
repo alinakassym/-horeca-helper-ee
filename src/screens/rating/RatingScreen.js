@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  Modal,
+  SafeAreaView,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
@@ -35,7 +35,7 @@ const items = [
 
 export const RatingScreen = () => {
   return (
-    <View style={globalStyles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.topBar}>
         <TouchableOpacity style={globalStyles.filterBtn}>
           <IconFilter color={'#185AB7'} size={32} width={1.5} />
@@ -57,7 +57,7 @@ export const RatingScreen = () => {
           />
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  SafeAreaView,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {searchJobs} from '../../services/JobsService';
@@ -50,7 +51,7 @@ export const JobsScreen = ({navigation}) => {
   }
 
   return (
-    <View style={globalStyles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <View style={styles.topSection}>
         <Text style={styles.title}>Astana</Text>
         <Text style={styles.title}>123</Text>
@@ -91,7 +92,7 @@ export const JobsScreen = ({navigation}) => {
           <Text style={styles.text}>No matches found</Text>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
