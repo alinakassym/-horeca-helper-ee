@@ -15,7 +15,7 @@ class BackButton extends React.PureComponent {
         activeOpacity={0.5}
         onPress={onPress}
         style={styles.btn}>
-        <IconLeft color={'#151F47'} size={28} width={2} />
+        <IconLeft color={'#151F47'} size={18} width={3} />
       </TouchableOpacity>
     );
   }
@@ -23,8 +23,8 @@ class BackButton extends React.PureComponent {
 
 const styles = StyleSheet.create({
   btn: {
-    height: 52,
-    width: 52,
+    height: 40,
+    width: 40,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 12,
