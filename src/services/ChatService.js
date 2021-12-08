@@ -22,3 +22,10 @@ export const postMessage = async (id, data) => {
   const r = await http.post(`/ee/chats/${id}/messages`, data);
   return r.data;
 };
+
+export const getChatsSearch = async data => {
+  const r = await http.get(`/ee/chats/search?term=${data}`);
+  console.log('data: ', data);
+  console.log('getChatsSearch: ', r.data);
+  return r.data;
+};

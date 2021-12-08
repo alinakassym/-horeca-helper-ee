@@ -2,10 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, View, StyleSheet, SafeAreaView} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {MessagePreview} from './components/MessagePreview';
-import {getChats} from '../../services/ChatService';
+import {getChats, getChatsSearch} from '../../services/ChatService';
+import {MessageSearch} from './components/MessageSearch';
 
 export const MessagesScreen = ({navigation}) => {
   const [chats, setChats] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  const searchMessage = async () => {
+    try {
+      if (searchText.length > 0) {
+        const res = await getChatsSearch(searchText);
+        setChats(res);
+      } else {
+        const res = await getChats();
+        setChats(res);
+      }
+    } catch (e) {
+      console.log('searchMessage err: ', e);
+    }
+  };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -19,6 +35,11 @@ export const MessagesScreen = ({navigation}) => {
   }, [navigation]);
   return (
     <SafeAreaView style={globalStyles.container}>
+      <MessageSearch
+        text={searchText}
+        onChangeText={val => setSearchText(val)}
+        onEndEditing={() => searchMessage()}
+      />
       <ScrollView style={styles.scrollView}>
         <View style={styles.chats}>
           {chats.map((item, index) => (
