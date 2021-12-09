@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   rightBottomTextEE: {
     marginRight: 4,
     fontSize: 13,
-    lineHeight: 20,
+    lineHeight: 13,
     color: '#FFFFFF',
   },
 });

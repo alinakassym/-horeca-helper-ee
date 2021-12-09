@@ -15,7 +15,7 @@ class BackButton extends React.PureComponent {
         activeOpacity={0.5}
         onPress={onPress}
         style={styles.btn}>
-        <IconLeft color={'#151F47'} size={18} width={3} />
+        <IconLeft color={'#151F47'} size={24} width={3} />
       </TouchableOpacity>
     );
   }
