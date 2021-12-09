@@ -28,6 +28,7 @@ export const MessagesScreen = ({navigation}) => {
       try {
         const res = await getChats();
         setChats(res);
+        setSearchText('');
       } catch (e) {
         console.error('MessagesScreen err: ', e);
       }
@@ -38,7 +39,7 @@ export const MessagesScreen = ({navigation}) => {
       <MessageSearch
         text={searchText}
         onChangeText={val => setSearchText(val)}
-        onEndEditing={() => searchMessage()}
+        onBlur={() => searchMessage()}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.chats}>
