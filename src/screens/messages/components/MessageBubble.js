@@ -139,7 +139,10 @@ export const MessageBubble = ({item, company, prev}) => {
             <Text style={styles.rightBottomTextEE}>
               {formattedTime(createdAt)}
             </Text>
-            <IconMessageStatus color={isRead ? '#FFFFFF' : '#6CB5ED'} />
+            <IconMessageStatus
+              size={20}
+              color={isRead ? '#FFFFFF' : '#6CB5ED'}
+            />
           </View>
         </LinearGradient>
       )}
@@ -206,13 +209,13 @@ const styles = StyleSheet.create({
   rightBottomTextER: {
     marginRight: 4,
     fontSize: 13,
-    lineHeight: 22,
+    lineHeight: 23,
     color: '#8391A1',
   },
   rightBottomTextEE: {
     marginRight: 4,
     fontSize: 13,
-    lineHeight: 13,
+    lineHeight: 23,
     color: '#FFFFFF',
   },
 });

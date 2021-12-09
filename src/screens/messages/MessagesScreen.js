@@ -29,7 +29,7 @@ export const MessagesScreen = ({navigation}) => {
       setChats(res);
       setSearchText('');
     } catch (e) {
-      console.error('onClear err: ', e);
+      console.error('getAllChats err: ', e);
     }
   };
 
