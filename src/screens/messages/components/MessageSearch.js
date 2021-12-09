@@ -9,7 +9,7 @@ import {
 import {IconSearch} from '../../../assets/icons/tabs/IconSearch';
 import {IconClose} from '../../../assets/icons/main/IconClose';
 
-export const MessageSearch = ({text, onChangeText, onEndEditing, onBlur}) => {
+export const MessageSearch = ({text, onChangeText, onEndEditing, onClear}) => {
   return (
     <View style={styles.search}>
       <Text style={styles.header}>
@@ -29,7 +29,10 @@ export const MessageSearch = ({text, onChangeText, onEndEditing, onBlur}) => {
         </View>
 
         {text.length > 0 && (
-          <TouchableOpacity activeOpacity={0.7} style={styles.iconClear}>
+          <TouchableOpacity
+            onPress={onClear}
+            activeOpacity={0.7}
+            style={styles.iconClear}>
             <IconClose size={15} color={'#8391A1'} width={2} />
           </TouchableOpacity>
         )}

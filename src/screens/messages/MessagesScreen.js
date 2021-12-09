@@ -23,15 +23,19 @@ export const MessagesScreen = ({navigation}) => {
     }
   };
 
+  const getAllChats = async () => {
+    try {
+      const res = await getChats();
+      setChats(res);
+      setSearchText('');
+    } catch (e) {
+      console.error('onClear err: ', e);
+    }
+  };
+
   useEffect(() => {
     return navigation.addListener('focus', async () => {
-      try {
-        const res = await getChats();
-        setChats(res);
-        setSearchText('');
-      } catch (e) {
-        console.error('MessagesScreen err: ', e);
-      }
+      await getAllChats();
     });
   }, [navigation]);
   return (
@@ -39,7 +43,8 @@ export const MessagesScreen = ({navigation}) => {
       <MessageSearch
         text={searchText}
         onChangeText={val => setSearchText(val)}
-        onBlur={() => searchMessage()}
+        onEndEditing={() => searchMessage()}
+        onClear={() => getAllChats()}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.chats}>
