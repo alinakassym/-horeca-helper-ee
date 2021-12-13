@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {IconMessageStatus} from '../../../assets/icons/main/IconMessageStatus';
 import moment from 'moment';
+import {PrimaryColors} from '../../../styles/colors';
 
 const dimensions = Dimensions.get('screen');
 
@@ -53,7 +54,9 @@ export const MessagePreview = ({item, navigation}) => {
           {lastMessage.senderType === 'ee' ? (
             <View style={styles.row}>
               <IconMessageStatus
-                color={lastMessage.isRead ? '#2A8BE4' : '#8391A1'}
+                color={
+                  lastMessage.isRead ? PrimaryColors.brand : PrimaryColors.grey1
+                }
                 size={20}
               />
               <Text style={styles.text} numberOfLines={1}>
@@ -105,13 +108,13 @@ const styles = StyleSheet.create({
     width: imageSize,
     borderWidth: 0.7,
     borderRadius: imageSize,
-    borderColor: '#E2E5E8',
+    borderColor: PrimaryColors.grey3,
     overflow: 'hidden',
   },
   img: {
     height: '100%',
     width: '100%',
-    backgroundColor: '#E2E5E8',
+    backgroundColor: PrimaryColors.grey3,
   },
   titleRow: {
     marginTop: 4,
@@ -127,13 +130,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
     lineHeight: 20,
-    color: '#151F47',
+    color: PrimaryColors.element,
   },
   date: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     lineHeight: 18,
-    color: '#8391A1',
+    color: PrimaryColors.grey1,
   },
   row: {
     flexDirection: 'row',
@@ -148,14 +151,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     lineHeight: 18,
-    color: '#8391A1',
+    color: PrimaryColors.grey1,
   },
   divider: {
     marginTop: 14,
     height: 1,
     width: rightColWidth - pa * 2,
     borderBottomWidth: 1,
-    borderColor: '#E2E5E8',
+    borderColor: PrimaryColors.grey3,
   },
   unreadMessagesCount: {
     paddingHorizontal: 4,
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     textAlign: 'center',
     borderRadius: 50,
-    backgroundColor: '#2A8BE4',
-    color: '#FFFFFF',
+    backgroundColor: PrimaryColors.brand,
+    color: PrimaryColors.white,
   },
 });

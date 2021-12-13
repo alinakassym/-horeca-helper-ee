@@ -4,6 +4,7 @@ import {globalStyles} from '../../styles/globalStyles';
 import {MessagePreview} from './components/MessagePreview';
 import {getChats, getChatsSearch} from '../../services/ChatService';
 import {MessageSearch} from './components/MessageSearch';
+import {PrimaryColors} from '../../styles/colors';
 
 export const MessagesScreen = ({navigation}) => {
   const [chats, setChats] = useState([]);
@@ -46,7 +47,7 @@ export const MessagesScreen = ({navigation}) => {
         onEndEditing={() => searchMessage()}
         onClear={() => getAllChats()}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView>
         <View style={styles.chats}>
           {chats.map((item, index) => (
             <MessagePreview key={index} item={item} navigation={navigation} />
@@ -58,10 +59,7 @@ export const MessagesScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: '#F5F8FE',
-  },
   chats: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: PrimaryColors.white,
   },
 });

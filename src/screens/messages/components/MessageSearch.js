@@ -1,31 +1,25 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {IconSearch} from '../../../assets/icons/tabs/IconSearch';
 import {IconClose} from '../../../assets/icons/main/IconClose';
+import {PrimaryColors} from '../../../styles/colors';
+import Header from '../../../components/Header';
 
 export const MessageSearch = ({text, onChangeText, onEndEditing, onClear}) => {
   return (
     <View style={styles.search}>
-      <Text style={styles.header}>
-        <Text style={styles.textBold}>Чат </Text>с соискателями
-      </Text>
+      <Header title={'Чат'} subtitle={'с соискателями'} />
       <View style={styles.inputSection}>
         <TextInput
           value={text}
           style={styles.input}
           placeholder={'Поиск'}
-          placeholderTextColor={'#B9C1CA'}
+          placeholderTextColor={PrimaryColors.grey2}
           onChangeText={onChangeText}
           onEndEditing={onEndEditing}
         />
         <View style={styles.iconSearch}>
-          <IconSearch size={24} color={'#B9C1CA'} />
+          <IconSearch size={24} color={PrimaryColors.grey2} />
         </View>
 
         {text.length > 0 && (
@@ -33,7 +27,7 @@ export const MessageSearch = ({text, onChangeText, onEndEditing, onClear}) => {
             onPress={onClear}
             activeOpacity={0.7}
             style={styles.iconClear}>
-            <IconClose size={15} color={'#8391A1'} width={2} />
+            <IconClose size={15} color={PrimaryColors.grey1} width={2} />
           </TouchableOpacity>
         )}
       </View>
@@ -43,43 +37,33 @@ export const MessageSearch = ({text, onChangeText, onEndEditing, onClear}) => {
 
 const styles = StyleSheet.create({
   search: {
-    paddingTop: 30,
-    paddingHorizontal: 20,
-  },
-  header: {
-    marginBottom: 20,
-    fontFamily: 'Inter-Regular',
-    fontSize: 24,
-    lineHeight: 28,
-    color: '#151F47',
-  },
-  textBold: {
-    fontFamily: 'Inter-SemiBold',
+    backgroundColor: PrimaryColors.white,
   },
   inputSection: {
     position: 'relative',
+    paddingHorizontal: 20,
   },
   input: {
     marginBottom: 12,
     paddingHorizontal: 0,
     paddingLeft: 48,
-    paddingRight: 40,
+    paddingRight: 38,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     fontSize: 16,
     lineHeight: 24,
-    backgroundColor: '#F0F2F4',
-    color: '#151F47',
+    backgroundColor: PrimaryColors.grey4,
+    color: PrimaryColors.element,
   },
   iconSearch: {
     position: 'absolute',
     top: 12,
-    left: 12,
+    left: 32,
   },
   iconClear: {
     position: 'absolute',
     top: 15,
-    right: 13,
+    right: 33,
     padding: 2,
   },
 });
