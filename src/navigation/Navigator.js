@@ -6,12 +6,12 @@ import {JobsScreen} from '../screens/search/JobsScreen';
 import {JobsFilterScreen} from '../screens/search/JobsFilterScreen';
 import {JobScreen} from '../screens/search/JobScreen';
 
-// rating screens
-import {RatingScreen} from '../screens/rating/RatingScreen';
-
 // messages screens
 import {MessagesScreen} from '../screens/messages/MessagesScreen';
 import {MessagesChatScreen} from '../screens/messages/MessagesChatScreen';
+
+// notification screens
+import {NotificationsScreen} from '../screens/notifications/NotificationsScreen';
 
 // profile screens
 import {AddWorkScreen} from '../screens/profile/AddWorkScreen';
@@ -22,9 +22,9 @@ import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
 
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
-import {IconRating} from '../assets/icons/tabs/IconRating';
 import {IconMessages} from '../assets/icons/tabs/IconMessages';
 import {IconProfile} from '../assets/icons/tabs/IconProfile';
+import {IconNotifications} from '../assets/icons/tabs/IconNotifications';
 
 // Navigation
 import {createStackNavigator} from '@react-navigation/stack';
@@ -84,16 +84,6 @@ export const Navigator = () => {
           }}
         />
         <Tab.Screen
-          name="Rating"
-          component={RatingScreen}
-          options={{
-            tabBarLabel: 'Rating',
-            tabBarIcon: ({color}) => {
-              return <IconRating color={color} size={24} width={1.5} />;
-            },
-          }}
-        />
-        <Tab.Screen
           name="Messages"
           component={MessagesScreen}
           options={{
@@ -107,6 +97,16 @@ export const Navigator = () => {
             },
             tabBarIcon: ({color}) => {
               return <IconMessages color={color} size={24} width={1.5} />;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={NotificationsScreen}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({color}) => {
+              return <IconNotifications color={color} size={24} width={1.5} />;
             },
           }}
         />
