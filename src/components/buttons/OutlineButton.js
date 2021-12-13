@@ -9,7 +9,7 @@ const propTypes = {
   color: PropTypes.string,
 };
 
-class PrimaryButton extends React.PureComponent {
+class OutlineButton extends React.PureComponent {
   render() {
     const {label, color, onPress} = this.props;
     const btnColor = color || PrimaryColors.brand;
@@ -17,8 +17,8 @@ class PrimaryButton extends React.PureComponent {
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={onPress}
-        style={[styles.btn, {backgroundColor: btnColor}]}>
-        <Text style={styles.btnLabel}>{label}</Text>
+        style={[styles.btn, {borderColor: btnColor}]}>
+        <Text style={[styles.btnLabel, {color: btnColor}]}>{label}</Text>
       </TouchableOpacity>
     );
   }
@@ -26,9 +26,11 @@ class PrimaryButton extends React.PureComponent {
 
 const styles = StyleSheet.create({
   btn: {
-    paddingVertical: 15,
+    paddingVertical: 14,
     paddingHorizontal: 35,
     borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: 'transparent',
   },
   btnLabel: {
     textAlign: 'center',
@@ -39,6 +41,6 @@ const styles = StyleSheet.create({
   },
 });
 
-PrimaryButton.propTypes = propTypes;
+OutlineButton.propTypes = propTypes;
 
-export default PrimaryButton;
+export default OutlineButton;
