@@ -38,7 +38,11 @@ export const DateSelect = ({
           onPress={() => {
             setOpen(true);
           }}>
-          <Text style={globalStyles.select}>
+          <Text
+            style={[
+              globalStyles.select,
+              {position: 'relative', width: 400, zIndex: 1},
+            ]}>
             {moment(item).format('YYYY-MM-DD')}
           </Text>
         </Pressable>
@@ -47,7 +51,10 @@ export const DateSelect = ({
             onPress={() => {
               clearValue();
             }}
-            style={styles.clearBtn}>
+            style={[
+              styles.clearBtn,
+              {position: 'relative', top: -21, right: -100, zIndex: 2},
+            ]}>
             <IconClose color={'#898989'} />
           </Pressable>
         )}

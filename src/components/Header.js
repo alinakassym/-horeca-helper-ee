@@ -2,12 +2,13 @@ import React from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import BackButton from './buttons/BackButton';
 import PropTypes from 'prop-types';
+import {PrimaryColors} from '../styles/colors';
 
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
   navigation: PropTypes.object,
-  children: PropTypes.array,
+  children: PropTypes.object,
   goBack: PropTypes.bool,
   title: PropTypes.string,
   subtitle: PropTypes.string,
@@ -23,7 +24,13 @@ class Header extends React.PureComponent {
             <View style={styles.leftCol}>
               <BackButton onPress={() => navigation.goBack()} />
             </View>
-            <View style={styles.rightCol}>{children}</View>
+            {title ? (
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>{title}</Text>
+              </View>
+            ) : (
+              <View style={styles.rightCol}>{children}</View>
+            )}
           </>
         ) : (
           <Text style={styles.title}>
@@ -46,7 +53,22 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: PrimaryColors.white,
+  },
+  headerTitle: {
+    fontFamily: 'Inter-Medium',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.element,
+  },
+  header: {
+    width: dimensions.width - 40,
+    marginLeft: -leftColWidth,
+    paddingLeft: leftColWidth,
+    paddingRight: leftColWidth - 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   leftCol: {
     width: leftColWidth,
