@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  Image,
   StyleSheet,
   Switch,
   ActivityIndicator,
@@ -15,13 +14,6 @@ import {
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
 import {IconAdd} from '../../assets/icons/main/IconAdd';
-import {IconComment} from '../../assets/icons/main/IconComment';
-import {IconAddress} from '../../assets/icons/main/IconAddress';
-import {IconMail} from '../../assets/icons/main/IconMail';
-import {IconPencil} from '../../assets/icons/main/IconPencil';
-import {IconWallet} from '../../assets/icons/main/IconWallet';
-import {IconAccount} from '../../assets/icons/main/IconAccount';
-import {IconCake} from '../../assets/icons/main/IconCake';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
@@ -29,6 +21,8 @@ import {
   updateEmployeePhoto,
 } from '../../services/EmployeesService';
 import PlainButton from '../../components/buttons/PlainButton';
+import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
+import {IconSignOut} from '../../assets/icons/main/IconSignOut';
 
 import {WorkCard} from '../../components/works/WorkCard';
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
@@ -37,6 +31,10 @@ import {IconSearch} from '../../assets/icons/main/IconSearch';
 
 import moment from 'moment';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {ProfileHeader} from './components/ProfileHeader';
+import {ProfileInfo} from './components/ProfileInfo';
+import LightGradientButton from '../../components/buttons/LightGradientButton';
+import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -59,41 +57,10 @@ export const ProfileScreen = ({navigation}) => {
     sortOrder: 'DESC',
     pageSize: 20,
     pageNum: 1,
+    description: '',
   });
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
-  const dispatch = useDispatch();
-  const apply = async () => {
-    await dispatch(
-      setFilter({
-        positionId: me.positionId,
-        position: me.position,
-        companyCategoryId: null,
-        cityId: me.cityId,
-        city: me.city,
-        ageMin: me.ageMin,
-        ageMax: me.ageMax,
-        genderId: me.genderId,
-        gender: me.gender,
-        experienceMin: me.experienceMin,
-        experienceMax: me.experienceMax,
-        scheduleId: me.scheduleId,
-        salaryMin: me.salary,
-        salaryMax: me.salary,
-        sortBy: 'relevance',
-        orderBy: {
-          title: 'Relevance',
-          key: 'relevance',
-        },
-        sortOrder: 'DESC',
-        pageSize: 20,
-        pageNum: 1,
-      }),
-    );
-    await dispatch(setFilterApplied(true));
-    navigation.navigate('Jobs');
-  };
 
   const logOut = async () => {
     console.log('AuthContext', AuthContext);
@@ -110,9 +77,8 @@ export const ProfileScreen = ({navigation}) => {
   const toggleNotification = () =>
     setIsNotification(previousNotificationState => !previousNotificationState);
 
-  const getAge = birthDate => {
-    return moment().diff(birthDate, 'years', false);
-  };
+  const getAge = birthDate =>
+    birthDate ? moment().diff(birthDate, 'years', false) : false;
 
   const openCamera = async () => {
     let options = {
@@ -187,7 +153,7 @@ export const ProfileScreen = ({navigation}) => {
 
   if (loading) {
     return (
-      <View style={styles.fullScreenSection}>
+      <View style={globalStyles.fullScreenSection}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -218,299 +184,144 @@ export const ProfileScreen = ({navigation}) => {
             </View>
           </Pressable>
         </Modal>
-        <View style={styles.profilePhoto}>
-          <TouchableOpacity
+
+        <View style={styles.section}>
+          <ProfileHeader
+            firstName={me.firstName}
+            lastName={me.lastName}
+            description={me.description}
+            photoUrl={me.photoUrl}
+          />
+        </View>
+
+        <ProfileInfo
+          avgAvgScore={me.avgAvgScore}
+          contactInfo={'+7 (777) 123-45-56'}
+          age={getAge(me.birthDate)}
+          city={me.city?.title_ru}
+          email={me.email}
+        />
+
+        <View style={styles.section}>
+          <LightGradientButton
             onPress={() => {
-              setOpen(true);
+              navigation.navigate('ProfileEditScreen', {
+                value: me,
+              });
             }}
-            style={styles.imageWrapper}>
-            {me?.photoUrl && (
-              <Image style={styles.image} source={{uri: me.photoUrl}} />
-            )}
+            label={'Редактировать профиль'}
+          />
+        </View>
+
+        <View style={styles.list}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('MyCV', {value: me})}
+            style={[styles.listItem, styles.listItemDivider]}>
+            <Text style={styles.listItemTitle}>Мои резюме</Text>
+            <IconExpandRight size={16} color={PrimaryColors.grey1} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('MyExperience', {value: me.works})
+            }
+            style={[styles.listItem]}>
+            <Text style={styles.listItemTitle}>Мой опыт работы</Text>
+            <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
         </View>
 
-        {/*About*/}
-        <Text style={styles.label}>About</Text>
-        <View style={styles.block}>
-          <View
-            style={[styles.row, styles.spaceBetween, styles.paddingBottom0]}>
-            <Text style={styles.text}>
-              {me.firstName || 'Is not entered'} {me.lastName || ''}
-              {me.birthDate && <Text>, {getAge(me.birthDate)} y.o.</Text>}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('ProfileEditScreen', {
-                  value: me,
-                });
-              }}>
-              <IconPencil color={'#767676'} size={24} width={1.5} />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.list}>
+          <TouchableOpacity style={[styles.listItem, styles.listItemDivider]}>
+            <Text style={styles.listItemTitle}>Контактная поддержка</Text>
+            <IconExpandRight size={16} color={PrimaryColors.grey1} />
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.listItem]}>
+            <Text style={styles.listItemTitle}>Вопросы и ответы</Text>
+            <IconExpandRight size={16} color={PrimaryColors.grey1} />
+          </TouchableOpacity>
+        </View>
 
-          {/*{(me.position || me.gender || me.schedule) && (
-          <View style={[styles.row, styles.paddingTop0, styles.paddingBottom0]}>
-            {me.position && <Text>{me.position.title}</Text>}
-            {me.position && me.schedule && <Text>, </Text>}
-            {me.schedule && <Text>{me.schedule.title}</Text>}
-            {me.schedule && me.gender && <Text>, </Text>}
-            {me.gender && <Text>{me.gender.title}</Text>}
-          </View>
-        )}*/}
+        <View style={styles.list}>
+          <TouchableOpacity style={styles.listItem}>
+            <Text style={styles.listItemTitle}>Уведомления</Text>
+            <Switch
+              trackColor={{
+                false: PrimaryColors.grey3,
+                true: '#5CC689',
+              }}
+              thumbColor={PrimaryColors.white}
+              ios_backgroundColor={PrimaryColors.grey3}
+              onValueChange={toggleNotification}
+              value={isNotification}
+            />
+          </TouchableOpacity>
+        </View>
 
-          {/*Birth Date and Gender*/}
-          {(me.birthDate || me.gender) && (
+        <View style={[styles.list, styles.marginBottom]}>
+          <TouchableOpacity
+            onPress={() => {
+              signOut();
+            }}
+            style={styles.listItem}>
             <View style={styles.row}>
-              <View style={styles.iconWrapper}>
-                <IconCake color={'#767676'} size={24} width={1.5} />
-              </View>
-              {me.birthDate && <Text style={styles.text}>{me.birthDate}</Text>}
-              {me.birthDate && me.gender && <Text style={styles.text}>, </Text>}
-              {me.gender && <Text style={styles.text}>{me.gender.title}</Text>}
-            </View>
-          )}
-
-          {/*Position & Schedule*/}
-          {(me.position || me.schedule) && (
-            <View style={styles.row}>
-              <View style={styles.iconWrapper}>
-                <IconAccount color={'#767676'} size={24} width={1.5} />
-              </View>
-              {me.position && (
-                <Text style={styles.text}>{me.position.title}</Text>
-              )}
-              {me.position && me.schedule && (
-                <Text style={styles.text}>, </Text>
-              )}
-              {me.schedule && (
-                <Text style={styles.text}>{me.schedule.title}</Text>
-              )}
-            </View>
-          )}
-
-          {/*Salary*/}
-          {me.salary && (
-            <View style={styles.row}>
-              <View style={styles.iconWrapper}>
-                <IconWallet color={'#767676'} size={24} width={1.5} />
-              </View>
-              <Text style={styles.text}>{numberWithSpaces(me.salary)} KZT</Text>
-            </View>
-          )}
-
-          {/*Location*/}
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconAddress color={'#767676'} size={24} width={1.5} />
-            </View>
-            {me.city ? (
-              <Text style={styles.text}>{me.city.title}</Text>
-            ) : (
-              <Text>Is not entered</Text>
-            )}
-          </View>
-
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconMail color={'#767676'} size={24} width={1.5} />
-            </View>
-            <Text style={styles.text}>{me.email}</Text>
-          </View>
-
-          <View style={[styles.row, styles.descriptionSection]}>
-            <View style={styles.iconWrapper}>
-              <IconComment color={'#767676'} size={24} width={1.5} />
-            </View>
-            <View style={styles.description}>
-              <Text style={styles.text}>
-                {me.description || 'About me ...'}
+              <IconSignOut color={StatusesColors.red} />
+              <Text
+                style={[
+                  styles.listItemTitle,
+                  styles.marginLeft,
+                  {color: StatusesColors.red},
+                ]}>
+                Выйти
               </Text>
             </View>
-          </View>
-
-          <View style={styles.row}>
-            <View style={styles.iconWrapper}>
-              <IconSearch color={'#185AB7'} size={24} width={2} />
-            </View>
-            <PlainButton
-              label={'Find relevant jobs'}
-              onPress={() =>
-                apply().then(() => {
-                  navigation.navigate('Jobs');
-                })
-              }
-            />
-          </View>
-        </View>
-
-        {/*Works*/}
-        <Text style={styles.label}>Past Experience</Text>
-
-        {/*Works*/}
-        <View style={styles.block}>
-          <View style={[styles.row, styles.spaceBetween]}>
-            <PlainButton
-              onPress={() => {
-                navigation.navigate('AddWorkScreen');
-              }}
-              label={'Add work experience'}>
-              <View style={styles.btnIcon}>
-                <IconAdd color={'#185AB7'} size={24} width={2} />
-              </View>
-            </PlainButton>
-          </View>
-          <View style={styles.column}>
-            {me.works.map((item, index) => (
-              <View key={index}>
-                <View style={styles.divider} />
-                <WorkCard
-                  item={item}
-                  onPress={() => {
-                    navigation.navigate('ProfileWorkScreen', {id: item.id});
-                  }}
-                />
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/*Settings*/}
-        <Text style={styles.label}>Settings</Text>
-
-        {/*Notification*/}
-        <View style={styles.block}>
-          <View style={[styles.row, styles.spaceBetween]}>
-            <Text style={styles.text}>Push notifications</Text>
-            <View>
-              <Switch
-                trackColor={{false: '#AAAAAA', true: '#4136F1'}}
-                thumbColor={isNotification ? '#f4f3f4' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleNotification}
-                value={isNotification}
-              />
-            </View>
-          </View>
-        </View>
-
-        {/*Support*/}
-        <Text style={styles.label}>Support</Text>
-
-        {/*Contact*/}
-        <View style={styles.block}>
-          <View style={[styles.row, styles.spaceBetween]}>
-            <Text style={styles.text}>Contact support</Text>
-          </View>
-        </View>
-
-        {/*FAQ*/}
-        <View style={styles.block}>
-          <View style={[styles.row, styles.spaceBetween]}>
-            <Text style={styles.text}>FAQ</Text>
-          </View>
-        </View>
-
-        {/*Sign Out*/}
-        <Text style={styles.label}>Sign Out</Text>
-        <View style={styles.block}>
-          <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => {
-                signOut();
-              }}>
-              <Text style={styles.text}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+const padding = 20;
+
 const styles = StyleSheet.create({
-  fullScreenSection: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  label: {
-    paddingTop: 24,
-    paddingBottom: 8,
-    paddingHorizontal: 16,
-    color: '#767676',
-    fontSize: 14,
-  },
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-    height: 30,
-    width: 30,
-  },
-  iconWrapperStatus: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    backgroundColor: '#F1C40F',
-    overflow: 'hidden',
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: '500',
-    lineHeight: 24,
-    color: '#000000',
-  },
-  block: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#F6F6F6',
+  section: {
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: PrimaryColors.white,
   },
   row: {
-    paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  column: {
-    flexDirection: 'column',
+  list: {
+    marginTop: 8,
+    paddingLeft: padding,
+    backgroundColor: PrimaryColors.white,
   },
-  spaceBetween: {
+  listItem: {
+    paddingRight: padding,
+    paddingVertical: padding,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
-  paddingBottom0: {
-    paddingBottom: 0,
+  listItemTitle: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
-  paddingTop0: {
-    paddingTop: 0,
+  listItemDivider: {
+    borderBottomWidth: 0.7,
+    borderBottomColor: PrimaryColors.grey3,
   },
-  profilePhoto: {
-    paddingTop: 16,
-    alignItems: 'center',
+  marginLeft: {
+    marginLeft: 8,
   },
-  imageWrapper: {
-    height: 128,
-    width: 128,
-    borderRadius: 64,
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    overflow: 'hidden',
+  marginBottom: {
+    marginBottom: padding,
   },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  btnIcon: {
-    paddingRight: 8,
-  },
-  divider: {
-    height: 1,
-    width: '100%',
-    borderBottomColor: '#cccccc',
-    borderBottomWidth: 1,
-  },
+
   overlay: {
     flex: 1,
     justifyContent: 'center',
@@ -521,17 +332,11 @@ const styles = StyleSheet.create({
     padding: 16,
     width: '80%',
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: PrimaryColors.white,
   },
   item: {
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  descriptionSection: {
-    alignItems: 'flex-start',
-  },
-  description: {
-    width: '90%',
   },
 });

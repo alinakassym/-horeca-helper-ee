@@ -19,6 +19,8 @@ import {EditWorkScreen} from '../screens/profile/EditWorkScreen';
 import {ProfileEditScreen} from '../screens/profile/ProfileEditScreen';
 import {ProfileScreen} from '../screens/profile/ProfileScreen';
 import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
+import {MyCVScreen} from '../screens/profile/MyCVScreen';
+import {MyExperienceScreen} from '../screens/profile/MyExperienceScreen';
 
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
@@ -53,6 +55,7 @@ export const Navigator = () => {
       <Tab.Navigator
         initialRouteName="Profile"
         screenOptions={{
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarActiveTintColor: '#151F47',
           tabBarInactiveTintColor: '#B9C1CA',
@@ -114,7 +117,7 @@ export const Navigator = () => {
           name="Profile"
           component={ProfileScreen}
           options={{
-            tabBarLabel: 'Profile',
+            headerShown: false,
             tabBarIcon: ({color}) => {
               return <IconProfile color={color} size={24} width={1.5} />;
             },
@@ -200,6 +203,20 @@ export const Navigator = () => {
           }}
           name="EditWorkScreen"
           component={EditWorkScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="MyCV"
+          component={MyCVScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="MyExperience"
+          component={MyExperienceScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

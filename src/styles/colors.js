@@ -12,4 +12,5 @@ export const PrimaryColors = {
 export const StatusesColors = {
   green: '#40C14D',
   red: '#EC4C47',
+  orange: '#FDA40E',
 };

@@ -95,7 +95,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
       });
     }
     fetchData().then();
-  }, [employee.firstName, navigation]);
+  }, [employee, navigation]);
 
   if (loading) {
     return (
@@ -138,6 +138,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         label={'Date of birth'}
         value={employee}
         valueKey={'birthDate'}
+        clearable
       />
 
       <ModalSelect
