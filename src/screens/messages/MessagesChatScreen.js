@@ -119,14 +119,16 @@ export const MessagesChatScreen = ({route, navigation}) => {
   return (
     <SafeAreaView style={globalStyles.container}>
       <Header goBack navigation={navigation}>
-        <View style={styles.imageWrapper}>
-          <Image style={styles.img} source={{uri: company.photoUrl}} />
-        </View>
-        <View>
-          <Text style={styles.userName} numberOfLines={1}>
-            {company.title}
-          </Text>
-        </View>
+        <>
+          <View style={styles.imageWrapper}>
+            <Image style={styles.img} source={{uri: company.photoUrl}} />
+          </View>
+          <View>
+            <Text style={styles.userName} numberOfLines={1}>
+              {company.title}
+            </Text>
+          </View>
+        </>
       </Header>
       <ScrollView
         style={styles.scrollView}
