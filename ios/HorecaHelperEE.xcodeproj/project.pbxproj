@@ -25,6 +25,7 @@
 		4F037DE4B417452994527B26 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54B0140386254B36A159E507 /* Inter-SemiBold.ttf */; };
 		31D0760C9D544D92BD75ECAE /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35B4871CAD67499A9D28218B /* Inter-ExtraBold.ttf */; };
 		CC5D78275B114B5DA1C33B27 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9F9A3E762564972A6744806 /* Inter-Light.ttf */; };
+		974144AD08AE4E3FBD0F9248 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00311C198A7C4665AA5E762A /* Inter-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		54B0140386254B36A159E507 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		35B4871CAD67499A9D28218B /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D9F9A3E762564972A6744806 /* Inter-Light.ttf */ = {isa = PBXFileReference; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		00311C198A7C4665AA5E762A /* Inter-Medium.ttf */ = {isa = PBXFileReference; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				54B0140386254B36A159E507 /* Inter-SemiBold.ttf */,
 				35B4871CAD67499A9D28218B /* Inter-ExtraBold.ttf */,
 				D9F9A3E762564972A6744806 /* Inter-Light.ttf */,
+				00311C198A7C4665AA5E762A /* Inter-Medium.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				4F037DE4B417452994527B26 /* Inter-SemiBold.ttf in Resources */,
 				31D0760C9D544D92BD75ECAE /* Inter-ExtraBold.ttf in Resources */,
 				CC5D78275B114B5DA1C33B27 /* Inter-Light.ttf in Resources */,
+				974144AD08AE4E3FBD0F9248 /* Inter-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
