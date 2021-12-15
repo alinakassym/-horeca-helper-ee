@@ -15,4 +15,17 @@ export const globalStyles = StyleSheet.create({
     width: dimensions.width,
     backgroundColor: PrimaryColors.white,
   },
+  inputLabel: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 12,
+    lineHeight: 14,
+    color: PrimaryColors.grey2,
+  },
+  placeholderText: {
+    marginBottom: -25,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.grey2,
+  },
 });

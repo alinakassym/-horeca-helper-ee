@@ -7,7 +7,9 @@ import {PrimaryColors} from '../styles/colors';
 const propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
+  marginBottom: PropTypes.number,
   onChangeText: PropTypes.func,
+  onInputFocus: PropTypes.func,
 };
 
 class MultilineInput extends React.PureComponent {
@@ -20,7 +22,7 @@ class MultilineInput extends React.PureComponent {
   }
 
   render() {
-    const {label, value, onChangeText} = this.props;
+    const {label, value, marginBottom, onChangeText, onInputFocus} = this.props;
     const {height, focused} = this.state;
     const inputMaxHeight = 120;
     const setHeight = val => {
@@ -28,7 +30,7 @@ class MultilineInput extends React.PureComponent {
       this.setState({...this.state, height: res});
     };
     return (
-      <View style={[styles.inputSection]}>
+      <View style={[styles.inputSection, {marginBottom: marginBottom || 20}]}>
         {((!!label && focused) || (!!label && !!value)) && (
           <Text style={globalStyles.inputLabel}>{label}</Text>
         )}
@@ -41,8 +43,14 @@ class MultilineInput extends React.PureComponent {
           onContentSizeChange={event => {
             setHeight(event.nativeEvent.contentSize.height);
           }}
-          onFocus={() => this.setState({...this.state, focused: true})}
-          onBlur={() => this.setState({...this.state, focused: false})}
+          onFocus={() => {
+            this.setState({...this.state, focused: true});
+            onInputFocus(true);
+          }}
+          onBlur={() => {
+            this.setState({...this.state, focused: false});
+            onInputFocus(false);
+          }}
           onChangeText={val => onChangeText(val)}
           style={[
             styles.input,

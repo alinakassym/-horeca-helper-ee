@@ -64,12 +64,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderRadius: imageSize,
     borderColor: PrimaryColors.grey3,
+    backgroundColor: PrimaryColors.white,
     overflow: 'hidden',
   },
   img: {
     height: '100%',
     width: '100%',
-    backgroundColor: PrimaryColors.grey3,
   },
   userName: {
     marginBottom: 6,
