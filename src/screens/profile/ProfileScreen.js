@@ -13,64 +13,28 @@ import {
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {AuthContext} from '../../store/context';
-import {IconAdd} from '../../assets/icons/main/IconAdd';
-
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   getEmployee,
   updateEmployeePhoto,
 } from '../../services/EmployeesService';
-import PlainButton from '../../components/buttons/PlainButton';
 import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
 import {IconSignOut} from '../../assets/icons/main/IconSignOut';
-
-import {WorkCard} from '../../components/works/WorkCard';
-import {setFilter, setFilterApplied} from '../../store/slices/jobs';
-import {useDispatch} from 'react-redux';
-import {IconSearch} from '../../assets/icons/main/IconSearch';
 
 import moment from 'moment';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {ProfileHeader} from './components/ProfileHeader';
-import {ProfileInfo} from './components/ProfileInfo';
+import ProfileInfo from './components/ProfileInfo';
 import LightGradientButton from '../../components/buttons/LightGradientButton';
 import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
   const [me, setMe] = useState({
-    positionId: null,
-    position: null,
-    companyCategoryId: null,
-    cityId: null,
     city: null,
-    ageMin: null,
-    ageMax: null,
-    genderId: null,
-    gender: null,
-    experienceMin: null,
-    experienceMax: null,
-    scheduleId: null,
-    salaryMin: null,
-    salaryMax: null,
-    sortBy: 'relevance',
-    sortOrder: 'DESC',
-    pageSize: 20,
-    pageNum: 1,
     description: '',
   });
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
-  const logOut = async () => {
-    console.log('AuthContext', AuthContext);
-    try {
-      await GoogleSignin.signOut();
-      signOut();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   // Notification
   const [isNotification, setIsNotification] = useState(false);
@@ -128,12 +92,6 @@ export const ProfileScreen = ({navigation}) => {
         }
       }
     });
-  };
-
-  const numberWithSpaces = val => {
-    let parts = val.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    return parts.join('.');
   };
 
   useEffect(() => {
