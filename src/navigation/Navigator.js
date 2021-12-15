@@ -37,6 +37,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // Redux
 import {useSelector} from 'react-redux';
+import {PrimaryColors, StatusesColors} from '../styles/colors';
 
 export const Navigator = () => {
   useSelector(state => {
@@ -46,13 +47,6 @@ export const Navigator = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const screenOptions = {
-    headerTintColor: '#185AB7',
-    headerTitleStyle: {
-      color: '#333333',
-    },
-  };
-
   const TabStack = () => {
     return (
       <Tab.Navigator
@@ -60,12 +54,12 @@ export const Navigator = () => {
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarActiveTintColor: '#151F47',
-          tabBarInactiveTintColor: '#B9C1CA',
+          tabBarActiveTintColor: PrimaryColors.element,
+          tabBarInactiveTintColor: PrimaryColors.grey2,
           tabBarStyle: {
             // note: don't set height, or set screen-specific heights
             marginBottom: 2,
-            shadowColor: '#151F47',
+            shadowColor: PrimaryColors.element,
             shadowOpacity: 0.5,
             shadowRadius: 5,
             shadowOffset: {
@@ -99,7 +93,7 @@ export const Navigator = () => {
             tabBarBadgeStyle: {
               top: 4,
               left: 0,
-              backgroundColor: '#EC4C47',
+              backgroundColor: StatusesColors.red,
             },
             tabBarIcon: ({color}) => {
               return <IconMessages color={color} size={24} width={1.5} />;
@@ -132,7 +126,6 @@ export const Navigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="Tabs"
-      screenOptions={screenOptions}
       screenListeners={{
         state: e => {
           console.log('state changed', e.data.state.history);
