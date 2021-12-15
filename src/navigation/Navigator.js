@@ -13,6 +13,9 @@ import {MessagesChatScreen} from '../screens/messages/MessagesChatScreen';
 // notification screens
 import {NotificationsScreen} from '../screens/notifications/NotificationsScreen';
 
+// company screens
+import {CompanyReviewScreen} from '../screens/company/CompanyReviewScreen';
+
 // profile screens
 import {AddWorkScreen} from '../screens/profile/AddWorkScreen';
 import {EditWorkScreen} from '../screens/profile/EditWorkScreen';
@@ -171,6 +174,17 @@ export const Navigator = () => {
           }}
           name="MessagesChatScreen"
           component={MessagesChatScreen}
+        />
+      </Stack.Group>
+
+      {/*COMPANY SCREENS*/}
+      <Stack.Group>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="CompanyReview"
+          component={CompanyReviewScreen}
         />
       </Stack.Group>
 

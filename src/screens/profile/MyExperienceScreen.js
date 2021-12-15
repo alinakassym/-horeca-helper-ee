@@ -18,8 +18,11 @@ export const MyExperienceScreen = ({route, navigation}) => {
             <View />
             <ProfileWorkCard
               item={item}
-              onPress={() => {
-                navigation.navigate('ProfileWorkScreen', {id: item.id});
+              edit={() => {
+                navigation.navigate('EditWorkScreen', {value: item});
+              }}
+              rate={() => {
+                navigation.navigate('CompanyReview', {value: item});
               }}
             />
           </View>

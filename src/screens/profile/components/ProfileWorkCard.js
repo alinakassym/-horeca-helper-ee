@@ -77,7 +77,7 @@ class ProfileWorkCard extends React.PureComponent {
               Ожидайте подтверждение заведения
             </Text>
           </View>
-        ) : item.companyReview ? (
+        ) : !item.companyReview ? (
           <View style={[styles.row, styles.marginTop]}>
             <View style={styles.leftCol2}>
               <LightGradientButton onPress={edit} label={'Редактировать'} />
