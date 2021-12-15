@@ -40,7 +40,7 @@ export const AddWorkScreen = ({navigation}) => {
       };
       try {
         await postWork(data);
-        navigation.navigate('Profile');
+        navigation.navigate('MyExperience');
       } catch (e) {
         console.log('postWork err: ', e);
       }

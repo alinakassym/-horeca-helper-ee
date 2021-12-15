@@ -13,4 +13,5 @@ export const StatusesColors = {
   green: '#40C14D',
   red: '#EC4C47',
   orange: '#FDA40E',
+  orangeOpacity: 'rgba(253, 164, 14, 0.12)',
 };
