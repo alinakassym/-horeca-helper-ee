@@ -25,6 +25,9 @@ import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
 import {MyCVScreen} from '../screens/profile/MyCVScreen';
 import {MyExperienceScreen} from '../screens/profile/MyExperienceScreen';
 
+// support screens
+import {SupportScreen} from '../screens/support/SupportScreen';
+
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
 import {IconMessages} from '../assets/icons/tabs/IconMessages';
@@ -224,6 +227,15 @@ export const Navigator = () => {
           }}
           name="MyExperience"
           component={MyExperienceScreen}
+        />
+      </Stack.Group>
+
+      {/*SUPPORT SCREENS*/}
+      <Stack.Group>
+        <Stack.Screen
+          name={'Support'}
+          component={SupportScreen}
+          options={{headerShown: false}}
         />
       </Stack.Group>
     </Stack.Navigator>

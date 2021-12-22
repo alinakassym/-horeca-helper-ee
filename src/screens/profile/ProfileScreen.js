@@ -189,7 +189,9 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         <View style={styles.list}>
-          <TouchableOpacity style={[styles.listItem, styles.listItemDivider]}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Support')}
+            style={[styles.listItem, styles.listItemDivider]}>
             <Text style={styles.listItemTitle}>Контактная поддержка</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
