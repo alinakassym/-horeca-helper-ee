@@ -7,15 +7,16 @@ const propTypes = {
   label: PropTypes.string,
   onPress: PropTypes.func,
   color: PropTypes.string,
+  style: PropTypes.object,
 };
 
 class GradientButton extends React.PureComponent {
   render() {
-    const {label, onPress} = this.props;
+    const {label, onPress, style} = this.props;
 
     const colors = ['#38B6EC', '#31A0E8', '#2A8BE4'];
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+      <TouchableOpacity style={style} activeOpacity={0.5} onPress={onPress}>
         <LinearGradient
           colors={colors}
           start={{x: 0, y: 0}}
