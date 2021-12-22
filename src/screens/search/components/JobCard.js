@@ -10,6 +10,11 @@ import {
 import {globalStyles} from '../../../styles/globalStyles';
 import {PrimaryColors} from '../../../styles/colors';
 import SmallBadge from '../../../components/SmallBadge';
+import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
+import {IconAddress} from '../../../assets/icons/main/IconAddress';
+import RatingScale from '../../../components/RatingScale';
+import GradientButton from '../../../components/buttons/GradientButton';
+import OutlineButton from '../../../components/buttons/OutlineButton';
 
 const dimensions = Dimensions.get('screen');
 
@@ -19,17 +24,56 @@ export const JobCard = ({item, onPress}) => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     return parts.join('.');
   };
+
+  const getSalary = (salaryMin, salaryMax) => {
+    if (salaryMin && salaryMax) {
+      return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(salaryMax)}`;
+    } else if (salaryMin) {
+      return `от ${numberWithSpaces(salaryMin)}`;
+    }
+    return `до ${numberWithSpaces(salaryMax)}`;
+  };
   return (
     <Pressable style={globalStyles.card} onPress={onPress}>
-      <View style={styles.row}>
+      <View style={[styles.row, styles.mb]}>
         <View style={styles.leftCol}>
-          <Text style={styles.positionTitle}>{item?.position?.title_ru}</Text>
-          <SmallBadge style={{marginLeft: 8}} text={'TOP'} color={'#9B51E0'} />
+          <View style={styles.row}>
+            <Text style={styles.positionTitle}>{item?.position?.title_ru}</Text>
+            <SmallBadge
+              style={{marginLeft: 8}}
+              text={'TOP'}
+              color={'#9B51E0'}
+            />
+          </View>
+          <View style={[styles.row, styles.alignCenter]}>
+            <IconBuilding color={PrimaryColors.grey1} size={16} />
+            <Text style={[styles.text, styles.ml]}>{item.company.title}</Text>
+          </View>
+          <View style={[styles.row, styles.alignCenter]}>
+            <IconAddress color={PrimaryColors.grey1} size={16} />
+            <Text numberOfLines={1} style={[styles.text, styles.ml]}>
+              {item.company.address}
+            </Text>
+          </View>
         </View>
         <View style={styles.imageWrapper}>
           <Image style={styles.image} source={{uri: item.company.photoUrl}} />
           {item.isActive && <View style={styles.indicator} />}
         </View>
+      </View>
+      <View style={[styles.row, styles.justifyBetween]}>
+        <Text style={styles.salary}>
+          {getSalary(item.salaryMin, item.salaryMax)} ₸
+        </Text>
+        <RatingScale score={Math.ceil(item.company.avgAvgScore)} />
+      </View>
+      <Text style={[styles.text, styles.mb]}>{item.description}</Text>
+      <View style={[styles.row]}>
+        <GradientButton style={{width: width - 196}} label={'Откликнуться'} />
+        <OutlineButton
+          style={{marginLeft: 8, width: 148}}
+          label={'В избранные'}
+        />
       </View>
     </Pressable>
   );
@@ -43,10 +87,14 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
+  alignCenter: {
+    alignItems: 'center',
+  },
+  justifyBetween: {
+    justifyContent: 'space-between',
+  },
   leftCol: {
     width: width - imageSize - padding * 2 - 8,
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
   },
   imageWrapper: {
     position: 'relative',
@@ -69,5 +117,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     color: PrimaryColors.element,
+  },
+  ml: {
+    marginLeft: 6,
+  },
+  mb: {
+    marginBottom: 24,
+  },
+  salary: {
+    marginBottom: 8,
+    fontFamily: 'Inter-Regular',
+    fontSize: 20,
+    lineHeight: 24,
+    color: PrimaryColors.element,
+  },
+  text: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 18,
+    color: PrimaryColors.grey1,
   },
 });
