@@ -155,9 +155,9 @@ export const Navigator = () => {
         />
         <Stack.Screen
           options={{
-            headerTitle: 'Job',
+            headerShown: false,
           }}
-          name="JobScreen"
+          name="Job"
           component={JobScreen}
         />
       </Stack.Group>

@@ -5,21 +5,30 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
+  SafeAreaView,
+  Dimensions,
 } from 'react-native';
 
-import {getJobById, postJobApply} from '../../services/JobsService';
+import {postJobApply} from '../../services/JobsService';
 import {BottomModal} from './components/BottomModal';
-
-import moment from 'moment';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {getChatsLookup} from '../../services/ChatService';
+import Header from '../../components/Header';
+import {globalStyles} from '../../styles/globalStyles';
+import CompanyCard from './components/CompanyCard';
+import CompanyInfo from './components/CompanyInfo';
+import {PrimaryColors} from '../../styles/colors';
+import LinearGradient from 'react-native-linear-gradient';
+import GradientButton from '../../components/buttons/GradientButton';
+import {IconMessages} from '../../assets/icons/tabs/IconMessages';
+
+const dimensions = Dimensions.get('screen');
 
 export const JobScreen = ({route, navigation}) => {
-  const jobId = route.params ? route.params.jobId : null;
+  const jobParams = route.params ? route.params.job : null;
 
   const [chatId, setChatId] = useState(null);
-  const [job, onChange] = React.useState({});
+  const [job] = React.useState(jobParams);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [applyMessage, setApplyMessage] = useState();
@@ -43,27 +52,13 @@ export const JobScreen = ({route, navigation}) => {
     return applyMessage && applyMessage.length > 0;
   };
 
-  const formatDate = date => {
-    return moment(date).format('MMM-D, YYYY');
-  };
-
-  const numberWithSpaces = val => {
-    let parts = val.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    return parts.join('.');
-  };
-
   useEffect(() => {
     function fetchData() {
       return navigation.addListener('focus', async () => {
         try {
-          const data = await getJobById(jobId);
-          onChange(data.data);
-
-          const companyId = data.data?.company?.id;
+          const companyId = job?.company?.id;
           const chatLookup = await getChatsLookup(companyId);
           setChatId(chatLookup);
-
           setLoading(false);
         } catch (e) {
           console.log('fetch err: ', e);
@@ -71,7 +66,7 @@ export const JobScreen = ({route, navigation}) => {
       });
     }
     fetchData();
-  }, [jobId, navigation]);
+  }, [job, navigation]);
 
   if (loading) {
     return (
@@ -82,193 +77,110 @@ export const JobScreen = ({route, navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={globalStyles.container}>
+      <Header goBack navigation={navigation} title={'Подробная информация'} />
+      <CompanyCard
+        photoUrl={job?.company?.photoUrl}
+        title={job?.company?.title}
+      />
       <ScrollView>
-        <View style={styles.section}>
-          {job.position && (
-            <Text style={styles.positionTitle}>{job.position.title}</Text>
-          )}
-          <View style={styles.row}>
-            <View style={[styles.col, {width: '20%'}]}>
-              <View style={styles.imageWrapper}>
-                <Image
-                  style={styles.img}
-                  source={{uri: job.company.photoUrl}}
-                />
-              </View>
-            </View>
-            <View style={[styles.col, {width: '80%'}]}>
-              <Text style={styles.companyTitle}>{job.company.title}</Text>
-              <Text style={styles.companyDescription}>
-                {job.company.description}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          {job.city && (
-            <View style={styles.row}>
-              <Text style={[styles.text, styles.textBold]}>Location:</Text>
-              <Text style={styles.text}> {job.city.title}</Text>
-            </View>
-          )}
-
-          {job.salaryMin && job.salaryMax ? (
-            <View style={styles.row}>
-              <Text style={[styles.text, styles.textBold]}>Salary:</Text>
-              <Text style={styles.salary}>
-                {' '}
-                {numberWithSpaces(job.salaryMin)} -{' '}
-                {numberWithSpaces(job.salaryMax)} KZT
-              </Text>
-            </View>
-          ) : job.salaryMin ? (
-            <View style={styles.row}>
-              <Text style={[styles.text, styles.textBold]}>Salary:</Text>
-              <Text style={styles.salary}>
-                {' '}
-                from {numberWithSpaces(job.salaryMin)} KZT
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.row}>
-              <Text style={[styles.text, styles.textBold]}>Salary:</Text>
-              <Text style={styles.salary}>
-                {' '}
-                to {numberWithSpaces(job.salaryMax)} KZT
-              </Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.section}>
-          {!!job.description && job.description.length > 3 && (
-            <View style={{width: '95%'}}>
-              <Text style={[styles.text, styles.textBold]}>
-                Description:
-                <Text textBreakStrategy={'simple'} style={styles.text}>
-                  {' '}
-                  {job.description} Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Totam, veritatis?
-                </Text>
-              </Text>
-            </View>
-          )}
-        </View>
-
-        <View style={[styles.section, styles.bottomSection]}>
-          <Text style={styles.createdAt}>
-            Created on: {formatDate(job.createdAt)}
-          </Text>
-          <Text style={styles.createdAt}>
-            Last updated on: {formatDate(job.updatedAt)}
-          </Text>
-        </View>
-
-        <View style={[styles.section]}>
-          <PrimaryButton onPress={() => setVisible(true)} label={'Apply'} />
-        </View>
-
-        {!!chatId && (
-          <View style={[styles.section, styles.bottomSection]}>
-            <PrimaryButton
-              label={'Open chat'}
-              onPress={() =>
-                navigation.navigate('MessagesChatScreen', {
-                  chatId: chatId,
-                  company: job.company,
-                })
-              }
-            />
-          </View>
-        )}
-
-        <BottomModal
-          visible={visible}
-          onClose={() => setVisible(false)}
-          text={applyMessage}
-          onSend={() => sendApply()}
-          isValid={isValid()}
-          onChangeText={val => setApplyMessage(val)}
+        <CompanyInfo
+          avgAvgScore={job?.company?.avgAvgScore}
+          position={job?.position?.title_ru}
+          location={job.company.address}
+          salaryMin={job.salaryMin}
+          salaryMax={job.salaryMax}
         />
+        <View style={globalStyles.card}>
+          <Text style={styles.title}>Требования</Text>
+          <Text style={styles.text}>{job.description}</Text>
+        </View>
       </ScrollView>
-    </View>
+
+      <BottomModal
+        visible={visible}
+        onClose={() => setVisible(false)}
+        text={applyMessage}
+        onSend={() => sendApply()}
+        isValid={isValid()}
+        onChangeText={val => setApplyMessage(val)}
+      />
+
+      <LinearGradient
+        colors={[
+          'rgba(255, 255, 255, 0.2)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 1)',
+        ]}
+        style={styles.btnSection}>
+        {chatId ? (
+          <View style={styles.row}>
+            <View style={styles.leftCol}>
+              <GradientButton
+                onPress={() => setVisible(true)}
+                label={'Откликнуться'}
+              />
+            </View>
+            <View style={styles.rightCol}>
+              <PrimaryButton
+                label={'Перейти в чат'}
+                color={PrimaryColors.element}
+                onPress={() =>
+                  navigation.navigate('MessagesChatScreen', {
+                    chatId: chatId,
+                    company: job.company,
+                  })
+                }>
+                <IconMessages size={12.67} color={PrimaryColors.white} />
+              </PrimaryButton>
+            </View>
+          </View>
+        ) : (
+          <GradientButton
+            onPress={() => setVisible(true)}
+            label={'Откликнуться'}
+          />
+        )}
+      </LinearGradient>
+    </SafeAreaView>
   );
 };
 
+const width = dimensions.width;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 28,
+  title: {
+    marginBottom: 8,
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 18,
+    color: PrimaryColors.grey1,
   },
-  section: {
-    paddingHorizontal: 16,
-    flexDirection: 'column',
-  },
-  bottomSection: {
-    marginVertical: 20,
+  text: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
   row: {
     flexDirection: 'row',
   },
-  imageWrapper: {
-    marginRight: 16,
-    marginBottom: 16,
-    height: 60,
-    width: 60,
-    borderRadius: 4,
-    backgroundColor: '#767676',
-    overflow: 'hidden',
+  leftCol: {
+    width: width - 190,
   },
-  img: {
-    height: '100%',
-    width: '100%',
+  rightCol: {
+    marginLeft: 8,
+    width: 142,
   },
-  positionTitle: {
-    marginBottom: 18,
-    fontFamily: 'Roboto-Bold',
-    fontSize: 22,
-    color: '#000000',
-  },
-  salary: {
-    marginBottom: 18,
-    fontSize: 16,
-    color: '#000000',
-  },
-  cityTitle: {
-    marginBottom: 8,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 16,
-    color: '#000000',
-  },
-  companyTitle: {
-    marginBottom: 4,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 16,
-    color: '#000000',
-  },
-  companyDescription: {
-    marginBottom: 18,
-    fontSize: 16,
-  },
-  description: {
-    marginBottom: 18,
-    fontSize: 16,
-    color: '#000000',
-  },
-  createdAt: {
-    marginBottom: 4,
-  },
-
-  textBold: {
-    fontFamily: 'Roboto-Bold',
-    color: '#000000',
-  },
-  text: {
-    fontFamily: 'Roboto-Regular',
-    marginBottom: 8,
-    fontSize: 16,
-    color: '#000000',
+  btnSection: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    zIndex: 3,
   },
 });
 

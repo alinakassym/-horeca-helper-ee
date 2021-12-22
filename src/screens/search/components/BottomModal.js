@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import CloseButton from '../../../components/buttons/CloseButton';
 import PrimaryButton from '../../../components/buttons/PrimaryButton';
+import GradientButton from '../../../components/buttons/GradientButton';
+import {PrimaryColors} from '../../../styles/colors';
+import {globalStyles} from '../../../styles/globalStyles';
 
 const dimensions = Dimensions.get('screen');
 
@@ -34,9 +37,12 @@ export const BottomModal = ({
         <Pressable style={styles.overlay} onPress={onClose}>
           <View style={styles.wrap}>
             <CloseButton onPress={onClose} />
-            <Text style={styles.title}>Apply for Job</Text>
+            <Text style={styles.title}>Отклик на вакансию</Text>
             {children}
             <View style={styles.inputSection}>
+              <Text style={[globalStyles.inputLabel, styles.inputLabel]}>
+                Сопроводительное письмо
+              </Text>
               <TextInput
                 multiline={true}
                 value={text}
@@ -48,11 +54,15 @@ export const BottomModal = ({
               />
             </View>
             <View style={styles.btn}>
-              <PrimaryButton
-                color={(!isValid && '#E2E5E8') || null}
-                label={'Send'}
-                onPress={onSend}
-              />
+              {isValid ? (
+                <GradientButton label={'Отправить'} onPress={onSend} />
+              ) : (
+                <PrimaryButton
+                  color={PrimaryColors.grey3}
+                  labelColor={PrimaryColors.grey1}
+                  label={'Отправить'}
+                />
+              )}
             </View>
           </View>
         </Pressable>
@@ -97,6 +107,9 @@ const styles = StyleSheet.create({
     color: '#151F47',
     borderBottomWidth: 1.5,
     borderBottomColor: '#2A8BE4',
+  },
+  inputLabel: {
+    color: PrimaryColors.brand,
   },
   btn: {
     marginTop: 40,

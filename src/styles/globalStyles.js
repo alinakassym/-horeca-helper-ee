@@ -6,6 +6,8 @@ const dimensions = Dimensions.get('screen');
 export const globalStyles = StyleSheet.create({
   fullScreenSection: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   container: {
+    position: 'relative',
+    height: dimensions.height,
     flex: 1,
     backgroundColor: PrimaryColors.background,
   },

@@ -93,7 +93,7 @@ export const JobsScreen = ({navigation}) => {
             jobs.map((item, index) => (
               <JobCard
                 onPress={() => {
-                  navigation.navigate('JobScreen', {jobId: item.id});
+                  navigation.navigate('Job', {job: item});
                 }}
                 key={index}
                 item={item}
