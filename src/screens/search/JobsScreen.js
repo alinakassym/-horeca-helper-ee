@@ -13,10 +13,14 @@ import {searchJobs} from '../../services/JobsService';
 import {JobCard} from '../../components/jobs/JobCard';
 import {IconFilter} from '../../assets/icons/main/IconFilter';
 import {useSelector} from 'react-redux';
+import UsersInfo from './components/UsersInfo';
+import OptionsButton from '../../components/buttons/OptionsButton';
+import Header from '../../components/Header';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
   const isFilterApplied = useSelector(state => state.jobs.isFilterApplied);
+  const [usersNumber, setUsersNumber] = useState(0);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +37,7 @@ export const JobsScreen = ({navigation}) => {
         try {
           const result = await searchJobs(filterState);
           setJobs(result.data.items);
+          setUsersNumber(result.data.total);
           setLoading(false);
         } catch (e) {
           console.log('searchJobs err:', e);
@@ -52,6 +57,14 @@ export const JobsScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
+      <UsersInfo usersNumber={usersNumber} />
+      <Header options title={'Поиск'} subtitle={'соискателей'}>
+        <OptionsButton
+          onPress={() => {
+            navigation.navigate('FilterScreen');
+          }}
+        />
+      </Header>
       <View style={styles.topSection}>
         <Text style={styles.title}>Astana</Text>
         <Text style={styles.title}>123</Text>

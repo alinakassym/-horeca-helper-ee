@@ -10,17 +10,18 @@ const propTypes = {
   navigation: PropTypes.object,
   children: PropTypes.object,
   goBack: PropTypes.bool,
+  options: PropTypes.bool,
   title: PropTypes.string,
   subtitle: PropTypes.string,
 };
 
 class Header extends React.PureComponent {
   render() {
-    const {navigation, children, goBack, title, subtitle} = this.props;
+    const {navigation, children, goBack, options, title, subtitle} = this.props;
     return (
-      <View style={styles.headerSection}>
+      <>
         {goBack ? (
-          <>
+          <View style={styles.headerSection}>
             <View style={styles.leftCol}>
               <BackButton onPress={() => navigation.goBack()} />
             </View>
@@ -31,13 +32,22 @@ class Header extends React.PureComponent {
             ) : (
               <View style={styles.rightCol}>{children}</View>
             )}
-          </>
+          </View>
+        ) : options ? (
+          <View style={[styles.headerSection, styles.optionsHeaderSection]}>
+            <Text style={[styles.rightCol, styles.title]}>
+              {title} <Text style={styles.subtitle}>{subtitle}</Text>
+            </Text>
+            <View style={[styles.leftCol, styles.alignEnd]}>{children}</View>
+          </View>
         ) : (
-          <Text style={styles.title}>
-            {title} <Text style={styles.subtitle}>{subtitle}</Text>
-          </Text>
+          <View style={styles.headerSection}>
+            <Text style={[styles.title, styles.mt]}>
+              {title} <Text style={styles.subtitle}>{subtitle}</Text>
+            </Text>
+          </View>
         )}
-      </View>
+      </>
     );
   }
 }
@@ -49,11 +59,18 @@ const rightColWidth =
 
 const styles = StyleSheet.create({
   headerSection: {
-    padding: 20,
+    padding: headerSectionPadding,
     width: dimensions.width,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: PrimaryColors.white,
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
+  },
+  optionsHeaderSection: {
+    paddingTop: 16,
+    justifyContent: 'space-between',
   },
   headerTitle: {
     fontFamily: 'Inter-Medium',
@@ -62,10 +79,10 @@ const styles = StyleSheet.create({
     color: PrimaryColors.element,
   },
   header: {
-    width: dimensions.width - 40,
+    width: dimensions.width - headerSectionPadding * 2,
     marginLeft: -leftColWidth,
     paddingLeft: leftColWidth,
-    paddingRight: leftColWidth - 20,
+    paddingRight: leftColWidth - headerSectionPadding,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -78,8 +95,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  title: {
+  mt: {
     marginTop: 10,
+  },
+  title: {
+    marginTop: 4,
     fontFamily: 'Inter-ExtraBold',
     fontSize: 24,
     lineHeight: 28,
