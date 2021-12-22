@@ -3,15 +3,13 @@ import {
   ScrollView,
   View,
   Text,
-  TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
 import {searchJobs} from '../../services/JobsService';
-import {JobCard} from '../../components/jobs/JobCard';
-import {IconFilter} from '../../assets/icons/main/IconFilter';
+import {JobCard} from './components/JobCard';
 import {useSelector} from 'react-redux';
 import UsersInfo from './components/UsersInfo';
 import OptionsButton from '../../components/buttons/OptionsButton';
@@ -19,17 +17,9 @@ import Header from '../../components/Header';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
-  const isFilterApplied = useSelector(state => state.jobs.isFilterApplied);
   const [usersNumber, setUsersNumber] = useState(0);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const sortBy = {
-    updatedAt: 'date',
-    relevance: 'relevance',
-    salaryMin: 'min salary',
-    salaryMax: 'max salary',
-  };
 
   useEffect(() => {
     function fetchData() {
@@ -61,31 +51,10 @@ export const JobsScreen = ({navigation}) => {
       <Header options title={'Поиск'} subtitle={'соискателей'}>
         <OptionsButton
           onPress={() => {
-            navigation.navigate('FilterScreen');
+            navigation.navigate('JobsFilterScreen');
           }}
         />
       </Header>
-      <View style={styles.topSection}>
-        <Text style={styles.title}>Astana</Text>
-        <Text style={styles.title}>123</Text>
-      </View>
-      <View style={globalStyles.topBar}>
-        <TouchableOpacity
-          style={globalStyles.filterBtn}
-          onPress={() => {
-            navigation.navigate('JobsFilterScreen');
-          }}>
-          <IconFilter color={'#185AB7'} size={32} width={1.5} />
-          {isFilterApplied && <View style={globalStyles.filterApplied} />}
-          <Text style={globalStyles.filterBtnRightText}>Filters</Text>
-        </TouchableOpacity>
-
-        <View style={globalStyles.filterBtn}>
-          <Text style={globalStyles.filterBtnLeftText}>
-            Ordered by {sortBy[filterState.sortBy]}
-          </Text>
-        </View>
-      </View>
 
       {jobs.length > 0 ? (
         <ScrollView>
