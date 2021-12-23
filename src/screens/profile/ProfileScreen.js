@@ -11,21 +11,30 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import moment from 'moment';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
+import {PrimaryColors, StatusesColors} from '../../styles/colors';
+
+// icons
+import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
+import {IconSignOut} from '../../assets/icons/main/IconSignOut';
+
+// components
+import {ProfileHeader} from './components/ProfileHeader';
+import ProfileInfo from './components/ProfileInfo';
+import LightGradientButton from '../../components/buttons/LightGradientButton';
+
+// store
 import {AuthContext} from '../../store/context';
+
+//services
 import {
   getEmployee,
   updateEmployeePhoto,
 } from '../../services/EmployeesService';
-import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
-import {IconSignOut} from '../../assets/icons/main/IconSignOut';
-
-import moment from 'moment';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {ProfileHeader} from './components/ProfileHeader';
-import ProfileInfo from './components/ProfileInfo';
-import LightGradientButton from '../../components/buttons/LightGradientButton';
-import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -119,30 +128,29 @@ export const ProfileScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
+      <Modal visible={open} animationType="slide" transparent={true}>
+        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
+          <View style={styles.wrap}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                openGallery();
+                setOpen(false);
+              }}>
+              <Text style={globalStyles.text}>Open Gallery</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                openCamera();
+                setOpen(false);
+              }}>
+              <Text style={globalStyles.text}>Open Camera</Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
       <ScrollView>
-        <Modal visible={open} animationType="slide" transparent={true}>
-          <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
-            <View style={styles.wrap}>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => {
-                  openGallery();
-                  setOpen(false);
-                }}>
-                <Text style={globalStyles.text}>Open Gallery</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => {
-                  openCamera();
-                  setOpen(false);
-                }}>
-                <Text style={globalStyles.text}>Open Camera</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
-        </Modal>
-
         <View style={styles.section}>
           <ProfileHeader
             firstName={me.firstName}
@@ -228,7 +236,7 @@ export const ProfileScreen = ({navigation}) => {
               <Text
                 style={[
                   styles.listItemTitle,
-                  styles.marginLeft,
+                  globalStyles.ml3,
                   {color: StatusesColors.red},
                 ]}>
                 Выйти
@@ -275,13 +283,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.7,
     borderBottomColor: PrimaryColors.grey3,
   },
-  marginLeft: {
-    marginLeft: 8,
-  },
   marginBottom: {
     marginBottom: padding,
   },
-
   overlay: {
     flex: 1,
     justifyContent: 'center',
