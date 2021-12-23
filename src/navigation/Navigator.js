@@ -197,7 +197,7 @@ export const Navigator = () => {
           options={{
             headerTitle: 'Add work',
           }}
-          name="AddWorkScreen"
+          name="AddWork"
           component={AddWorkScreen}
         />
         <Stack.Screen

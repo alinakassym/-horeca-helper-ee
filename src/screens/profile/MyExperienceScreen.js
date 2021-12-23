@@ -7,14 +7,22 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
-import PlainButton from '../../components/buttons/PlainButton';
-import {IconAdd} from '../../assets/icons/main/IconAdd';
 import {PrimaryColors} from '../../styles/colors';
+
+// icons
+import {IconAdd} from '../../assets/icons/main/IconAdd';
+
+// components
+import PlainButton from '../../components/buttons/PlainButton';
 import ProfileWorkCard from './components/ProfileWorkCard';
+
+// services
 import {getEmployee} from '../../services/EmployeesService';
 
-export const MyExperienceScreen = ({route, navigation}) => {
+export const MyExperienceScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [works, setWorks] = useState([]);
 
@@ -42,35 +50,35 @@ export const MyExperienceScreen = ({route, navigation}) => {
         </View>
       ) : (
         <>
-          <View style={styles.section}>
-            {works.map((item, index) => (
-              <View key={index}>
-                <View />
-                <ProfileWorkCard
-                  item={item}
-                  edit={() => {
-                    navigation.navigate('EditWorkScreen', {value: item});
-                  }}
-                  rate={() => {
-                    navigation.navigate('CompanyReview', {id: item.id});
-                  }}
-                />
-              </View>
-            ))}
-          </View>
+          {works.map((item, index) => (
+            <ProfileWorkCard
+              key={index}
+              item={item}
+              edit={() => {
+                navigation.navigate('EditWorkScreen', {value: item});
+              }}
+              rate={() => {
+                navigation.navigate('CompanyReview', {id: item.id});
+              }}
+            />
+          ))}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('AddWorkScreen');
+              navigation.navigate('AddWork');
             }}
-            style={[styles.section, styles.padding]}>
+            style={globalStyles.card}>
             <PlainButton
               onPress={() => {
-                navigation.navigate('AddWorkScreen');
+                navigation.navigate('AddWork');
               }}
+              labelStyle={styles.labelStyle}
               label={'Добавить опыт работы'}>
-              <View style={styles.icon}>
-                <IconAdd color={PrimaryColors.brand} size={16} width={2} />
-              </View>
+              <IconAdd
+                style={styles.icon}
+                color={PrimaryColors.brand}
+                size={16}
+                width={2}
+              />
             </PlainButton>
           </TouchableOpacity>
         </>
@@ -80,14 +88,7 @@ export const MyExperienceScreen = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  section: {
-    marginTop: 8,
-    backgroundColor: PrimaryColors.white,
-  },
-  padding: {
-    padding: 18,
-  },
-  icon: {
-    marginRight: 8,
+  labelStyle: {
+    marginLeft: 8,
   },
 });

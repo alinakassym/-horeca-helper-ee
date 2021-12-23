@@ -1,12 +1,19 @@
 import React from 'react';
 import {Image, Text, View, StyleSheet, Dimensions} from 'react-native';
-import {PrimaryColors, StatusesColors} from '../../../styles/colors';
-import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
-import {IconCalendar} from '../../../assets/icons/main/IconCalendar';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment/locale/ru';
+
+// styles
+import {globalStyles} from '../../../styles/globalStyles';
+import {PrimaryColors, StatusesColors} from '../../../styles/colors';
+
+// icons
+import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
+import {IconCalendar} from '../../../assets/icons/main/IconCalendar';
 import {IconTime} from '../../../assets/icons/main/IconTime';
+
+// components
 import LightGradientButton from '../../../components/buttons/LightGradientButton';
 import PrimaryButton from '../../../components/buttons/PrimaryButton';
 
@@ -29,7 +36,7 @@ class ProfileWorkCard extends React.PureComponent {
     };
 
     return (
-      <View style={styles.card}>
+      <View style={globalStyles.card}>
         <View style={styles.row}>
           <View style={styles.leftCol}>
             <Text style={styles.positionTitle}>{item.position.title_ru}</Text>
