@@ -7,8 +7,6 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import moment from 'moment';
-import 'moment/locale/ru';
 
 // styles
 import {globalStyles} from '../../../styles/globalStyles';
@@ -26,6 +24,7 @@ import GradientButton from '../../../components/buttons/GradientButton';
 import SmallBadge from '../../../components/SmallBadge';
 import OutlineButton from '../../../components/buttons/OutlineButton';
 import ActivePoint from '../../../components/ActivePoint';
+import UpdatedAt from '../../../components/UpdatedAt';
 
 // utils
 import {numberWithSpaces} from '../../../utils/common';
@@ -33,8 +32,6 @@ import {numberWithSpaces} from '../../../utils/common';
 const dimensions = Dimensions.get('screen');
 
 export const JobCard = ({item, onPress}) => {
-  const formatDate = date => moment(date).locale('ru').format('DD MMM YYYY');
-
   const getSalary = (salaryMin, salaryMax) => {
     if (salaryMin && salaryMax) {
       return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(salaryMax)}`;
@@ -98,7 +95,7 @@ export const JobCard = ({item, onPress}) => {
         {/* Description */}
         <Text style={[styles.text, styles.mb2]}>{item.description}</Text>
 
-        {/* Apply job & save btns */}
+        {/* Apply job & save buttons */}
         <View style={[styles.row]}>
           <GradientButton style={{width: width - 196}} label={'Откликнуться'} />
           <OutlineButton
@@ -111,9 +108,7 @@ export const JobCard = ({item, onPress}) => {
       </Pressable>
 
       {/* Updated at */}
-      <Text style={styles.updatedAt}>
-        Обновлено {formatDate(item.updatedAt)}
-      </Text>
+      <UpdatedAt date={item.updatedAt} />
     </React.Fragment>
   );
 };
@@ -187,15 +182,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     color: PrimaryColors.grey1,
-  },
-  updatedAt: {
-    padding: 8,
-    fontFamily: 'Inter-Regular',
-    fontSize: 13,
-    lineHeight: 16,
-    textAlign: 'center',
-    color: PrimaryColors.grey1,
-    backgroundColor: PrimaryColors.grey4,
   },
   smallBadge: {marginLeft: 8},
   outlineBtn: {marginLeft: 8, width: 148},
