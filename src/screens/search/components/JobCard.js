@@ -12,7 +12,7 @@ import 'moment/locale/ru';
 
 // styles
 import {globalStyles} from '../../../styles/globalStyles';
-import {PrimaryColors, StatusesColors} from '../../../styles/colors';
+import {PrimaryColors} from '../../../styles/colors';
 
 // icons
 import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
@@ -25,6 +25,7 @@ import RatingScale from '../../../components/RatingScale';
 import GradientButton from '../../../components/buttons/GradientButton';
 import SmallBadge from '../../../components/SmallBadge';
 import OutlineButton from '../../../components/buttons/OutlineButton';
+import ActivePoint from '../../../components/ActivePoint';
 
 const dimensions = Dimensions.get('screen');
 
@@ -74,7 +75,7 @@ export const JobCard = ({item, onPress}) => {
           </View>
           <View style={styles.imageWrapper}>
             <Image style={styles.image} source={{uri: item.company.photoUrl}} />
-            {item.company.isActive && <View style={styles.isActive} />}
+            {item.company.isActive && <ActivePoint style={styles.isActive} />}
 
             {/*TODO: if isConfirmed show the icon*/}
             <View style={styles.iconChecked}>
@@ -161,12 +162,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -4,
     right: -4,
-    height: 16,
-    width: 16,
-    borderRadius: 8,
-    borderWidth: 3,
-    borderColor: PrimaryColors.white,
-    backgroundColor: StatusesColors.green,
   },
   positionTitle: {
     marginBottom: 8,
