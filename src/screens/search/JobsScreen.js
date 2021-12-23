@@ -12,8 +12,11 @@ import {searchJobs} from '../../services/JobsService';
 import {JobCard} from './components/JobCard';
 import {useSelector} from 'react-redux';
 import UsersInfo from './components/UsersInfo';
-import OptionsButton from '../../components/buttons/OptionsButton';
+import IconButton from '../../components/buttons/IconButton';
 import Header from '../../components/Header';
+import {IconBookmark} from '../../assets/icons/main/IconBookmark';
+import {PrimaryColors} from '../../styles/colors';
+import {IconOptions} from '../../assets/icons/main/IconOptions';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
@@ -48,12 +51,18 @@ export const JobsScreen = ({navigation}) => {
   return (
     <SafeAreaView style={globalStyles.container}>
       <UsersInfo usersNumber={usersNumber} />
-      <Header options title={'Поиск'} subtitle={'соискателей'}>
-        <OptionsButton
-          onPress={() => {
-            navigation.navigate('JobsFilterScreen');
-          }}
-        />
+      <Header options title={'Поиск'} subtitle={'вакансий'}>
+        <React.Fragment>
+          <IconButton>
+            <IconBookmark width={1.7} color={PrimaryColors.element} size={16} />
+          </IconButton>
+          <IconButton
+            onPress={() => {
+              navigation.navigate('JobsFilterScreen');
+            }}>
+            <IconOptions color={PrimaryColors.element} size={16} />
+          </IconButton>
+        </React.Fragment>
       </Header>
 
       {jobs.length > 0 ? (

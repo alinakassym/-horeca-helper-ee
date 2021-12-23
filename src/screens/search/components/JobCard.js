@@ -7,13 +7,20 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+
+// styles
 import {globalStyles} from '../../../styles/globalStyles';
 import {PrimaryColors} from '../../../styles/colors';
-import SmallBadge from '../../../components/SmallBadge';
+
+// icons
 import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
 import {IconAddress} from '../../../assets/icons/main/IconAddress';
+import {IconBookmark} from '../../../assets/icons/main/IconBookmark';
+
+// components
 import RatingScale from '../../../components/RatingScale';
 import GradientButton from '../../../components/buttons/GradientButton';
+import SmallBadge from '../../../components/SmallBadge';
 import OutlineButton from '../../../components/buttons/OutlineButton';
 
 const dimensions = Dimensions.get('screen');
@@ -35,7 +42,7 @@ export const JobCard = ({item, onPress}) => {
   };
   return (
     <Pressable style={globalStyles.card} onPress={onPress}>
-      <View style={[styles.row, styles.mb]}>
+      <View style={[styles.row, styles.mb2]}>
         <View style={styles.leftCol}>
           <View style={styles.row}>
             <Text style={styles.positionTitle}>{item?.position?.title_ru}</Text>
@@ -61,19 +68,27 @@ export const JobCard = ({item, onPress}) => {
           {item.isActive && <View style={styles.indicator} />}
         </View>
       </View>
-      <View style={[styles.row, styles.justifyBetween]}>
+      <View
+        style={[
+          styles.row,
+          styles.alignCenter,
+          styles.justifyBetween,
+          styles.mb,
+        ]}>
         <Text style={styles.salary}>
           {getSalary(item.salaryMin, item.salaryMax)} ₸
         </Text>
         <RatingScale score={Math.ceil(item.company.avgAvgScore)} />
       </View>
-      <Text style={[styles.text, styles.mb]}>{item.description}</Text>
+      <Text style={[styles.text, styles.mb2]}>{item.description}</Text>
       <View style={[styles.row]}>
         <GradientButton style={{width: width - 196}} label={'Откликнуться'} />
         <OutlineButton
           style={{marginLeft: 8, width: 148}}
-          label={'В избранные'}
-        />
+          labelStyle={{marginLeft: 4}}
+          label={'В избранные'}>
+          <IconBookmark width={1.7} size={16} color={PrimaryColors.brand} />
+        </OutlineButton>
       </View>
     </Pressable>
   );
@@ -122,10 +137,12 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   mb: {
+    marginBottom: 8,
+  },
+  mb2: {
     marginBottom: 24,
   },
   salary: {
-    marginBottom: 8,
     fontFamily: 'Inter-Regular',
     fontSize: 20,
     lineHeight: 24,
