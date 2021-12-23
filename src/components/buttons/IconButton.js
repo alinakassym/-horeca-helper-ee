@@ -1,21 +1,20 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
-import {IconOptions} from '../../assets/icons/main/IconOptions';
 
 const propTypes = {
   onPress: PropTypes.func,
 };
 
-class OptionsButton extends React.PureComponent {
+class IconButton extends React.PureComponent {
   render() {
-    const {onPress} = this.props;
+    const {onPress, children} = this.props;
     return (
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={onPress}
         style={styles.btn}>
-        <IconOptions color={'#151F47'} />
+        {children}
       </TouchableOpacity>
     );
   }
@@ -33,6 +32,6 @@ const styles = StyleSheet.create({
   },
 });
 
-OptionsButton.propTypes = propTypes;
+IconButton.propTypes = propTypes;
 
-export default OptionsButton;
+export default IconButton;
