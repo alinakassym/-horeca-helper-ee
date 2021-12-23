@@ -12,12 +12,13 @@ import 'moment/locale/ru';
 
 // styles
 import {globalStyles} from '../../../styles/globalStyles';
-import {PrimaryColors} from '../../../styles/colors';
+import {PrimaryColors, StatusesColors} from '../../../styles/colors';
 
 // icons
 import {IconBuilding} from '../../../assets/icons/main/IconBuilding';
 import {IconAddress} from '../../../assets/icons/main/IconAddress';
 import {IconBookmark} from '../../../assets/icons/main/IconBookmark';
+import {IconChecked} from '../../../assets/icons/main/IconChecked';
 
 // components
 import RatingScale from '../../../components/RatingScale';
@@ -47,6 +48,7 @@ export const JobCard = ({item, onPress}) => {
   return (
     <React.Fragment>
       <Pressable style={globalStyles.card} onPress={onPress}>
+        {/* Position title & company name, address, photo */}
         <View style={[styles.row, styles.mb2]}>
           <View style={styles.leftCol}>
             <View style={styles.row}>
@@ -72,9 +74,16 @@ export const JobCard = ({item, onPress}) => {
           </View>
           <View style={styles.imageWrapper}>
             <Image style={styles.image} source={{uri: item.company.photoUrl}} />
-            {item.isActive && <View style={styles.indicator} />}
+            {item.company.isActive && <View style={styles.isActive} />}
+
+            {/*TODO: if isConfirmed show the icon*/}
+            <View style={styles.iconChecked}>
+              <IconChecked size={24} />
+            </View>
           </View>
         </View>
+
+        {/* Salary & company avgAvgScore */}
         <View
           style={[
             styles.row,
@@ -87,7 +96,11 @@ export const JobCard = ({item, onPress}) => {
           </Text>
           <RatingScale score={Math.ceil(item.company.avgAvgScore)} />
         </View>
+
+        {/* Description */}
         <Text style={[styles.text, styles.mb2]}>{item.description}</Text>
+
+        {/* Apply job & save btns */}
         <View style={[styles.row]}>
           <GradientButton style={{width: width - 196}} label={'Откликнуться'} />
           <OutlineButton
@@ -98,6 +111,8 @@ export const JobCard = ({item, onPress}) => {
           </OutlineButton>
         </View>
       </Pressable>
+
+      {/* Updated at */}
       <Text style={styles.updatedAt}>
         Обновлено {formatDate(item.updatedAt)}
       </Text>
@@ -136,6 +151,22 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: imageSize,
     overflow: 'hidden',
+  },
+  iconChecked: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+  },
+  isActive: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    borderWidth: 3,
+    borderColor: PrimaryColors.white,
+    backgroundColor: StatusesColors.green,
   },
   positionTitle: {
     marginBottom: 8,
