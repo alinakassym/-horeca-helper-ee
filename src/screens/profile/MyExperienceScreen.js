@@ -71,14 +71,9 @@ export const MyExperienceScreen = ({navigation}) => {
               onPress={() => {
                 navigation.navigate('AddWork');
               }}
-              labelStyle={styles.labelStyle}
+              labelStyle={globalStyles.ml3}
               label={'Добавить опыт работы'}>
-              <IconAdd
-                style={styles.icon}
-                color={PrimaryColors.brand}
-                size={16}
-                width={2}
-              />
+              <IconAdd color={PrimaryColors.brand} size={16} width={2} />
             </PlainButton>
           </TouchableOpacity>
         </>
@@ -86,9 +81,3 @@ export const MyExperienceScreen = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  labelStyle: {
-    marginLeft: 8,
-  },
-});

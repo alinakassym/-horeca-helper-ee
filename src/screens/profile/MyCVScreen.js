@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-import Header from '../../components/Header';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView} from 'react-native';
+
+//styles
 import {globalStyles} from '../../styles/globalStyles';
-import {IconSearch} from '../../assets/icons/main/IconSearch';
-import PlainButton from '../../components/buttons/PlainButton';
+
+// components
+import Header from '../../components/Header';
+import CVCard from './components/CVCard';
+
+// store
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
 
 export const MyCVScreen = ({route, navigation}) => {
-  const [me, setMe] = useState(route.params.value);
+  const [me] = useState(route.params.value);
   const dispatch = useDispatch();
 
   const apply = async () => {
@@ -44,19 +49,16 @@ export const MyCVScreen = ({route, navigation}) => {
   return (
     <SafeAreaView style={globalStyles.container}>
       <Header navigation={navigation} title={'Мои резюме'} goBack />
-      <View>
-        <View>
-          <IconSearch color={'#185AB7'} size={24} width={2} />
-        </View>
-        <PlainButton
-          label={'Find relevant jobs'}
-          onPress={() =>
-            apply().then(() => {
-              navigation.navigate('Jobs');
-            })
-          }
-        />
-      </View>
+      <CVCard
+        position={me.position.title_ru}
+        salary={me.salary}
+        updatedAt={me.updatedAt}
+        onPress={() =>
+          apply().then(() => {
+            navigation.navigate('Jobs');
+          })
+        }
+      />
     </SafeAreaView>
   );
 };

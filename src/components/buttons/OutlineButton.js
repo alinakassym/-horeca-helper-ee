@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {PrimaryColors} from '../../styles/colors';
 import PropTypes from 'prop-types';
+import {PrimaryColors} from '../../styles/colors';
 
 const propTypes = {
   label: PropTypes.string,
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 12,
     borderWidth: 1,
     backgroundColor: 'transparent',

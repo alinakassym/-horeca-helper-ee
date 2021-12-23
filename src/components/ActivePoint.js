@@ -4,13 +4,15 @@ import PropTypes from 'prop-types';
 import {PrimaryColors, StatusesColors} from '../styles/colors';
 
 const propTypes = {
+  color: PropTypes.string,
   style: PropTypes.object,
 };
 
 class ActivePoint extends React.PureComponent {
   render() {
-    const {style} = this.props;
-    return <View style={[styles.isActive, style]} />;
+    const {color, style} = this.props;
+    const bgColor = {backgroundColor: color ? color : StatusesColors.green};
+    return <View style={[styles.isActive, bgColor, style]} />;
   }
 }
 
@@ -21,7 +23,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 3,
     borderColor: PrimaryColors.white,
-    backgroundColor: StatusesColors.green,
   },
 });
 
