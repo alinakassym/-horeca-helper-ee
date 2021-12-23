@@ -27,15 +27,12 @@ import SmallBadge from '../../../components/SmallBadge';
 import OutlineButton from '../../../components/buttons/OutlineButton';
 import ActivePoint from '../../../components/ActivePoint';
 
+// utils
+import {numberWithSpaces} from '../../../utils/common';
+
 const dimensions = Dimensions.get('screen');
 
 export const JobCard = ({item, onPress}) => {
-  const numberWithSpaces = val => {
-    let parts = val.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    return parts.join('.');
-  };
-
   const formatDate = date => moment(date).locale('ru').format('DD MMM YYYY');
 
   const getSalary = (salaryMin, salaryMax) => {

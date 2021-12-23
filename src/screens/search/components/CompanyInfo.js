@@ -1,8 +1,15 @@
 import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {PrimaryColors} from '../../../styles/colors';
 import PropTypes from 'prop-types';
+
+// styles
+import {PrimaryColors} from '../../../styles/colors';
+
+// components
 import RatingScale from '../../../components/RatingScale';
+
+// utils
+import {numberWithSpaces} from '../../../utils/common';
 
 const dimensions = Dimensions.get('screen');
 
@@ -20,11 +27,6 @@ class CompanyInfo extends React.PureComponent {
   render() {
     const {avgAvgScore, position, location, schedule, salaryMin, salaryMax} =
       this.props;
-    const numberWithSpaces = val => {
-      let parts = val.toString().split('.');
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-      return parts.join('.');
-    };
 
     const getSalary = () => {
       if (salaryMin && salaryMax) {
