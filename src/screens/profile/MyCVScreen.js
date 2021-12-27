@@ -48,7 +48,7 @@ export const MyCVScreen = ({route, navigation}) => {
   };
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Header navigation={navigation} title={'Мои резюме'} goBack />
+      <Header onClose={() => navigation.goBack()} title={'Мои резюме'} goBack />
       <CVCard
         position={me.position.title_ru}
         salary={me.salary}

@@ -78,7 +78,11 @@ export const JobScreen = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Header goBack navigation={navigation} title={'Подробная информация'} />
+      <Header
+        goBack
+        onClose={() => navigation.goBack()}
+        title={'Подробная информация'}
+      />
       <CompanyCard
         photoUrl={job?.company?.photoUrl}
         title={job?.company?.title}

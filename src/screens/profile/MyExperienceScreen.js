@@ -3,7 +3,6 @@ import Header from '../../components/Header';
 import {
   SafeAreaView,
   View,
-  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
@@ -43,7 +42,11 @@ export const MyExperienceScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Header navigation={navigation} title={'Мой опыт работы'} goBack />
+      <Header
+        onClose={() => navigation.goBack()}
+        title={'Мой опыт работы'}
+        goBack
+      />
       {loading ? (
         <View style={globalStyles.fullScreenSection}>
           <ActivityIndicator size="large" />

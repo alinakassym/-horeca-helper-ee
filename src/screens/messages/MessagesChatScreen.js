@@ -118,7 +118,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Header goBack navigation={navigation}>
+      <Header goBack onClose={() => navigation.goBack()}>
         <>
           <View style={styles.imageWrapper}>
             <Image style={styles.img} source={{uri: company.photoUrl}} />
@@ -192,17 +192,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   imageWrapper: {
+    marginLeft: 16,
     marginRight: 12,
     height: imageSize,
     width: imageSize,
+    borderRadius: imageSize,
+    borderWidth: 0.7,
+    borderColor: PrimaryColors.grey3,
+    overflow: 'hidden',
   },
   img: {
     height: '100%',
     width: '100%',
-    borderRadius: imageSize,
-    borderWidth: 0.7,
-    borderColor: PrimaryColors.grey3,
-    backgroundColor: PrimaryColors.grey3,
   },
   userName: {
     width: rightColWidth - imageSize - 16,

@@ -1,29 +1,38 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
-import BackButton from './buttons/BackButton';
-import PropTypes from 'prop-types';
+
+// styles
+import {globalStyles} from '../styles/globalStyles';
 import {PrimaryColors} from '../styles/colors';
+
+// components
+import BackButton from './buttons/BackButton';
+import CloseButton from './buttons/CloseButton';
+
+import PropTypes from 'prop-types';
 
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
-  navigation: PropTypes.object,
+  onClose: PropTypes.func,
   children: PropTypes.object,
   goBack: PropTypes.bool,
   options: PropTypes.bool,
+  modal: PropTypes.bool,
   title: PropTypes.string,
   subtitle: PropTypes.string,
 };
 
 class Header extends React.PureComponent {
   render() {
-    const {navigation, children, goBack, options, title, subtitle} = this.props;
+    const {onClose, children, goBack, options, modal, title, subtitle} =
+      this.props;
     return (
       <React.Fragment>
         {goBack ? (
           <View style={styles.headerSection}>
             <View style={styles.leftCol}>
-              <BackButton onPress={() => navigation.goBack()} />
+              <BackButton onPress={onClose} />
             </View>
             {title ? (
               <View style={styles.header}>
@@ -40,9 +49,14 @@ class Header extends React.PureComponent {
             </Text>
             <View style={styles.optionsLeftCol}>{children}</View>
           </View>
+        ) : modal ? (
+          <View style={styles.modalHeaderSection}>
+            <CloseButton onPress={onClose} />
+            <Text style={[styles.title, globalStyles.mt4]}>{title}</Text>
+          </View>
         ) : (
           <View style={styles.headerSection}>
-            <Text style={[styles.title, styles.mt]}>
+            <Text style={[styles.title, globalStyles.mt3]}>
               {title} <Text style={styles.subtitle}>{subtitle}</Text>
             </Text>
           </View>
@@ -68,6 +82,11 @@ const styles = StyleSheet.create({
   optionsHeaderSection: {
     paddingTop: 16,
     justifyContent: 'space-between',
+  },
+  modalHeaderSection: {
+    padding: headerSectionPadding,
+    width: dimensions.width,
+    backgroundColor: PrimaryColors.white,
   },
   headerTitle: {
     fontFamily: 'Inter-Medium',
@@ -102,9 +121,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  mt: {
-    marginTop: 10,
   },
   title: {
     marginTop: 4,
