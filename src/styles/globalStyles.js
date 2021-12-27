@@ -11,6 +11,11 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: PrimaryColors.background,
   },
+  section: {
+    paddingHorizontal: 20,
+    width: dimensions.width,
+    backgroundColor: PrimaryColors.white,
+  },
   card: {
     marginTop: 8,
     padding: 20,

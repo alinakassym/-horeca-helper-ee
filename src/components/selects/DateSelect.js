@@ -1,23 +1,19 @@
 import React, {useState} from 'react';
 import {Text, View, Pressable, StyleSheet} from 'react-native';
-import {globalStyles} from '../../styles/globalStyles';
-import {IconClose} from '../../assets/icons/main/IconClose';
-import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
-export const DateSelect = ({
-  required,
-  label,
-  value,
-  valueKey,
-  minimumDate,
-  placeholder,
-  clearable,
-}) => {
+// styles
+import {PrimaryColors} from '../../styles/colors';
+
+// icons
+import {IconClose} from '../../assets/icons/main/IconClose';
+
+// components
+import DatePicker from 'react-native-date-picker';
+
+export const DateSelect = ({label, value, valueKey, minimumDate}) => {
   const [open, setOpen] = useState(false);
   const [item, setItem] = useState(value[valueKey]);
-
-  const placeholderText = placeholder ? placeholder : 'Select';
 
   const saveHandler = val => {
     setOpen(false);
@@ -33,58 +29,43 @@ export const DateSelect = ({
 
   const ValueSection = () => {
     return (
-      <View style={styles.valueSection}>
+      <View style={styles.block}>
+        <Text style={styles.label}>{label}</Text>
         <Pressable
           onPress={() => {
             setOpen(true);
           }}>
-          <Text
-            style={[
-              globalStyles.select,
-              {position: 'relative', width: 400, zIndex: 1},
-            ]}>
-            {moment(item).format('YYYY-MM-DD')}
+          <Text style={styles.valueText}>
+            {moment(item).format('MM-DD-YYYY')}
           </Text>
         </Pressable>
-        {clearable && (
-          <Pressable
-            onPress={() => {
-              clearValue();
-            }}
-            style={[
-              styles.clearBtn,
-              {position: 'relative', top: -21, right: -100, zIndex: 2},
-            ]}>
-            <IconClose color={'#898989'} />
-          </Pressable>
-        )}
+        <Pressable
+          onPress={() => {
+            clearValue();
+          }}
+          style={styles.clearBtn}>
+          <IconClose size={20} color={PrimaryColors.grey1} />
+        </Pressable>
       </View>
     );
   };
 
   const PlaceHolder = () => {
     return (
-      <Pressable
-        onPress={() => {
-          setOpen(true);
-        }}>
-        {required ? (
-          <Text style={[globalStyles.select, {color: '#E74C3C'}]}>
-            {placeholderText}
-          </Text>
-        ) : (
-          <Text style={globalStyles.select}>{placeholderText}</Text>
-        )}
-      </Pressable>
+      <View style={styles.blockPlaceholder}>
+        <Pressable
+          onPress={() => {
+            setOpen(true);
+          }}>
+          <Text style={styles.placeholderText}>{label}</Text>
+        </Pressable>
+      </View>
     );
   };
 
   return (
     <React.Fragment>
-      <View>
-        <Text style={globalStyles.label}>{label}</Text>
-        {item ? <ValueSection /> : <PlaceHolder />}
-      </View>
+      {item ? <ValueSection /> : <PlaceHolder />}
       <DatePicker
         modal
         mode={'date'}
@@ -103,12 +84,42 @@ export const DateSelect = ({
 };
 
 const styles = StyleSheet.create({
-  valueSection: {
+  block: {
     position: 'relative',
+    marginBottom: 20,
+    borderBottomWidth: 1.5,
+    borderBottomColor: PrimaryColors.element,
+  },
+  label: {
+    marginBottom: 6,
+    fontFamily: 'Inter-Regular',
+    fontSize: 12,
+    lineHeight: 14,
+    color: PrimaryColors.grey1,
+  },
+  valueText: {
+    marginBottom: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
   clearBtn: {
     position: 'absolute',
-    right: 11,
-    top: 12.5,
+    right: 0,
+    bottom: 10,
+  },
+  blockPlaceholder: {
+    marginBottom: 20,
+    borderBottomWidth: 1.5,
+    borderBottomColor: PrimaryColors.grey3,
+  },
+  placeholderText: {
+    marginTop: 20,
+    marginBottom: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.grey2,
   },
 });

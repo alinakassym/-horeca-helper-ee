@@ -57,7 +57,7 @@ export const Autocomplete = ({label, value, valueKey, items, itemTitle}) => {
             clearValue();
           }}
           style={styles.clearBtn}>
-          <IconClose size={20} color={'#898989'} />
+          <IconClose size={20} color={PrimaryColors.grey1} />
         </Pressable>
       </View>
     );
@@ -85,11 +85,11 @@ export const Autocomplete = ({label, value, valueKey, items, itemTitle}) => {
     title: filteredList[index].title,
   });
 
-  const getFilteredList = searchText => {
-    if (searchText && searchText.length >= 1) {
+  const getFilteredList = sText => {
+    if (sText && sText.length >= 1) {
       setFilteredList(
         _.filter(items, el => {
-          return _.startsWith(el.title.toLowerCase(), searchText.toLowerCase());
+          return _.startsWith(el.title.toLowerCase(), sText.toLowerCase());
         }),
       );
     } else {
@@ -115,12 +115,17 @@ export const Autocomplete = ({label, value, valueKey, items, itemTitle}) => {
           goBack
           onClose={() => {
             setFilteredList(items);
+            setSearchText('');
             setVisible(false);
           }}
           title={label}
         />
         <Input
           text={searchText}
+          onClear={() => {
+            setSearchText('');
+            setFilteredList(items);
+          }}
           onChangeText={val => {
             setSearchText(val);
             getFilteredList(val);
