@@ -195,7 +195,7 @@ export const Navigator = () => {
         />
         <Stack.Screen
           options={{
-            headerTitle: 'Add work',
+            headerShown: false,
           }}
           name="AddWork"
           component={AddWorkScreen}
@@ -209,7 +209,7 @@ export const Navigator = () => {
         />
         <Stack.Screen
           options={{
-            headerTitle: 'Edit work',
+            headerShown: false,
           }}
           name="EditWorkScreen"
           component={EditWorkScreen}

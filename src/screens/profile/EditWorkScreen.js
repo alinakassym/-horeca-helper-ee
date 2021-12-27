@@ -1,15 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, TextInput, StyleSheet, Alert} from 'react-native';
+import {StyleSheet, Alert, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
+import {PrimaryColors, StatusesColors} from '../../styles/colors';
+
+// components
+import Header from '../../components/Header';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
+import OutlineButton from '../../components/buttons/OutlineButton';
+import MultilineInput from '../../components/MultilineInput';
+import {DateSelect} from '../../components/selects/DateSelect';
+import {Autocomplete} from '../../components/selects/Autocomplete';
+import LinearGradient from 'react-native-linear-gradient';
+
+// services
 import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {getCities, getPositions} from '../../services/DictionariesService';
 import {getCompanies} from '../../services/CompaniesService';
-import {DateSelect} from '../../components/selects/DateSelect';
-import {Autocomplete} from '../../components/selects/Autocomplete';
 
 export const EditWorkScreen = ({route, navigation}) => {
+  const [isFocused, setIsFocused] = useState(false);
   const [work, setWork] = useState(route.params.value);
   const [companies, setCompanies] = useState([]);
   const [cities, setCities] = useState([]);
@@ -84,92 +96,118 @@ export const EditWorkScreen = ({route, navigation}) => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      style={styles.container}
-      enableResetScrollToCoords={false}>
-      <Autocomplete
-        label={'Location'}
-        onChangeText={val => {
-          setWork({...work, city: val});
-        }}
-        value={work}
-        valueKey={'city'}
-        items={cities}
-        itemTitle={'title'}
-        required={true}
+    <SafeAreaView style={[globalStyles.container, styles.bg]}>
+      <Header
+        modal
+        onClose={() => navigation.goBack()}
+        title={'Основная информация'}
       />
-
-      <Autocomplete
-        label={'Company'}
-        onChangeText={val => {
-          setWork({...work, company: val});
-        }}
-        value={work}
-        valueKey={'company'}
-        items={companies}
-        itemTitle={'title'}
-        required={true}
-      />
-
-      <Autocomplete
-        label={'Position'}
-        onChangeText={val => {
-          setWork({...work, position: val});
-        }}
-        value={work}
-        valueKey={'position'}
-        items={positions}
-        itemTitle={'title'}
-        required={true}
-      />
-
-      <DateSelect
-        label={'Start Date'}
-        value={work}
-        valueKey={'startDate'}
-        required={true}
-        androidVariant="nativeAndroid"
-      />
-      <DateSelect
-        label={'End Date'}
-        value={work}
-        valueKey={'endDate'}
-        minimumDate={new Date(work.startDate)}
-        required={true}
-        androidVariant="nativeAndroid"
-      />
-
-      <Text style={globalStyles.label}>Description</Text>
-      <TextInput
-        multiline={true}
-        style={[globalStyles.primaryInput, globalStyles.multiline]}
-        onChangeText={val => {
-          setWork({...work, description: val});
-        }}
-        value={work.description}
-      />
-      <View style={styles.btnSection}>
-        <View style={styles.btn}>
-          <PrimaryButton label={'Save'} onPress={() => save()} />
-        </View>
-        <PrimaryButton
-          label={'Delete work'}
-          color={'#ea0000'}
-          onPress={() => confirmDeletion()}
+      <KeyboardAwareScrollView
+        style={[globalStyles.section, styles.mb]}
+        enableResetScrollToCoords={false}>
+        <Autocomplete
+          onCloseModal={() => navigation.goBack()}
+          label={'Город'}
+          onChangeText={val => {
+            setWork({...work, city: val});
+          }}
+          value={work}
+          valueKey={'city'}
+          items={cities}
+          itemTitle={'title'}
+          required={true}
         />
-      </View>
-    </KeyboardAwareScrollView>
+
+        <Autocomplete
+          label={'Название компании'}
+          onChangeText={val => {
+            setWork({...work, company: val});
+          }}
+          value={work}
+          valueKey={'company'}
+          items={companies}
+          itemTitle={'title'}
+          required={true}
+        />
+
+        <Autocomplete
+          label={'Должность'}
+          onChangeText={val => {
+            setWork({...work, position: val});
+          }}
+          value={work}
+          valueKey={'position'}
+          items={positions}
+          itemTitle={'title'}
+          required={true}
+        />
+        <DateSelect
+          label={'Дата начала'}
+          value={work}
+          valueKey={'startDate'}
+          required={true}
+          androidVariant="nativeAndroid"
+        />
+        <DateSelect
+          label={'Дата окончания'}
+          value={work}
+          valueKey={'endDate'}
+          minimumDate={new Date(work.startDate)}
+          required={true}
+          androidVariant="nativeAndroid"
+        />
+
+        <MultilineInput
+          style={styles.multilineInput}
+          label={'Описание'}
+          value={work.description}
+          onChangeText={val => {
+            setWork({...work, description: val});
+          }}
+          marginBottom={100}
+          onInputFocus={val => {
+            setIsFocused(val);
+          }}
+        />
+      </KeyboardAwareScrollView>
+      {!isFocused && (
+        <LinearGradient
+          colors={[
+            'rgba(255, 255, 255, 0.2)',
+            'rgba(255, 255, 255, 0.9)',
+            'rgba(255, 255, 255, 1)',
+          ]}
+          style={styles.btn}>
+          <PrimaryButton
+            style={globalStyles.mb3}
+            label={'Save'}
+            onPress={() => save()}
+          />
+          <OutlineButton
+            label={'Delete work'}
+            color={StatusesColors.red}
+            onPress={() => confirmDeletion()}
+          />
+        </LinearGradient>
+      )}
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
+  mb: {
+    marginBottom: 120,
   },
-  btnSection: {
-    marginBottom: 42,
+  bg: {
+    backgroundColor: PrimaryColors.white,
   },
   btn: {
-    marginBottom: 16,
+    position: 'absolute',
+    bottom: 0,
+    padding: 20,
+    width: '100%',
+  },
+  multilineInput: {
+    marginTop: 20,
   },
 });

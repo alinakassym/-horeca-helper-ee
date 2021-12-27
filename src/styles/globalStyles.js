@@ -26,7 +26,14 @@ export const globalStyles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 12,
     lineHeight: 14,
-    color: PrimaryColors.grey2,
+    color: PrimaryColors.grey1,
+  },
+  inputText: {
+    marginBottom: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
   placeholderText: {
     marginBottom: -25,

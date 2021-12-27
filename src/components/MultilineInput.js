@@ -60,7 +60,8 @@ class MultilineInput extends React.PureComponent {
           }}
           onChangeText={val => onChangeText(val)}
           style={[
-            styles.input,
+            globalStyles.inputText,
+            styles.borderBottom,
             {
               height: Math.max(32, height),
               borderBottomColor: focused
@@ -80,10 +81,7 @@ const styles = StyleSheet.create({
   inputSection: {
     minHeight: 32,
   },
-  input: {
-    fontSize: 14,
-    lineHeight: 18,
-    color: PrimaryColors.element,
+  borderBottom: {
     borderBottomWidth: 1.5,
   },
 });
