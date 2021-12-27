@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {globalStyles} from '../styles/globalStyles';
-import PropTypes from 'prop-types';
 import {PrimaryColors} from '../styles/colors';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   label: PropTypes.string,
@@ -10,6 +10,7 @@ const propTypes = {
   marginBottom: PropTypes.number,
   onChangeText: PropTypes.func,
   onInputFocus: PropTypes.func,
+  style: PropTypes.object,
 };
 
 class MultilineInput extends React.PureComponent {
@@ -22,7 +23,8 @@ class MultilineInput extends React.PureComponent {
   }
 
   render() {
-    const {label, value, marginBottom, onChangeText, onInputFocus} = this.props;
+    const {label, value, marginBottom, onChangeText, onInputFocus, style} =
+      this.props;
     const {height, focused} = this.state;
     const inputMaxHeight = 120;
     const setHeight = val => {
@@ -30,7 +32,12 @@ class MultilineInput extends React.PureComponent {
       this.setState({...this.state, height: res});
     };
     return (
-      <View style={[styles.inputSection, {marginBottom: marginBottom || 20}]}>
+      <View
+        style={[
+          styles.inputSection,
+          {marginBottom: marginBottom || 20},
+          style,
+        ]}>
         {((!!label && focused) || (!!label && !!value)) && (
           <Text style={globalStyles.inputLabel}>{label}</Text>
         )}
@@ -60,7 +67,7 @@ class MultilineInput extends React.PureComponent {
                 ? PrimaryColors.brand
                 : !focused && !!value
                 ? PrimaryColors.element
-                : PrimaryColors.grey2,
+                : PrimaryColors.grey3,
             },
           ]}
         />
@@ -71,8 +78,6 @@ class MultilineInput extends React.PureComponent {
 
 const styles = StyleSheet.create({
   inputSection: {
-    paddingTop: 20,
-    paddingHorizontal: 20,
     minHeight: 32,
   },
   input: {

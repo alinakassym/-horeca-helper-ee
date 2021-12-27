@@ -85,6 +85,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
         />
 
         <MultilineInput
+          style={styles.multilineInput}
           label={'Комментарий'}
           value={comment}
           onChangeText={val => setComment(val)}
@@ -139,5 +140,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     height: 108,
     zIndex: 3,
+  },
+  multilineInput: {
+    padding: 20,
   },
 });
