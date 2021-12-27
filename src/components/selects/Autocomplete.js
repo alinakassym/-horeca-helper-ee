@@ -6,27 +6,24 @@ import {
   Modal,
   VirtualizedList,
   StyleSheet,
-  TextInput,
-  Platform,
 } from 'react-native';
-import {globalStyles} from '../../styles/globalStyles';
-import {IconClose} from '../../assets/icons/main/IconClose';
 import _ from 'lodash';
 
-export const Autocomplete = ({
-  required,
-  label,
-  value,
-  valueKey,
-  items,
-  itemTitle,
-  placeholder,
-}) => {
+// styles
+import {PrimaryColors} from '../../styles/colors';
+
+// icons
+import {IconClose} from '../../assets/icons/main/IconClose';
+
+// components
+import Header from '../Header';
+import Input from '../Input';
+
+export const Autocomplete = ({label, value, valueKey, items, itemTitle}) => {
+  const [searchText, setSearchText] = useState('');
   const [visible, setVisible] = useState(false);
   const [item, setItem] = useState(value[valueKey]);
   const [filteredList, setFilteredList] = useState([]);
-
-  const placeholderText = placeholder ? placeholder : 'Select';
 
   const saveHandler = selectedItem => {
     setItem(selectedItem);
@@ -47,19 +44,20 @@ export const Autocomplete = ({
 
   const ValueSection = () => {
     return (
-      <View style={styles.valueSection}>
+      <View style={styles.block}>
+        <Text style={styles.label}>{label}</Text>
         <Pressable
           onPress={() => {
             setVisible(true);
           }}>
-          <Text style={globalStyles.select}>{item[itemTitle]}</Text>
+          <Text style={styles.valueText}>{item[itemTitle]}</Text>
         </Pressable>
         <Pressable
           onPress={() => {
             clearValue();
           }}
           style={styles.clearBtn}>
-          <IconClose color={'#898989'} />
+          <IconClose size={20} color={'#898989'} />
         </Pressable>
       </View>
     );
@@ -67,18 +65,14 @@ export const Autocomplete = ({
 
   const PlaceHolder = () => {
     return (
-      <Pressable
-        onPress={() => {
-          setVisible(true);
-        }}>
-        {required ? (
-          <Text style={[globalStyles.select, {color: '#E74C3C'}]}>
-            {placeholderText}
-          </Text>
-        ) : (
-          <Text style={globalStyles.select}>{placeholderText}</Text>
-        )}
-      </Pressable>
+      <View style={styles.blockPlaceholder}>
+        <Pressable
+          onPress={() => {
+            setVisible(true);
+          }}>
+          <Text style={styles.placeholderText}>{label}</Text>
+        </Pressable>
+      </View>
     );
   };
 
@@ -115,32 +109,23 @@ export const Autocomplete = ({
 
   return (
     <React.Fragment>
-      <View>
-        <Text style={globalStyles.label}>{label}</Text>
-        {value[valueKey] ? <ValueSection /> : <PlaceHolder />}
-      </View>
+      {value[valueKey] ? <ValueSection /> : <PlaceHolder />}
       <Modal visible={visible} animationType="slide" transparent={false}>
-        <View style={[globalStyles.modalTopBar, styles.topBar]}>
-          <Pressable
-            style={styles.topBarIcon}
-            onPress={() => {
-              setFilteredList(items);
-              setVisible(false);
-            }}>
-            <IconClose />
-          </Pressable>
-          <View style={styles.topBarTitleSection}>
-            <Text style={styles.topBarTitle}>{label}</Text>
-          </View>
-        </View>
-        <View style={styles.searchSection}>
-          <TextInput
-            onChangeText={val => {
-              getFilteredList(val);
-            }}
-            style={globalStyles.primaryInput}
-          />
-        </View>
+        <Header
+          goBack
+          onClose={() => {
+            setFilteredList(items);
+            setVisible(false);
+          }}
+          title={label}
+        />
+        <Input
+          text={searchText}
+          onChangeText={val => {
+            setSearchText(val);
+            getFilteredList(val);
+          }}
+        />
         <VirtualizedList
           data={filteredList}
           renderItem={({item, index}) => <Item index={index} item={item} />}
@@ -153,57 +138,52 @@ export const Autocomplete = ({
 };
 
 const styles = StyleSheet.create({
-  topBar: {
-    padding: 16,
-    marginHorizontal: -4,
-    width: '102%',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    shadowColor: '#777777',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 2,
-  },
-  topBarIcon: {
-    marginRight: 16,
-  },
-  topBarTitleSection: {
-    paddingRight: 32,
-    flex: 1,
-    alignItems: 'center',
-  },
-  topBarTitle: {
-    fontFamily: 'Roboto-Medium',
-    fontSize: 18,
-    color: '#000000',
-  },
-  searchSection: {
-    paddingHorizontal: 16,
-  },
-  wrap: {
-    padding: 16,
-    width: '80%',
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-  },
-  item: {
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-  },
-  itemTitle: {
-    color: '#000000',
-  },
-  valueSection: {
+  block: {
     position: 'relative',
+    marginBottom: 20,
+    borderBottomWidth: 1.5,
+    borderBottomColor: PrimaryColors.element,
+  },
+  label: {
+    marginBottom: 6,
+    fontFamily: 'Inter-Regular',
+    fontSize: 12,
+    lineHeight: 14,
+    color: PrimaryColors.grey1,
+  },
+  valueText: {
+    marginBottom: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
   clearBtn: {
     position: 'absolute',
-    right: 11,
-    top: 12.5,
+    right: 0,
+    bottom: 10,
+  },
+  blockPlaceholder: {
+    marginBottom: 20,
+    borderBottomWidth: 1.5,
+    borderBottomColor: PrimaryColors.grey3,
+  },
+  placeholderText: {
+    marginTop: 20,
+    marginBottom: 10,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 20,
+    color: PrimaryColors.grey2,
+  },
+  item: {
+    paddingVertical: 20,
+    paddingHorizontal: 24,
+  },
+  itemTitle: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 20,
+    color: PrimaryColors.element,
   },
 });
