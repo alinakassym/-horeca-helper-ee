@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 
 // styles
@@ -8,8 +9,6 @@ import {PrimaryColors} from '../styles/colors';
 // components
 import BackButton from './buttons/BackButton';
 import CloseButton from './buttons/CloseButton';
-
-import PropTypes from 'prop-types';
 
 const dimensions = Dimensions.get('screen');
 
@@ -21,16 +20,17 @@ const propTypes = {
   modal: PropTypes.bool,
   title: PropTypes.string,
   subtitle: PropTypes.string,
+  style: PropTypes.object,
 };
 
 class Header extends React.PureComponent {
   render() {
-    const {onClose, children, goBack, options, modal, title, subtitle} =
+    const {onClose, children, goBack, options, modal, title, subtitle, style} =
       this.props;
     return (
       <React.Fragment>
         {goBack ? (
-          <View style={styles.headerSection}>
+          <View style={[styles.headerSection, style]}>
             <View style={styles.leftCol}>
               <BackButton onPress={onClose} />
             </View>
@@ -43,19 +43,20 @@ class Header extends React.PureComponent {
             )}
           </View>
         ) : options ? (
-          <View style={[styles.headerSection, styles.optionsHeaderSection]}>
+          <View
+            style={[styles.headerSection, styles.optionsHeaderSection, style]}>
             <Text style={[styles.optionsRightCol, styles.title]}>
               {title} <Text style={styles.subtitle}>{subtitle}</Text>
             </Text>
             <View style={styles.optionsLeftCol}>{children}</View>
           </View>
         ) : modal ? (
-          <View style={styles.modalHeaderSection}>
+          <View style={[styles.modalHeaderSection, style]}>
             <CloseButton onPress={onClose} />
             <Text style={[styles.title, globalStyles.mt4]}>{title}</Text>
           </View>
         ) : (
-          <View style={styles.headerSection}>
+          <View style={[styles.headerSection, style]}>
             <Text style={[styles.title, globalStyles.mt3]}>
               {title} <Text style={styles.subtitle}>{subtitle}</Text>
             </Text>

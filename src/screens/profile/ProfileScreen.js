@@ -203,7 +203,9 @@ export const ProfileScreen = ({navigation}) => {
             <Text style={styles.listItemTitle}>Контактная поддержка</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.listItem]}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FAQ')}
+            style={[styles.listItem]}>
             <Text style={styles.listItemTitle}>Вопросы и ответы</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>

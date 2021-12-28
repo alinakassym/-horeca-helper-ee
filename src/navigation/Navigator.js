@@ -27,6 +27,7 @@ import {MyExperienceScreen} from '../screens/profile/MyExperienceScreen';
 
 // support screens
 import {SupportScreen} from '../screens/support/SupportScreen';
+import {FAQScreen} from '../screens/support/FAQScreen';
 
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
@@ -235,6 +236,11 @@ export const Navigator = () => {
         <Stack.Screen
           name={'Support'}
           component={SupportScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'FAQ'}
+          component={FAQScreen}
           options={{headerShown: false}}
         />
       </Stack.Group>
