@@ -41,6 +41,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // Redux
 import {useSelector} from 'react-redux';
+
+// styles
 import {PrimaryColors, StatusesColors} from '../styles/colors';
 
 export const Navigator = () => {
@@ -62,7 +64,6 @@ export const Navigator = () => {
           tabBarInactiveTintColor: PrimaryColors.grey2,
           tabBarStyle: {
             // note: don't set height, or set screen-specific heights
-            marginBottom: 2,
             shadowColor: PrimaryColors.element,
             shadowOpacity: 0.5,
             shadowRadius: 5,

@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
-import Header from '../../components/Header';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
-import {getNotifications} from '../../services/NotificationsService';
+
+// components
+import Header from '../../components/Header';
 import ConfirmationRequest from './components/ConfirmationRequest';
 import JobApply from './components/JobApply';
 
+// services
+import {getNotifications} from '../../services/NotificationsService';
 import {getChatsLookup} from '../../services/ChatService';
 
 export const NotificationsScreen = ({navigation}) => {

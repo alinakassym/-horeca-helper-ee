@@ -1,6 +1,6 @@
 import React from 'react';
-import {Dimensions, View, Text, Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
+import {Dimensions, View, Text, Image, StyleSheet} from 'react-native';
 import {globalStyles} from '../../../styles/globalStyles';
 import {PrimaryColors} from '../../../styles/colors';
 import OutlineButton from '../../../components/buttons/OutlineButton';
@@ -65,12 +65,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderRadius: imageSize,
     borderColor: PrimaryColors.grey3,
+    backgroundColor: PrimaryColors.white,
     overflow: 'hidden',
   },
   img: {
     height: '100%',
     width: '100%',
-    backgroundColor: PrimaryColors.grey3,
   },
   userName: {
     marginBottom: 6,

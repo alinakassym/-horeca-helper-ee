@@ -1,6 +1,6 @@
 import React from 'react';
-import {Dimensions, View, Text, StyleSheet, Image} from 'react-native';
 import PropTypes from 'prop-types';
+import {Dimensions, View, Text, StyleSheet, Image} from 'react-native';
 import {globalStyles} from '../../../styles/globalStyles';
 import {PrimaryColors} from '../../../styles/colors';
 
