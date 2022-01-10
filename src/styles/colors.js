@@ -5,6 +5,7 @@ export const PrimaryColors = {
   grey2: '#B9C1CA',
   grey3: '#E2E5E8',
   grey4: '#F0F2F4',
+  grey5: '#F5F5F5',
   background: '#F5F8FE',
   white: '#FFFFFF',
 };

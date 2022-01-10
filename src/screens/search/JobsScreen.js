@@ -7,50 +7,60 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
-import {searchJobs} from '../../services/JobsService';
+import {PrimaryColors} from '../../styles/colors';
+
+// icons
+import {IconBookmark} from '../../assets/icons/main/IconBookmark';
+import {IconOptions} from '../../assets/icons/main/IconOptions';
+
+// components
+import Header from '../../components/Header';
 import {JobCard} from './components/JobCard';
-import {useSelector} from 'react-redux';
 import UsersInfo from './components/UsersInfo';
 import IconButton from '../../components/buttons/IconButton';
-import Header from '../../components/Header';
-import {IconBookmark} from '../../assets/icons/main/IconBookmark';
-import {PrimaryColors} from '../../styles/colors';
-import {IconOptions} from '../../assets/icons/main/IconOptions';
+import BottomModal from '../../components/BottomModal';
+import StatCard from './components/StatCard';
+
+// store
+import {useSelector} from 'react-redux';
+
+// services
+import {searchJobs} from '../../services/JobsService';
+import {getStats} from '../../services/UtilsService';
 
 export const JobsScreen = ({navigation}) => {
   const filterState = useSelector(state => state.jobs.filter);
-  const [usersNumber, setUsersNumber] = useState(0);
   const [jobs, setJobs] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [stats, setStats] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    function fetchData() {
-      return navigation.addListener('focus', async () => {
-        try {
-          const result = await searchJobs(filterState);
-          setJobs(result.data.items);
-          setUsersNumber(result.data.total);
-          setLoading(false);
-        } catch (e) {
-          console.log('searchJobs err:', e);
-        }
-      });
-    }
-    fetchData();
-  }, [filterState, navigation]);
+  const getData = async () => {
+    return Promise.all([searchJobs(), getStats()]);
+  };
 
-  if (loading) {
-    return (
-      <View style={styles.fullScreenSection}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  useEffect(() => {
+    return navigation.addListener('focus', async () => {
+      try {
+        const [jobsData, statsData] = await getData();
+        setJobs(jobsData.items);
+        setStats(statsData);
+        setLoading(false);
+      } catch (e) {
+        console.log('searchJobs err:', e);
+      }
+    });
+  }, [filterState, navigation]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <UsersInfo usersNumber={usersNumber} />
+      <UsersInfo
+        onPress={() => setVisible(true)}
+        usersNumber={stats?.numCompaniesOnline || 0}
+      />
       <Header options title={'Поиск'} subtitle={'вакансий'}>
         <React.Fragment>
           <IconButton>
@@ -64,8 +74,17 @@ export const JobsScreen = ({navigation}) => {
           </IconButton>
         </React.Fragment>
       </Header>
-
-      {jobs.length > 0 ? (
+      <BottomModal
+        onCancel={() => setVisible(false)}
+        visible={visible}
+        title={'Полезная информация'}>
+        <StatCard numUsers={stats?.numCompanies} numJobs={stats?.numJobs} />
+      </BottomModal>
+      {loading ? (
+        <View style={globalStyles.fullScreenSection}>
+          <ActivityIndicator size={'large'} />
+        </View>
+      ) : jobs.length > 0 ? (
         <ScrollView>
           {jobs &&
             jobs.map((item, index) => (
@@ -88,28 +107,8 @@ export const JobsScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  fullScreenSection: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  topSection: {
-    padding: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
-  },
-  title: {
-    fontFamily: 'Roboto-Medium',
-    fontSize: 18,
-    color: '#000000',
-  },
   text: {
     fontFamily: 'Roboto-Medium',
     fontSize: 18,
-  },
-  btn: {
-    marginBottom: 16,
   },
 });
