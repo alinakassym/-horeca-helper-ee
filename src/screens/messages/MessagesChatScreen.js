@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 0.5,
     borderColor: PrimaryColors.grey1,
+    color: PrimaryColors.element,
   },
   scrollView: {
     paddingHorizontal: 20,
