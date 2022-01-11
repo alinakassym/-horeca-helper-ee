@@ -34,13 +34,13 @@ const propTypes = {
 class Autocomplete extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log({props});
     this.state = {
       searchText: '',
       visible: false,
-      filteredList: props.items,
+      filteredList: [],
     };
   }
+
   render() {
     const {label, value, items, itemKey, validIcon, onSelect, onClear} =
       this.props;
@@ -76,7 +76,11 @@ class Autocomplete extends React.PureComponent {
               clearValue();
             }}
             style={styles.clearBtn}>
-            <IconClose style={styles.icon} size={16} color={PrimaryColors.grey1} />
+            <IconClose
+              style={styles.icon}
+              size={16}
+              color={PrimaryColors.grey1}
+            />
             {validIcon || (
               <IconCheck size={16} color={PrimaryColors.brand} width={2} />
             )}
@@ -99,21 +103,23 @@ class Autocomplete extends React.PureComponent {
     };
 
     const getItemCount = () => {
-      return filteredList.length;
+      if (filteredList.length > 0) {
+        return filteredList.length;
+      }
+      return items.length;
     };
 
-    const getItem = (filteredList, index) => ({
-      id: filteredList[index].id,
-      title: filteredList[index].title,
-      title_ru: filteredList[index].title_ru,
+    const getItem = (lItem, index) => ({
+      id: lItem[index].id,
+      title: lItem[index].title,
+      title_ru: lItem[index].title_ru,
     });
 
     const getFilteredList = sText => {
       if (sText && sText.length >= 1) {
         const val = _.filter(items, el =>
-          _.startsWith(el.title.toLowerCase(), sText.toLowerCase()),
+          _.includes(el[itemKey].toLowerCase(), sText.toLowerCase()),
         );
-        console.log({val});
         this.setState({...this.state, searchText: sText, filteredList: val});
       } else {
         this.setState({...this.state, searchText: sText, filteredList: items});
@@ -163,7 +169,7 @@ class Autocomplete extends React.PureComponent {
             }}
           />
           <VirtualizedList
-            data={filteredList}
+            data={filteredList.length > 0 ? filteredList : items}
             renderItem={({item, index}) => <Item index={index} item={item} />}
             getItemCount={getItemCount}
             getItem={getItem}
