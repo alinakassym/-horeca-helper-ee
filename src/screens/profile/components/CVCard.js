@@ -26,11 +26,12 @@ const propTypes = {
   salary: PropTypes.number,
   updatedAt: PropTypes.string,
   onPress: PropTypes.func,
+  findRelevant: PropTypes.func,
 };
 
 class CVCard extends React.PureComponent {
   render() {
-    const {position, salary, updatedAt, onPress} = this.props;
+    const {position, salary, updatedAt, onPress, findRelevant} = this.props;
 
     return (
       <React.Fragment>
@@ -53,12 +54,12 @@ class CVCard extends React.PureComponent {
               </View>
               <Text style={styles.salary}>{numberWithSpaces(salary)} ₸</Text>
             </View>
-            <IconButton>
+            <IconButton onPress={onPress}>
               <IconDots />
             </IconButton>
           </View>
           <PlainButton
-            onPress={onPress}
+            onPress={findRelevant}
             label={'Найти подходящие вакансии'}
             btnStyle={styles.findBtn}>
             <IconSearch
