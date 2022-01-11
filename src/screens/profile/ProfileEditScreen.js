@@ -2,56 +2,51 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Alert,
-  StyleSheet,
   ActivityIndicator,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {globalStyles} from '../../styles/globalStyles';
 
-import {
-  getCities,
-  getGenders,
-  getPositions,
-  getSchedules,
-} from '../../services/DictionariesService';
+// styles
+import {globalStyles} from '../../styles/globalStyles';
+import {PrimaryColors, StatusesColors} from '../../styles/colors';
+
+// icons
+import {IconLocation} from '../../assets/icons/main/IconLocation';
+
+// components
+import Header from '../../components/Header';
+import ProfilePhoto from './components/ProfilePhoto';
+import ProfilePhotoPlaceholder from './components/ProfilePhotoPlaceholder';
+import ModalButton from '../../components/buttons/ModalButton';
+import BottomModal from '../../components/BottomModal';
+import Input from '../../components/Input';
+import {DateSelect} from '../../components/selects/DateSelect';
+import Autocomplete from '../../components/selects/Autocomplete';
+import MultilineInput from '../../components/MultilineInput';
+import GradientButton from '../../components/buttons/GradientButton';
+import LinearGradient from 'react-native-linear-gradient';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
+// services
 import {
   updateEmployee,
   updateEmployeePhoto,
 } from '../../services/EmployeesService';
-import Header from '../../components/Header';
-import {PrimaryColors} from '../../styles/colors';
-import ProfilePhoto from './components/ProfilePhoto';
-import ProfilePhotoPlaceholder from './components/ProfilePhotoPlaceholder';
-import ModalButton from '../../components/buttons/ModalButton';
-import {StatusesColors} from '../../styles/colors';
-import BottomModal from '../../components/BottomModal';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import Input from '../../components/Input';
-import {DateSelect} from '../../components/selects/DateSelect';
-import Autocomplete from '../../components/selects/Autocomplete';
-import {IconLocation} from '../../assets/icons/main/IconLocation';
-import MultilineInput from '../../components/MultilineInput';
-import LinearGradient from 'react-native-linear-gradient';
-import GradientButton from '../../components/buttons/GradientButton';
+import {getCities, getGenders} from '../../services/DictionariesService';
+import ModalSelect from '../../components/selects/ModalSelect';
 
 export const ProfileEditScreen = ({route, navigation}) => {
   const [me, setMe] = useState(route.params.value);
   const [cities, setCities] = useState([]);
-  const [positions, setPositions] = useState([]);
   const [genders, setGenders] = useState([]);
-  const [schedules, setSchedules] = useState([]);
   const [open, setOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
   const [isValidFirstName, setIsValidFirstName] = useState(false);
 
   const [loading, setLoading] = useState(true);
-
-  function firstNameChanged(val) {
-    setIsValidFirstName(val && val.length >= 2);
-    setMe({...me, firstName: val});
-  }
 
   const save = async () => {
     if (isValidFirstName) {
@@ -133,23 +128,15 @@ export const ProfileEditScreen = ({route, navigation}) => {
   };
 
   const getData = async () => {
-    return Promise.all([
-      getCities(),
-      getPositions(),
-      getGenders(),
-      getSchedules(),
-    ]);
+    return Promise.all([getCities(), getGenders()]);
   };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
       try {
-        const [citiesData, positionsData, gendersData, schedulesData] =
-          await getData();
+        const [citiesData, gendersData] = await getData();
         setCities(citiesData);
-        setPositions(positionsData);
         setGenders(gendersData);
-        setSchedules(schedulesData);
         setLoading(false);
       } catch (e) {
         console.log('getData err:', e);
@@ -212,6 +199,19 @@ export const ProfileEditScreen = ({route, navigation}) => {
           value={me}
           valueKey={'birthDate'}
           clearable
+        />
+
+        <ModalSelect
+          label={'Пол'}
+          value={me.gender}
+          items={genders}
+          itemText={'title_ru'}
+          onSaveSelection={val => {
+            setMe({...me, gender: val});
+          }}
+          onClear={() => {
+            setMe({...me, gender: null});
+          }}
         />
 
         {/*Город*/}

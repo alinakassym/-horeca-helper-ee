@@ -60,9 +60,13 @@ class CVCard extends React.PureComponent {
           <PlainButton
             onPress={onPress}
             label={'Найти подходящие вакансии'}
-            style={styles.findBtn}
-            labelStyle={globalStyles.ml3}>
-            <IconSearch size={16} width={3} color={PrimaryColors.brand} />
+            btnStyle={styles.findBtn}>
+            <IconSearch
+              size={16}
+              width={3}
+              style={globalStyles.mr3}
+              color={PrimaryColors.brand}
+            />
           </PlainButton>
         </View>
         <UpdatedAt date={updatedAt} />

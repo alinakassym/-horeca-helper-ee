@@ -183,7 +183,7 @@ export const Navigator = () => {
       <Stack.Group>
         <Stack.Screen
           options={{headerShown: false}}
-          name="ProfileEditScreen"
+          name="ProfileEdit"
           component={ProfileEditScreen}
         />
         <Stack.Screen
