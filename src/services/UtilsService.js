@@ -11,3 +11,9 @@ export const getConfigs = async key => {
   console.log('getConfigs: ', r.data);
   return r.data;
 };
+
+export const getFAQs = async () => {
+  const r = await http.get('/ee/utils/faqs');
+  console.log('getFAQs: ', r.data);
+  return r.data;
+};

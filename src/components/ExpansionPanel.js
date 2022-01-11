@@ -11,6 +11,8 @@ import {IconExpandUp} from '../assets/icons/main/IconExpandUp';
 
 const propTypes = {
   items: PropTypes.array,
+  itemTitle: PropTypes.string,
+  itemValue: PropTypes.string,
   expandedBlockStyle: PropTypes.object,
 };
 
@@ -25,8 +27,12 @@ class ExpansionPanel extends React.PureComponent {
   }
 
   render() {
-    const {items, expandedBlockStyle, children} = this.props;
+    const {items, itemTitle, itemValue, expandedBlockStyle, children} =
+      this.props;
     const {currentItem} = this.state;
+
+    const title = itemTitle || 'title';
+
     return (
       <React.Fragment>
         {items.map((item, index) => (
@@ -40,15 +46,15 @@ class ExpansionPanel extends React.PureComponent {
                   this.setState({...this.state, currentItem: index});
                 }
               }}>
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.title}>{item[title]}</Text>
               {index === currentItem ? (
                 <IconExpandUp size={16} color={PrimaryColors.element} />
               ) : (
                 <IconExpandDown size={16} color={PrimaryColors.element} />
               )}
             </Pressable>
-            {index === currentItem && item.body && (
-              <Text style={styles.body}>{item.body}</Text>
+            {index === currentItem && item[itemValue] && (
+              <Text style={styles.body}>{item[itemValue]}</Text>
             )}
             {index === currentItem && (
               <View style={[styles.expandedBlock, expandedBlockStyle]}>
