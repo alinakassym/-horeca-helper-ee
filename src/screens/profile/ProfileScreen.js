@@ -3,13 +3,12 @@ import {
   Text,
   View,
   ScrollView,
-  StyleSheet,
   Switch,
-  ActivityIndicator,
   Modal,
-  Pressable,
   TouchableOpacity,
   SafeAreaView,
+  StyleSheet,
+  Pressable,
 } from 'react-native';
 import moment from 'moment';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -42,7 +41,6 @@ export const ProfileScreen = ({navigation}) => {
     city: null,
     description: '',
   });
-  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
   // Notification
@@ -51,105 +49,21 @@ export const ProfileScreen = ({navigation}) => {
     setIsNotification(previousNotificationState => !previousNotificationState);
 
   const getAge = birthDate =>
-    birthDate ? moment().diff(birthDate, 'years', false) : false;
-
-  const openCamera = async () => {
-    let options = {
-      storageOption: {
-        path: 'images',
-        mediaType: 'photo',
-      },
-    };
-    launchCamera(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        try {
-          const r = updateEmployeePhoto(response.assets[0]);
-          setMe(r.data);
-        } catch (e) {
-          console.log('updateEmployeePhoto err: ', e);
-        }
-      }
-    });
-  };
-
-  const openGallery = async () => {
-    let options = {
-      storageOption: {
-        path: 'images',
-        skipBackup: true,
-      },
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        try {
-          const r = updateEmployeePhoto(response.assets[0]);
-          setMe(r.data);
-        } catch (e) {
-          console.log('updateEmployeePhoto err: ', e);
-        }
-      }
-    });
-  };
+    birthDate ? moment().diff(birthDate, 'years', false) : null;
 
   useEffect(() => {
-    function fetchData() {
-      return navigation.addListener('focus', async () => {
-        try {
-          const res = await getEmployee();
-          setMe(res.data);
-          setLoading(false);
-        } catch (e) {
-          console.log('ProfileScreen err: ', e);
-        }
-      });
-    }
-    fetchData();
+    return navigation.addListener('focus', async () => {
+      try {
+        const res = await getEmployee();
+        setMe(res.data);
+      } catch (e) {
+        console.log('ProfileScreen err: ', e);
+      }
+    });
   }, [navigation]);
-
-  if (loading) {
-    return (
-      <View style={globalStyles.fullScreenSection}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Modal visible={open} animationType="slide" transparent={true}>
-        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
-          <View style={styles.wrap}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                openGallery();
-                setOpen(false);
-              }}>
-              <Text style={globalStyles.text}>Open Gallery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => {
-                openCamera();
-                setOpen(false);
-              }}>
-              <Text style={globalStyles.text}>Open Camera</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </Modal>
       <ScrollView>
         <View style={styles.section}>
           <ProfileHeader
@@ -171,7 +85,7 @@ export const ProfileScreen = ({navigation}) => {
         <View style={styles.section}>
           <LightGradientButton
             onPress={() => {
-              navigation.navigate('ProfileEditScreen', {
+              navigation.navigate('ProfileEdit', {
                 value: me,
               });
             }}

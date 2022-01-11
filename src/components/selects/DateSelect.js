@@ -44,7 +44,7 @@ export const DateSelect = ({label, value, valueKey, minimumDate}) => {
             clearValue();
           }}
           style={styles.clearBtn}>
-          <IconClose size={20} color={PrimaryColors.grey1} />
+          <IconClose size={16} color={PrimaryColors.grey1} />
         </Pressable>
       </View>
     );

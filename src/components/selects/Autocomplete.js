@@ -15,6 +15,7 @@ import {PrimaryColors} from '../../styles/colors';
 
 // icons
 import {IconClose} from '../../assets/icons/main/IconClose';
+import {IconCheck} from '../../assets/icons/main/IconCheck';
 
 // components
 import Header from '../Header';
@@ -25,6 +26,7 @@ const propTypes = {
   value: PropTypes.object,
   items: PropTypes.array,
   itemKey: PropTypes.string,
+  validIcon: PropTypes.object,
   onSelect: PropTypes.func,
   onClear: PropTypes.func,
 };
@@ -40,7 +42,8 @@ class Autocomplete extends React.PureComponent {
     };
   }
   render() {
-    const {label, value, items, itemKey, onSelect, onClear} = this.props;
+    const {label, value, items, itemKey, validIcon, onSelect, onClear} =
+      this.props;
     const {searchText, visible, filteredList} = this.state;
 
     const saveHandler = selectedItem => {
@@ -73,7 +76,10 @@ class Autocomplete extends React.PureComponent {
               clearValue();
             }}
             style={styles.clearBtn}>
-            <IconClose size={20} color={PrimaryColors.grey1} />
+            <IconClose style={styles.icon} size={16} color={PrimaryColors.grey1} />
+            {validIcon || (
+              <IconCheck size={16} color={PrimaryColors.brand} width={2} />
+            )}
           </Pressable>
         </View>
       );
@@ -191,8 +197,14 @@ const styles = StyleSheet.create({
   },
   clearBtn: {
     position: 'absolute',
-    right: 0,
-    bottom: 10,
+    top: 24,
+    right: 4,
+    padding: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 4,
   },
   blockPlaceholder: {
     marginBottom: 20,

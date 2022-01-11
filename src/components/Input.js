@@ -1,40 +1,97 @@
 import React from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {PrimaryColors} from '../styles/colors';
-import {IconSearch} from '../assets/icons/tabs/IconSearch';
-import {IconClose} from '../assets/icons/main/IconClose';
 import PropTypes from 'prop-types';
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
+import {PrimaryColors} from '../styles/colors';
+import {IconClose} from '../assets/icons/main/IconClose';
+import {IconCheck} from '../assets/icons/main/IconCheck';
 
 const propTypes = {
-  text: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.string,
   onChangeText: PropTypes.func,
   onEndEditing: PropTypes.func,
   onClear: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  validIcon: PropTypes.object,
+  keyboardType: PropTypes.string,
 };
 
 class Input extends React.PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      focused: false,
+    };
+  }
   render() {
-    const {text, onChangeText, onEndEditing, onClear} = this.props;
+    const {
+      label,
+      value,
+      onChangeText,
+      onFocus,
+      onBlur,
+      onClear,
+      validIcon,
+      keyboardType,
+    } = this.props;
+    const {focused} = this.state;
+    const inputType = keyboardType ? keyboardType : 'default';
+
     return (
       <View style={styles.inputSection}>
+        <Text style={styles.label}>
+          {((!!label && focused) || (!!label && !!value)) && `${label}`}
+        </Text>
         <TextInput
-          value={text}
-          style={styles.input}
-          placeholder={'Поиск'}
+          keyboardType={inputType}
+          value={value}
+          style={[
+            styles.input,
+            {
+              borderBottomColor:
+                focused || !!value
+                  ? PrimaryColors.element
+                  : PrimaryColors.grey3,
+            },
+          ]}
+          placeholder={focused ? '' : label}
           placeholderTextColor={PrimaryColors.grey2}
           onChangeText={onChangeText}
-          onEndEditing={onEndEditing}
+          onBlur={() => {
+            if (onBlur) {
+              onBlur(false);
+            }
+          }}
+          onFocus={val => {
+            if (onFocus) {
+              onFocus(val);
+            }
+            this.setState({...this.state, focused: true});
+          }}
+          onEndEditing={() => this.setState({...this.state, focused: false})}
         />
-        <View style={styles.iconSearch}>
-          <IconSearch size={24} color={PrimaryColors.grey2} />
-        </View>
 
-        {text.length > 0 && (
+        {!!value && value.length > 0 && (
           <TouchableOpacity
             onPress={onClear}
             activeOpacity={0.7}
             style={styles.iconClear}>
-            <IconClose size={15} color={PrimaryColors.grey1} width={2} />
+            <IconClose
+              style={styles.icon}
+              size={16}
+              color={PrimaryColors.grey1}
+              width={2}
+            />
+            {validIcon || (
+              <IconCheck size={16} color={PrimaryColors.brand} width={2} />
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -45,30 +102,38 @@ class Input extends React.PureComponent {
 const styles = StyleSheet.create({
   inputSection: {
     position: 'relative',
-    paddingHorizontal: 20,
+  },
+  label: {
+    marginBottom: 4,
+    height: 14,
+    fontFamily: 'Inter-Regular',
+    fontSize: 12,
+    lineHeight: 14,
+    color: PrimaryColors.grey1,
   },
   input: {
-    marginBottom: 12,
-    paddingHorizontal: 0,
-    paddingLeft: 48,
-    paddingRight: 38,
-    borderRadius: 10,
+    marginBottom: 20,
+    paddingTop: 0,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    paddingRight: 48,
     fontFamily: 'Inter-Regular',
     fontSize: 16,
-    lineHeight: 24,
-    backgroundColor: PrimaryColors.grey4,
+    lineHeight: 20,
     color: PrimaryColors.element,
-  },
-  iconSearch: {
-    position: 'absolute',
-    top: 12,
-    left: 32,
+    borderBottomWidth: 1.5,
+    borderBottomColor: PrimaryColors.grey3,
   },
   iconClear: {
     position: 'absolute',
-    top: 15,
-    right: 33,
+    top: 24,
+    right: 4,
     padding: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 4,
   },
 });
 
