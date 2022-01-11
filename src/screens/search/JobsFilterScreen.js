@@ -1,24 +1,52 @@
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View, Text, StyleSheet, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+
+// styles
+import {globalStyles} from '../../styles/globalStyles';
+import {PrimaryColors} from '../../styles/colors';
+
+// icons
+import {IconBucket} from '../../assets/icons/main/IconBucket';
+
+// components
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Header from '../../components/Header';
+import PlainButton from '../../components/buttons/PlainButton';
+import GroupButton from '../../components/buttons/GroupButton';
+import ExpansionPanel from '../../components/ExpansionPanel';
+import RadioBtn from '../../components/buttons/RadioBtn';
+import NumberInput from '../../components/NumberInput';
+import GradientButton from '../../components/buttons/GradientButton';
+import LinearGradient from 'react-native-linear-gradient';
+
+// store
+import {useDispatch, useSelector} from 'react-redux';
+import {setFilter, setFilterApplied} from '../../store/slices/jobs';
+
+// services
 import {
-  getPositions,
   getCategories,
   getCities,
   getGenders,
+  getPositions,
   getSchedules,
 } from '../../services/DictionariesService';
-import {ModalSelect} from '../../components/selects/ModalSelect';
-import PrimaryButton from '../../components/buttons/PrimaryButton';
-import {useSelector, useDispatch} from 'react-redux';
-import {setFilter, setFilterApplied} from '../../store/slices/jobs';
-import {globalStyles} from '../../styles/globalStyles';
-import PlainButton from '../../components/buttons/PlainButton';
-import {Autocomplete} from '../../components/selects/Autocomplete';
+
+const dimensions = Dimensions.get('screen');
 
 export const JobsFilterScreen = ({navigation}) => {
-  const filterState = useSelector(state => state.jobs.filter);
-  const filterResetState = useSelector(state => state.jobs.filterReset);
-  const sortBy = useSelector(state => state.jobs.sortBy);
+  const filterState = useSelector(state => {
+    const {jobs} = state;
+    return jobs.filter;
+  });
+  const filterResetState = useSelector(state => {
+    const {jobs} = state;
+    return jobs.filterReset;
+  });
+  const sortBy = useSelector(state => {
+    const {jobs} = state;
+    return jobs.sortBy;
+  });
 
   const dispatch = useDispatch();
 
@@ -29,9 +57,11 @@ export const JobsFilterScreen = ({navigation}) => {
   const [cities, setCities] = useState([]);
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
-  const [listSortBy, setSortBy] = useState(sortBy);
+  const [listSortBy] = useState(sortBy);
+  const [focused, setFocused] = useState(false);
 
   const apply = async () => {
+    console.log({filters});
     await dispatch(setFilter(filters));
     await dispatch(setFilterApplied(true));
     navigation.navigate('Jobs');
@@ -54,243 +84,357 @@ export const JobsFilterScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    function fetchData() {
-      const unsubscribe = navigation.addListener('focus', async () => {
-        try {
-          const [
-            categoriesData,
-            citiesData,
-            positionsData,
-            gendersData,
-            schedulesData,
-          ] = await getData();
+    navigation.addListener('focus', async () => {
+      try {
+        const [
+          categoriesData,
+          citiesData,
+          positionsData,
+          gendersData,
+          schedulesData,
+        ] = await getData();
 
-          setPositions(positionsData);
-          setCategories(categoriesData);
-          setCities(citiesData);
-          setGenders(gendersData);
-          setSchedules(schedulesData);
-        } catch (e) {
-          console.log('getData err: ', e);
-        }
-      });
-      return unsubscribe;
-    }
-    fetchData();
+        setCategories(categoriesData);
+        setCities(citiesData);
+        setPositions(positionsData);
+        setGenders(gendersData);
+        setSchedules(schedulesData);
+      } catch (e) {
+        console.log('getData err: ', e);
+      }
+    });
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
-      {/*Order by*/}
-      <ModalSelect
-        onChangeText={val => {
-          setFilters({...filters, orderBy: val});
-        }}
-        label={'Order by'}
-        value={filters}
-        valueKey={'orderBy'}
-        items={listSortBy}
-        itemTitle={'title'}
-      />
-
-      {/*City*/}
-      <Autocomplete
-        onChangeText={val => {
-          setFilters({...filters, city: val});
-        }}
-        label={'City'}
-        value={filters}
-        valueKey={'city'}
-        items={cities}
-        itemTitle={'title'}
-      />
-
-      {/*categories*/}
-      <ModalSelect
-        onChangeText={val => {
-          setFilters({...filters, companyCategory: val});
-        }}
-        label={'Category'}
-        value={filters}
-        valueKey={'companyCategory'}
-        items={categories}
-        itemTitle={'title'}
-      />
-
-      {/*Position*/}
-      <Autocomplete
-        onChangeText={val => {
-          setFilters({...filters, position: val});
-        }}
-        label={'Position'}
-        value={filters}
-        valueKey={'position'}
-        items={positions}
-        itemTitle={'title'}
-      />
-
-      {/*Salary*/}
-      <View>
-        <Text style={globalStyles.label}>Salary</Text>
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>Min</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
-              onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  salaryMin: val.length > 0 ? Number(val) : null,
-                });
-              }}
-              value={filters.salaryMin ? filters.salaryMin.toString() : null}
-            />
-          </View>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>Max</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
-              onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  salaryMax: val.length > 0 ? Number(val) : null,
-                });
-              }}
-              value={filters.salaryMax ? filters.salaryMax.toString() : null}
-            />
-          </View>
+    <SafeAreaView style={globalStyles.container}>
+      <Header
+        headerStyle={globalStyles.mr4}
+        goBack
+        onClose={() => navigation.goBack()}
+        title={'Фильтр'}>
+        <PlainButton
+          onPress={() => resetFilter()}
+          btnStyle={styles.resetBtn}
+          label={'Сбросить'}>
+          <IconBucket
+            width={1.5}
+            size={16}
+            color={PrimaryColors.brand}
+            style={globalStyles.mr2}
+          />
+        </PlainButton>
+      </Header>
+      <KeyboardAwareScrollView enableResetScrollToCoords={false}>
+        <View style={globalStyles.card}>
+          <GroupButton
+            label={'Сортировать по'}
+            selectedItem={filters.orderBy}
+            items={listSortBy}
+            itemKey={'title_ru'}
+            onSelect={val => {
+              setFilters({...filters, orderBy: val});
+            }}
+          />
         </View>
-      </View>
 
-      {/*Schedule*/}
-      <ModalSelect
-        onChangeText={val => {
-          setFilters({...filters, schedule: val});
-        }}
-        label={'Schedule'}
-        value={filters}
-        valueKey={'schedule'}
-        items={schedules}
-        itemTitle={'title'}
-      />
+        <View style={[globalStyles.mt3, styles.container]}>
+          {/*Категория*/}
+          <ExpansionPanel
+            items={[{title: 'Категория'}]}
+            expandedBlockStyle={styles.wrapperRadio}>
+            {categories.map((cItem, index) => (
+              <RadioBtn
+                style={
+                  categories.length > 3 ? styles.radioBtn2 : styles.radioBtn1
+                }
+                key={index}
+                item={cItem}
+                itemKey={'title_ru'}
+                activeItem={filters.companyCategory}
+                onSelect={() =>
+                  setFilters({
+                    ...filters,
+                    companyCategory:
+                      cItem?.id === filters.companyCategory?.id ? null : cItem,
+                  })
+                }
+              />
+            ))}
+          </ExpansionPanel>
 
-      {/*Age*/}
-      <View>
-        <Text style={globalStyles.label}>Age</Text>
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>From</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
+          {/*Город*/}
+          <ExpansionPanel
+            items={[{title: 'Город'}]}
+            expandedBlockStyle={styles.wrapperRadio}>
+            {cities.map((cItem, index) => (
+              <RadioBtn
+                style={cities.length > 3 ? styles.radioBtn2 : styles.radioBtn1}
+                key={index}
+                item={cItem}
+                itemKey={'title_ru'}
+                activeItem={filters.city}
+                onSelect={() =>
+                  setFilters({
+                    ...filters,
+                    city: cItem?.id === filters.city?.id ? null : cItem,
+                  })
+                }
+              />
+            ))}
+          </ExpansionPanel>
+
+          {/*Позиция*/}
+          <ExpansionPanel
+            items={[{title: 'Позиция'}]}
+            expandedBlockStyle={styles.wrapperRadio}>
+            {positions.map((pItem, index) => (
+              <RadioBtn
+                style={
+                  positions.length > 3 ? styles.radioBtn2 : styles.radioBtn1
+                }
+                key={index}
+                item={pItem}
+                itemKey={'title_ru'}
+                activeItem={filters.position}
+                onSelect={() =>
+                  setFilters({
+                    ...filters,
+                    position: pItem?.id === filters.position?.id ? null : pItem,
+                  })
+                }
+              />
+            ))}
+          </ExpansionPanel>
+
+          {/*Расписание*/}
+          <ExpansionPanel
+            items={[{title: 'Расписание'}]}
+            expandedBlockStyle={styles.wrapperRadio}>
+            {schedules.map((sItem, index) => (
+              <RadioBtn
+                style={
+                  schedules.length > 3 ? styles.radioBtn2 : styles.radioBtn1
+                }
+                key={index}
+                item={sItem}
+                itemKey={'title_ru'}
+                activeItem={filters.schedule}
+                onSelect={() =>
+                  setFilters({
+                    ...filters,
+                    schedule: sItem?.id === filters.schedule?.id ? null : sItem,
+                  })
+                }
+              />
+            ))}
+          </ExpansionPanel>
+
+          {/*Зарплата*/}
+          <ExpansionPanel
+            items={[{title: 'Зарплата'}]}
+            expandedBlockStyle={styles.wrapperInputs}>
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'От'}
+              value={filters.salaryMin}
               onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  ageMin: val.length > 0 ? Number(val) : null,
-                });
+                setFilters({...filters, salaryMin: val});
               }}
-              value={filters.ageMin ? filters.ageMin.toString() : null}
+              onClear={() => {
+                setFilters({...filters, salaryMin: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
             />
-          </View>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>To</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'До'}
+              value={filters.salaryMax}
               onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  ageMax: val.length > 0 ? Number(val) : null,
-                });
+                setFilters({...filters, salaryMax: val});
               }}
-              value={filters.ageMax ? filters.ageMax.toString() : null}
+              onClear={() => {
+                setFilters({...filters, salaryMax: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
             />
-          </View>
+          </ExpansionPanel>
+
+          {/*Возраст*/}
+          <ExpansionPanel
+            items={[{title: 'Возраст'}]}
+            expandedBlockStyle={styles.wrapperInputs}>
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'От'}
+              value={filters.ageMin}
+              onChangeText={val => {
+                setFilters({...filters, ageMin: val});
+              }}
+              onClear={() => {
+                setFilters({...filters, ageMin: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
+            />
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'До'}
+              value={filters.ageMax}
+              onChangeText={val => {
+                setFilters({...filters, ageMax: val});
+              }}
+              onClear={() => {
+                setFilters({...filters, ageMax: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
+            />
+          </ExpansionPanel>
+
+          {/*Пол*/}
+          <ExpansionPanel
+            items={[{title: 'Пол'}]}
+            expandedBlockStyle={styles.wrapperRadio}>
+            {genders.map((gItem, index) => (
+              <RadioBtn
+                style={styles.radioBtn2}
+                key={index}
+                item={gItem}
+                itemKey={'title_ru'}
+                activeItem={filters.gender}
+                onSelect={() =>
+                  setFilters({
+                    ...filters,
+                    gender: gItem?.id === filters.gender?.id ? null : gItem,
+                  })
+                }
+              />
+            ))}
+          </ExpansionPanel>
+
+          {/*Опыт*/}
+          <ExpansionPanel
+            items={[{title: 'Опыт'}]}
+            expandedBlockStyle={styles.wrapperInputs}>
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'От'}
+              value={filters.experienceMin}
+              onChangeText={val => {
+                setFilters({...filters, experienceMin: val});
+              }}
+              onClear={() => {
+                setFilters({...filters, experienceMin: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
+            />
+            <NumberInput
+              validIcon={<></>}
+              style={styles.numberInput}
+              label={'До'}
+              value={filters.experienceMax}
+              onChangeText={val => {
+                setFilters({...filters, experienceMax: val});
+              }}
+              onClear={() => {
+                setFilters({...filters, experienceMax: null});
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+              }}
+            />
+          </ExpansionPanel>
         </View>
-      </View>
-
-      {/*Genders*/}
-      <ModalSelect
-        onChangeText={val => {
-          setFilters({...filters, gender: val});
-        }}
-        label={'Gender'}
-        value={filters}
-        valueKey={'gender'}
-        items={genders}
-        itemTitle={'title'}
-      />
-
-      {/*Experience*/}
-      <View>
-        <Text style={globalStyles.label}>Experience</Text>
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>From</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
-              onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  experienceMin: val.length > 0 ? Number(val) : null,
-                });
-              }}
-              value={
-                filters.experienceMin ? filters.experienceMin.toString() : null
-              }
-            />
-          </View>
-          <View style={styles.col}>
-            <Text style={globalStyles.text}>To</Text>
-            <TextInput
-              keyboardType={'number-pad'}
-              style={globalStyles.primaryInput}
-              onChangeText={val => {
-                setFilters({
-                  ...filters,
-                  experienceMax: val.length > 0 ? Number(val) : null,
-                });
-              }}
-              value={
-                filters.experienceMax ? filters.experienceMax.toString() : null
-              }
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.btnSection}>
-        <View style={styles.btn}>
-          <PrimaryButton label={'Apply'} onPress={() => apply()} />
-        </View>
-        <PlainButton label={'Reset filters'} onPress={() => resetFilter()} />
-      </View>
-    </ScrollView>
+      </KeyboardAwareScrollView>
+      {!focused && (
+        <LinearGradient
+          colors={[
+            'rgba(255, 255, 255, 0)',
+            'rgba(255, 255, 255, 0.9)',
+            'rgba(255, 255, 255, 0.9)',
+            'rgba(255, 255, 255, 1)',
+          ]}
+          style={styles.btnSection}>
+          <GradientButton
+            style={styles.btn}
+            label={'Применить фильтр'}
+            onPress={() => apply()}
+          />
+        </LinearGradient>
+      )}
+    </SafeAreaView>
   );
 };
 
+const width = dimensions.width;
+
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-  },
-  row: {
-    marginRight: -5,
-    marginLeft: -5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  col: {
-    marginLeft: 5,
-    marginRight: 5,
-    flex: 1,
+    marginBottom: 88,
   },
   btnSection: {
-    marginBottom: 42,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    alignItems: 'center',
+    zIndex: 3,
   },
-  btn: {
-    marginBottom: 16,
+  resetBtn: {
+    alignSelf: 'flex-end',
+  },
+  wrapperRadio: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  radioBtn1: {
+    width: width - 40,
+  },
+  radioBtn2: {
+    width: width * 0.5 - 20,
+  },
+  wrapperInputs: {
+    marginLeft: -20,
+    paddingLeft: 40,
+    width: width + 20,
+    flexDirection: 'row',
+  },
+  numberInput: {
+    marginRight: 20,
+    width: width * 0.5 - 30,
   },
 });

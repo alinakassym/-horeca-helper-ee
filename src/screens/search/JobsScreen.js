@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  ScrollView,
-  View,
-  Text,
   ActivityIndicator,
-  StyleSheet,
   SafeAreaView,
+  ScrollView,
+  Text,
+  View,
 } from 'react-native';
 
 // styles
@@ -32,20 +31,20 @@ import {searchJobs} from '../../services/JobsService';
 import {getStats} from '../../services/UtilsService';
 
 export const JobsScreen = ({navigation}) => {
-  const filterState = useSelector(state => state.jobs.filter);
+  const filterState = useSelector(state => {
+    const {jobs} = state;
+    return jobs.filter;
+  });
   const [jobs, setJobs] = useState([]);
   const [visible, setVisible] = useState(false);
   const [stats, setStats] = useState();
   const [loading, setLoading] = useState(true);
 
-  const getData = async () => {
-    return Promise.all([searchJobs(), getStats()]);
-  };
-
   useEffect(() => {
     return navigation.addListener('focus', async () => {
       try {
-        const [jobsData, statsData] = await getData();
+        const jobsData = await searchJobs(filterState);
+        const statsData = await getStats();
         setJobs(jobsData.items);
         setStats(statsData);
         setLoading(false);
@@ -68,7 +67,7 @@ export const JobsScreen = ({navigation}) => {
           </IconButton>
           <IconButton
             onPress={() => {
-              navigation.navigate('JobsFilterScreen');
+              navigation.navigate('JobsFilter');
             }}>
             <IconOptions color={PrimaryColors.element} size={16} />
           </IconButton>
@@ -98,17 +97,10 @@ export const JobsScreen = ({navigation}) => {
             ))}
         </ScrollView>
       ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.text}>No matches found</Text>
+        <View style={globalStyles.fullScreenSection}>
+          <Text style={globalStyles.text}>No matches found</Text>
         </View>
       )}
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'Roboto-Medium',
-    fontSize: 18,
-  },
-});

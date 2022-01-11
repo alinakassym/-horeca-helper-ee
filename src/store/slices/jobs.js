@@ -7,19 +7,13 @@ export const jobsSlice = createSlice({
     sortBy: [
       {
         title: 'Date',
+        title_ru: 'Дате',
         key: 'updatedAt',
       },
       {
         title: 'Relevance',
+        title_ru: 'Актуальности',
         key: 'relevance',
-      },
-      {
-        title: 'Min salary',
-        key: 'salaryMin',
-      },
-      {
-        title: 'Max salary',
-        key: 'salaryMax',
       },
     ],
     filterReset: {
@@ -41,7 +35,11 @@ export const jobsSlice = createSlice({
       salaryMax: null,
       sortBy: 'updatedAt',
       sortOrder: 'DESC',
-      orderBy: null,
+      orderBy: {
+        title: 'Date',
+        title_ru: 'Дате',
+        key: 'updatedAt',
+      },
       pageSize: 20,
       pageNum: 1,
     },
@@ -63,7 +61,11 @@ export const jobsSlice = createSlice({
       salaryMin: null,
       salaryMax: null,
       sortBy: 'updatedAt',
-      orderBy: null,
+      orderBy: {
+        title: 'Date',
+        title_ru: 'Дате',
+        key: 'updatedAt',
+      },
       sortOrder: 'DESC',
       pageSize: 20,
       pageNum: 1,
@@ -86,8 +88,14 @@ export const jobsSlice = createSlice({
         experienceMax: action.payload.experienceMax,
         scheduleId: action.payload.schedule?.id,
         schedule: action.payload.schedule,
-        salaryMin: action.payload.salaryMin,
-        salaryMax: action.payload.salaryMax,
+        salaryMin:
+          action.payload.salaryMin && action.payload.salaryMin.length > 0
+            ? Number(action.payload.salaryMin)
+            : null,
+        salaryMax:
+          action.payload.salaryMax && action.payload.salaryMax.length > 0
+            ? Number(action.payload.salaryMax)
+            : null,
         sortBy: action.payload.orderBy
           ? action.payload.orderBy.key
           : 'updatedAt',

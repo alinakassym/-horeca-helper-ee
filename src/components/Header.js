@@ -21,12 +21,22 @@ const propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   style: PropTypes.object,
+  headerStyle: PropTypes.object,
 };
 
 class Header extends React.PureComponent {
   render() {
-    const {onClose, children, goBack, options, modal, title, subtitle, style} =
-      this.props;
+    const {
+      onClose,
+      children,
+      goBack,
+      options,
+      modal,
+      title,
+      subtitle,
+      style,
+      headerStyle,
+    } = this.props;
     return (
       <React.Fragment>
         {goBack ? (
@@ -36,7 +46,8 @@ class Header extends React.PureComponent {
             </View>
             {title ? (
               <View style={styles.header}>
-                <Text style={styles.headerTitle}>{title}</Text>
+                <Text style={[styles.headerTitle, headerStyle]}>{title}</Text>
+                <View style={styles.floatRightBlock}>{children}</View>
               </View>
             ) : (
               <View style={styles.rightCol}>{children}</View>
@@ -103,6 +114,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  floatRightBlock: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   leftCol: {
     width: leftColWidth,

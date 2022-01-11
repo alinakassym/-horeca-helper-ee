@@ -3,7 +3,7 @@ import http from '../http-common';
 export const searchJobs = async data => {
   const r = await http.post('/ee/jobs/search', data);
   // console.log('getJobs result: ', r.data)
-  return r;
+  return r.data;
 };
 
 export const getJobById = async id => {

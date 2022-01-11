@@ -139,26 +139,23 @@ export const Navigator = () => {
           console.log('blur: ', e);
         },
       }}>
-      <Stack.Group
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Tabs" component={TabStack} />
+      <Stack.Group>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Tabs"
+          component={TabStack}
+        />
       </Stack.Group>
 
       {/*JOBS SCREENS*/}
       <Stack.Group>
         <Stack.Screen
-          options={{
-            headerTitle: 'Filters',
-          }}
-          name="JobsFilterScreen"
+          options={{headerShown: false}}
+          name="JobsFilter"
           component={JobsFilterScreen}
         />
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="Job"
           component={JobScreen}
         />
@@ -167,9 +164,7 @@ export const Navigator = () => {
       {/*MESSAGES SCREENS*/}
       <Stack.Group>
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="MessagesChatScreen"
           component={MessagesChatScreen}
         />
@@ -178,9 +173,7 @@ export const Navigator = () => {
       {/*COMPANY SCREENS*/}
       <Stack.Group>
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="CompanyReview"
           component={CompanyReviewScreen}
         />
@@ -189,16 +182,12 @@ export const Navigator = () => {
       {/*PROFILE SCREENS*/}
       <Stack.Group>
         <Stack.Screen
-          options={{
-            headerTitle: 'Profile',
-          }}
+          options={{headerShown: false}}
           name="ProfileEditScreen"
           component={ProfileEditScreen}
         />
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="AddWork"
           component={AddWorkScreen}
         />
@@ -210,23 +199,17 @@ export const Navigator = () => {
           component={ProfileWorkScreen}
         />
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="EditWorkScreen"
           component={EditWorkScreen}
         />
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="MyCV"
           component={MyCVScreen}
         />
         <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
           name="MyExperience"
           component={MyExperienceScreen}
         />

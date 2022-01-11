@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Pressable, View, Text, StyleSheet} from 'react-native';
+import {Pressable, View, Text, StyleSheet, Dimensions} from 'react-native';
 
 // styles
 import {PrimaryColors} from '../styles/colors';
@@ -11,7 +11,10 @@ import {IconExpandUp} from '../assets/icons/main/IconExpandUp';
 
 const propTypes = {
   items: PropTypes.array,
+  expandedBlockStyle: PropTypes.object,
 };
+
+const dimensions = Dimensions.get('screen');
 
 class ExpansionPanel extends React.PureComponent {
   constructor() {
@@ -22,7 +25,7 @@ class ExpansionPanel extends React.PureComponent {
   }
 
   render() {
-    const {items} = this.props;
+    const {items, expandedBlockStyle, children} = this.props;
     const {currentItem} = this.state;
     return (
       <React.Fragment>
@@ -44,8 +47,13 @@ class ExpansionPanel extends React.PureComponent {
                 <IconExpandDown size={16} color={PrimaryColors.element} />
               )}
             </Pressable>
-            {index === currentItem && (
+            {index === currentItem && item.body && (
               <Text style={styles.body}>{item.body}</Text>
+            )}
+            {index === currentItem && (
+              <View style={[styles.expandedBlock, expandedBlockStyle]}>
+                {children}
+              </View>
             )}
             {index < items.length && <View style={styles.divider} />}
           </React.Fragment>
@@ -79,6 +87,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16,
     color: PrimaryColors.element,
+    backgroundColor: PrimaryColors.white,
+  },
+  expandedBlock: {
+    width: dimensions.width,
+    paddingHorizontal: 20,
     backgroundColor: PrimaryColors.white,
   },
 });

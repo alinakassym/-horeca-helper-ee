@@ -63,7 +63,7 @@ export const JobCard = ({item, onPress}) => {
             <View style={[styles.row, styles.alignCenter]}>
               <IconAddress color={PrimaryColors.grey1} size={16} />
               <Text numberOfLines={1} style={[styles.text, styles.ml]}>
-                {item.company.address}
+                {item?.city?.title_ru}
               </Text>
             </View>
           </View>

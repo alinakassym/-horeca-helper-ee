@@ -7,24 +7,21 @@ const propTypes = {
   label: PropTypes.string,
   onPress: PropTypes.func,
   color: PropTypes.string,
-  style: PropTypes.object,
-  labelStyle: PropTypes.object,
+  btnStyle: PropTypes.object,
 };
 
 class PlainButton extends React.PureComponent {
   render() {
-    const {label, color, onPress, style, labelStyle} = this.props;
+    const {label, color, onPress, btnStyle} = this.props;
     const children = this.props.children;
     const btnColor = color ? color : PrimaryColors.brand;
     return (
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={onPress}
-        style={[styles.btn, style]}>
+        style={[styles.btn, btnStyle]}>
         {children}
-        <Text style={[styles.btnLabel, labelStyle, {color: btnColor}]}>
-          {label}
-        </Text>
+        <Text style={[styles.btnLabel, {color: btnColor}]}>{label}</Text>
       </TouchableOpacity>
     );
   }
@@ -46,5 +43,4 @@ const styles = StyleSheet.create({
 });
 
 PlainButton.propTypes = propTypes;
-
 export default PlainButton;
