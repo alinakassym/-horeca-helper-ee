@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {globalStyles} from '../styles/globalStyles';
 import {PrimaryColors} from '../styles/colors';
-import PropTypes from 'prop-types';
 
 const propTypes = {
   label: PropTypes.string,
@@ -48,7 +48,7 @@ class MultilineInput extends React.PureComponent {
           multiline={true}
           value={value}
           onContentSizeChange={event => {
-            setHeight(event.nativeEvent.contentSize.height);
+            setHeight(event.nativeEvent.contentSize.height - 10);
           }}
           onFocus={() => {
             this.setState({...this.state, focused: true});
@@ -63,7 +63,7 @@ class MultilineInput extends React.PureComponent {
             globalStyles.inputText,
             styles.borderBottom,
             {
-              height: Math.max(32, height),
+              height: Math.max(40, height),
               borderBottomColor: focused
                 ? PrimaryColors.brand
                 : !focused && !!value
@@ -79,7 +79,7 @@ class MultilineInput extends React.PureComponent {
 
 const styles = StyleSheet.create({
   inputSection: {
-    minHeight: 32,
+    minHeight: 40,
   },
   borderBottom: {
     borderBottomWidth: 1.5,

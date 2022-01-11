@@ -46,6 +46,9 @@ export const JobScreen = ({route, navigation}) => {
 
     await postJobApply(id, data);
     setVisible(false);
+
+    const chatLookup = await getChatsLookup(job?.company?.id);
+    setChatId(chatLookup);
   };
 
   const isValid = () => {
@@ -127,7 +130,7 @@ export const JobScreen = ({route, navigation}) => {
             </View>
             <View style={styles.rightCol}>
               <PrimaryButton
-                label={'Перейти в чат'}
+                label={'Чат'}
                 color={PrimaryColors.element}
                 onPress={() =>
                   navigation.navigate('MessagesChatScreen', {

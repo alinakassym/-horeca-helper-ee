@@ -11,8 +11,8 @@ import Header from '../../components/Header';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import MultilineInput from '../../components/MultilineInput';
 import LinearGradient from 'react-native-linear-gradient';
+import Autocomplete from '../../components/selects/Autocomplete';
 import {DateSelect} from '../../components/selects/DateSelect';
-import {Autocomplete} from '../../components/selects/Autocomplete';
 
 // services
 import {postWork} from '../../services/EmployeesService';
@@ -91,56 +91,38 @@ export const AddWorkScreen = ({navigation}) => {
         style={globalStyles.section}
         enableResetScrollToCoords={false}>
         <Autocomplete
-          onCloseModal={() => navigation.goBack()}
           label={'Город'}
-          onChangeText={val => {
-            setWork({...work, city: val});
-          }}
-          value={work}
-          valueKey={'city'}
+          value={work.city}
           items={cities}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title_ru'}
+          onSelect={val => setWork({...work, city: val})}
+          onClear={() => setWork({...work, city: null})}
         />
 
         <Autocomplete
           label={'Название компании'}
-          onChangeText={val => {
-            setWork({...work, company: val});
-          }}
-          value={work}
-          valueKey={'company'}
+          value={work.company}
           items={companies}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title'}
+          onSelect={val => setWork({...work, company: val})}
+          onClear={() => setWork({...work, company: null})}
         />
 
         <Autocomplete
           label={'Должность'}
-          onChangeText={val => {
-            setWork({...work, position: val});
-          }}
-          value={work}
-          valueKey={'position'}
+          value={work.position}
           items={positions}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title_ru'}
+          onSelect={val => setWork({...work, position: val})}
+          onClear={() => setWork({...work, position: null})}
         />
 
-        <DateSelect
-          label={'Дата начала'}
-          value={work}
-          valueKey={'startDate'}
-          required={true}
-          androidVariant="nativeAndroid"
-        />
+        <DateSelect label={'Дата начала'} value={work} valueKey={'startDate'} />
         <DateSelect
           label={'Дата окончания'}
           value={work}
           valueKey={'endDate'}
           minimumDate={new Date(work.startDate)}
-          required={true}
-          androidVariant="nativeAndroid"
         />
 
         <MultilineInput
