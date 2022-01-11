@@ -76,7 +76,12 @@ export const MyExperienceScreen = ({navigation}) => {
               }}
               labelStyle={globalStyles.ml3}
               label={'Добавить опыт работы'}>
-              <IconAdd color={PrimaryColors.brand} size={16} width={2} />
+              <IconAdd
+                style={globalStyles.mr3}
+                color={PrimaryColors.brand}
+                size={16}
+                width={2}
+              />
             </PlainButton>
           </TouchableOpacity>
         </>

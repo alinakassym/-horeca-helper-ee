@@ -221,7 +221,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
           items={cities}
           itemKey={'title_ru'}
           onSelect={val => setMe({...me, city: val})}
-          onClear={val => setMe({...me, city: null})}
+          onClear={() => setMe({...me, city: null})}
           validIcon={<IconLocation size={16} color={PrimaryColors.brand} />}
         />
 
