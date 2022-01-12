@@ -21,6 +21,7 @@ const propTypes = {
   onBlur: PropTypes.func,
   validIcon: PropTypes.object,
   keyboardType: PropTypes.string,
+  secureTextEntry: PropTypes.bool,
 };
 
 class Input extends React.PureComponent {
@@ -34,12 +35,14 @@ class Input extends React.PureComponent {
     const {
       label,
       value,
+      onEndEditing,
       onChangeText,
       onFocus,
       onBlur,
       onClear,
       validIcon,
       keyboardType,
+      secureTextEntry,
     } = this.props;
     const {focused} = this.state;
     const inputType = keyboardType ? keyboardType : 'default';
@@ -50,6 +53,7 @@ class Input extends React.PureComponent {
           {((!!label && focused) || (!!label && !!value)) && `${label}`}
         </Text>
         <TextInput
+          secureTextEntry={secureTextEntry}
           keyboardType={inputType}
           value={value}
           style={[
@@ -75,7 +79,10 @@ class Input extends React.PureComponent {
             }
             this.setState({...this.state, focused: true});
           }}
-          onEndEditing={() => this.setState({...this.state, focused: false})}
+          onEndEditing={e => {
+            !!onEndEditing && onEndEditing(e);
+            this.setState({...this.state, focused: false});
+          }}
         />
 
         {!!value && value.length > 0 && (

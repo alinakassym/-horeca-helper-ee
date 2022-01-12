@@ -25,6 +25,7 @@ import {
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {setToken} from './src/store/slices/auth';
+import {globalStyles} from './src/styles/globalStyles';
 
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -112,7 +113,11 @@ const App = () => {
       },
       signOut: async () => {
         try {
-          await GoogleSignin.signOut();
+          const isSignedIn = await GoogleSignin.isSignedIn();
+          if (isSignedIn) {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+          }
           await AsyncStorage.removeItem('hhToken');
         } catch (e) {
           console.log('signOut err:', e);
@@ -121,10 +126,10 @@ const App = () => {
       },
       signUp: () => {},
       toggleTheme: () => {
-        setIsDarkTheme(isDarkTheme => !isDarkTheme);
+        setIsDarkTheme(!isDarkTheme);
       },
     }),
-    [],
+    [isDarkTheme],
   );
 
   useEffect(() => {
@@ -145,7 +150,7 @@ const App = () => {
 
   if (loginState.isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={globalStyles.fullScreenSection}>
         <ActivityIndicator size="large" />
       </View>
     );

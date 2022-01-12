@@ -1,33 +1,28 @@
 import React from 'react';
 import {
-  TextInput,
-  View,
-  ScrollView,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   Alert,
+  View,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
-import Users from '../model/users';
-import {AuthContext} from '../store/context';
+
+// styles
+import {globalStyles} from '../styles/globalStyles';
+import {typography} from '../styles/typography';
+
+// components
+import Header from '../components/Header';
+import Input from '../components/Input';
+import GradientButton from '../components/buttons/GradientButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+// store
+import Users from '../model/users';
+import {AuthContext} from '../store/context';
 
-import {getHhToken} from '../services/AuthService';
-
-GoogleSignin.configure({
-  // webClientId is taken from android/app/google-services.json
-  webClientId:
-    '929223236001-cn8ig9bh06moiafbop0t48afcrnraej3.apps.googleusercontent.com',
-  offlineAccess: true,
-});
-
-export const SignInScreen = () => {
+export const SignInScreen = ({navigation}) => {
   const [data, setData] = React.useState({
     username: '',
     password: '',
@@ -46,56 +41,6 @@ export const SignInScreen = () => {
       await AsyncStorage.setItem('userInfo', JSON.stringify(item));
     } catch (error) {
       // Error saving data
-    }
-  };
-
-  const googleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setData({
-        ...data,
-        userGoogleInfo: userInfo,
-        loaded: true,
-      });
-
-      console.log('SignInScreen googleToken:', userInfo.idToken);
-      console.log('SignInScreen userInfo:', userInfo);
-
-      if (userInfo.idToken) {
-        getHhToken(userInfo.idToken)
-          .then(async authData => {
-            console.log('SignInScreen authData:', authData);
-            const foundUser = [
-              {
-                email: userInfo.user.email,
-                id: userInfo.user.id,
-                password: userInfo.user.id,
-                userToken: userInfo.idToken,
-                hhToken: authData.hhToken,
-                username: userInfo.user.email,
-                photoUrl: userInfo.user.photoUrl,
-              },
-            ];
-
-            await storeData(foundUser[0]);
-            signIn(foundUser);
-          })
-          .catch(e => {
-            console.log('SignInScreen', e);
-          });
-      }
-    } catch (error) {
-      console.log(error);
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
-      }
     }
   };
 
@@ -174,161 +119,40 @@ export const SignInScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.card}>
-        <View>
-          <View style={styles.cardBottomInnerBox}>
-            <View style={styles.action}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Email/Phone number"
-                placeholderTextColor="#767676"
-                autoCapitalize="none"
-                onChangeText={val => textInputChange(val)}
-                onEndEditing={e => handleValidUser(e.nativeEvent.text)}
-              />
-            </View>
-            <View style={styles.action}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Password"
-                placeholderTextColor="#767676"
-                secureTextEntry={!!data.secureTextEntry}
-                autoCapitalize="none"
-                onChangeText={val => handlePasswordChange(val)}
-              />
-            </View>
-            <View style={styles.action}>
-              <TouchableOpacity style={styles.btnRow}>
-                <Text style={styles.textBtn}>Forgot your password?</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              style={styles.action}
-              onPress={() => {
-                loginHandle(data.username, data.password);
-              }}>
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>Sign in</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.action}>
-              <View style={styles.buttonPlain}>
-                <Text style={styles.buttonPlainText}>Create Account</Text>
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.socialsBlock}>
-              <View>
-                <GoogleSigninButton
-                  style={styles.googleBtn}
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Dark}
-                  onPress={googleSignIn}
-                />
-              </View>
-            </View>
+    <SafeAreaView style={globalStyles.rootStackContainer}>
+      <Header goBack onClose={() => navigation.goBack()} />
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView>
+          <View style={globalStyles.section}>
+            <Text style={[typography.h1, globalStyles.mt6]}>
+              Вход и регистрация
+            </Text>
+            <Text style={[typography.text, globalStyles.mt3, globalStyles.mb6]}>
+              Введите логин и пароль чтобы войти
+            </Text>
+            <Input
+              value={data.username}
+              label={'Логин'}
+              onChangeText={val => textInputChange(val)}
+              onEndEditing={e => handleValidUser(e.nativeEvent.text)}
+            />
+            <Input
+              value={data.password}
+              label={'Пароль'}
+              secureTextEntry
+              onChangeText={val => handlePasswordChange(val)}
+            />
           </View>
+        </ScrollView>
+        <View style={globalStyles.section}>
+          <GradientButton
+            label={'Войти'}
+            onPress={() => {
+              loginHandle(data.username, data.password);
+            }}
+          />
         </View>
-      </View>
-    </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-    backgroundColor: '#FBFBFB',
-  },
-  socialIcon: {
-    marginHorizontal: 40,
-  },
-  card: {
-    display: 'flex',
-    paddingTop: '30%',
-    paddingHorizontal: 40,
-  },
-  cardBottomInnerBox: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  action: {
-    marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  inputText: {
-    flex: 1,
-    height: 56,
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    fontSize: 14,
-    backgroundColor: '#F3F3F3',
-    color: '#000000',
-  },
-  btnRow: {flex: 1, paddingHorizontal: 4},
-  button: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 56,
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    fontSize: 14,
-    backgroundColor: '#185AB7',
-  },
-  buttonPlain: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 56,
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    fontSize: 14,
-  },
-  buttonText: {
-    fontFamily: 'Roboto-Medium',
-    color: '#FFFFFF',
-    textTransform: 'uppercase',
-  },
-  buttonPlainText: {
-    fontFamily: 'Roboto-Medium',
-    color: '#185AB7',
-    textTransform: 'uppercase',
-  },
-  textBtn: {
-    fontFamily: 'Roboto-Medium',
-    textAlign: 'right',
-    color: '#185AB7',
-  },
-  shadow: {
-    shadowColor: '#777777',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-  },
-  cardRow: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  socialsBlock: {
-    display: 'flex',
-    flex: 1,
-    marginTop: 20,
-    marginBottom: 40,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  googleBtn: {
-    width: 280,
-    height: 48,
-  },
-});

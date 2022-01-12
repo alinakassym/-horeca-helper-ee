@@ -1,16 +1,16 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from 'react';
+import Svg, {Path} from 'react-native-svg';
 
-export const IconGoogle = ({color, size}) => {
+export const IconGoogle = ({style, color, size}) => {
   return (
     <Svg
-      width={size || 32}
-      height={size || 32}
-      viewBox="0 0 32 32"
-      fill="none"
-    >
+      style={style}
+      width={size || 24}
+      height={size || 24}
+      viewBox="0 0 24 24"
+      fill="none">
       <Path
-        d="M15.941 13.808v4.601h6.39c-.595 2.924-3.084 4.604-6.39 4.604a7.04 7.04 0 010-14.078 6.888 6.888 0 014.387 1.57l3.467-3.466a11.905 11.905 0 10-7.854 20.846c5.956 0 11.372-4.332 11.372-11.912a9.951 9.951 0 00-.266-2.166l-11.106.001z"
+        d="M12.205 11.238v3.82h5.55c-.725 2.317-2.697 3.973-5.55 3.973-3.4 0-6.157-2.699-6.157-6.031s2.758-6.031 6.157-6.031c1.526 0 2.92.547 3.996 1.453l2.873-2.817A10.29 10.29 0 0 0 12.204 3C6.567 3 2 7.477 2 13s4.566 10 10.205 10c8.563 0 10.451-7.852 9.615-11.746l-9.615-.016Z"
         fill={color || '#767676'}
       />
     </Svg>
