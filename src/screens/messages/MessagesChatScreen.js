@@ -1,23 +1,31 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
-  Dimensions,
   Image,
   TextInput,
   ActivityIndicator,
   SafeAreaView,
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
-import {getChatById, postMessage} from '../../services/ChatService';
-import {MessageBubble} from './components/MessageBubble';
+import {PrimaryColors} from '../../styles/colors';
+
+// components
+import Header from '../../components/Header';
 import SendButton from '../../components/buttons/SendButton';
+import ActivePoint from '../../components/ActivePoint';
+import {MessageBubble} from './components/MessageBubble';
 import lodash from 'lodash';
 import moment from 'moment';
-import {PrimaryColors} from '../../styles/colors';
-import Header from '../../components/Header';
+
+// services
+import {getCompanyStatus} from '../../services/CompaniesService';
+import {getChatById, postMessage} from '../../services/ChatService';
 
 const dimensions = Dimensions.get('screen');
 
@@ -25,9 +33,9 @@ export const MessagesChatScreen = ({route, navigation}) => {
   const scrollViewRef = useRef();
   const [company, setCompany] = useState({
     photoUrl: null,
-    firstName: '',
-    lastName: '',
+    title: '',
   });
+  const [status, setStatus] = useState();
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [groupNames, setGroupNames] = useState([]);
@@ -75,6 +83,13 @@ export const MessagesChatScreen = ({route, navigation}) => {
     });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const refresh = useCallback(async () => {
+    setTimeout(refresh, 60000);
+    const statusData = await getCompanyStatus(route.params?.company?.id);
+    setStatus(statusData?.isActive);
+  });
+
   useEffect(() => {
     return navigation.addListener('focus', async () => {
       try {
@@ -83,12 +98,15 @@ export const MessagesChatScreen = ({route, navigation}) => {
         setMessages(groups);
 
         setCompany(route.params?.company);
+        setStatus(route.params?.company.isActive);
         setLoading(false);
+
+        setTimeout(refresh, 60000);
       } catch (e) {
         console.error('MessagesChatScreen err: ', e);
       }
     });
-  }, [fetchData, navigation, route]);
+  }, [fetchData, navigation, refresh, route]);
 
   const Group = ({item}) => {
     return (
@@ -122,6 +140,7 @@ export const MessagesChatScreen = ({route, navigation}) => {
         <>
           <View style={styles.imageWrapper}>
             <Image style={styles.img} source={{uri: company.photoUrl}} />
+            {status && <ActivePoint style={styles.isActive} />}
           </View>
           <View>
             <Text style={styles.userName} numberOfLines={1}>
@@ -193,6 +212,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   imageWrapper: {
+    position: 'relative',
     marginLeft: 16,
     marginRight: 12,
     height: imageSize,
@@ -200,11 +220,16 @@ const styles = StyleSheet.create({
     borderRadius: imageSize,
     borderWidth: 0.7,
     borderColor: PrimaryColors.grey3,
-    overflow: 'hidden',
   },
   img: {
     height: '100%',
     width: '100%',
+    borderRadius: imageSize,
+  },
+  isActive: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
   },
   userName: {
     width: rightColWidth - imageSize - 16,
