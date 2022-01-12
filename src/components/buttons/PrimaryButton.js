@@ -35,7 +35,7 @@ class PrimaryButton extends React.PureComponent {
 const styles = StyleSheet.create({
   btn: {
     paddingVertical: 15,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

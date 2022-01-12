@@ -31,7 +31,8 @@ class OutlineButton extends React.PureComponent {
 
 const styles = StyleSheet.create({
   btn: {
-    padding: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

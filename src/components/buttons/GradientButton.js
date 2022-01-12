@@ -32,7 +32,7 @@ class GradientButton extends React.PureComponent {
 const styles = StyleSheet.create({
   btn: {
     paddingVertical: 14,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     borderRadius: 8,
   },
   btnLabel: {
