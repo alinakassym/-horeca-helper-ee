@@ -73,7 +73,9 @@ export const JobCard = ({item, onPress}) => {
 
             {/*TODO: if isConfirmed show the icon*/}
             <View style={styles.iconChecked}>
-              <IconChecked size={24} />
+              {item.company.verificationStatus === 'VERIFIED' && (
+                <IconChecked size={24} />
+              )}
             </View>
           </View>
         </View>
