@@ -60,7 +60,7 @@ export const MyCVScreen = ({route, navigation}) => {
         <ModalButton label={'Удалить'} labelColor={StatusesColors.red} />
       </BottomModal>
       <CVCard
-        position={me.position.title_ru}
+        position={me.position?.title_ru}
         salary={me.salary}
         updatedAt={me.updatedAt}
         onPress={() => {

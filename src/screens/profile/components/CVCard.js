@@ -49,10 +49,15 @@ class CVCard extends React.PureComponent {
                   globalStyles.alignCenter,
                   globalStyles.mb1,
                 ]}>
-                <Text style={styles.positionTitle}>{position}</Text>
+                <Text style={styles.positionTitle}>
+                  {position || 'Позиция не указана'}
+                </Text>
+
                 <ActivePoint style={globalStyles.ml2} />
               </View>
-              <Text style={styles.salary}>{numberWithSpaces(salary)} ₸</Text>
+              <Text style={styles.salary}>
+                {salary ? `${numberWithSpaces(salary)} ₸` : ''}
+              </Text>
             </View>
             <IconButton onPress={onPress}>
               <IconDots />
