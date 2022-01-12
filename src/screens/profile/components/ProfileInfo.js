@@ -73,7 +73,7 @@ class ProfileInfo extends React.PureComponent {
 }
 
 const width = dimensions.width;
-const leftColWidth = dimensions.width * 0.17;
+const leftColWidth = dimensions.width * 0.2;
 const padding = 20;
 
 const styles = StyleSheet.create({
