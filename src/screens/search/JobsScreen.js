@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
 
 // styles
 import {globalStyles} from '../../styles/globalStyles';
@@ -17,17 +11,19 @@ import {IconOptions} from '../../assets/icons/main/IconOptions';
 
 // components
 import Header from '../../components/Header';
-import {JobCard} from './components/JobCard';
+import JobCard from './components/JobCard';
 import UsersInfo from './components/UsersInfo';
 import IconButton from '../../components/buttons/IconButton';
-import BottomModal from '../../components/BottomModal';
+import BottomModalComponent from '../../components/BottomModal';
 import StatCard from './components/StatCard';
+import {BottomModal} from './components/BottomModal';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // store
 import {useSelector} from 'react-redux';
 
 // services
-import {searchJobs} from '../../services/JobsService';
+import {postJobApply, searchJobs} from '../../services/JobsService';
 import {getStats} from '../../services/UtilsService';
 
 export const JobsScreen = ({navigation}) => {
@@ -36,9 +32,31 @@ export const JobsScreen = ({navigation}) => {
     return jobs.filter;
   });
   const [jobs, setJobs] = useState([]);
+  const [jobId, setJobId] = useState();
   const [visible, setVisible] = useState(false);
+  const [visibleApply, setVisibleApply] = useState(false);
   const [stats, setStats] = useState();
+  const [applyMessage, setApplyMessage] = useState();
   const [loading, setLoading] = useState(true);
+
+  const sendApply = async () => {
+    const data = {
+      body: applyMessage,
+    };
+
+    console.log({
+      id: jobId,
+      data: data,
+    });
+
+    await postJobApply(jobId, data);
+    setApplyMessage('');
+    setVisibleApply(false);
+  };
+
+  const isValid = () => {
+    return applyMessage && applyMessage.length > 0;
+  };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -73,21 +91,34 @@ export const JobsScreen = ({navigation}) => {
           </IconButton>
         </React.Fragment>
       </Header>
-      <BottomModal
+      <BottomModalComponent
         onCancel={() => setVisible(false)}
         visible={visible}
         title={'Полезная информация'}>
         <StatCard numUsers={stats?.numCompanies} numJobs={stats?.numJobs} />
-      </BottomModal>
+      </BottomModalComponent>
+
+      <BottomModal
+        visible={visibleApply}
+        onClose={() => setVisibleApply(false)}
+        text={applyMessage}
+        onSend={() => sendApply()}
+        isValid={isValid()}
+        onChangeText={val => setApplyMessage(val)}
+      />
       {loading ? (
         <View style={globalStyles.fullScreenSection}>
           <ActivityIndicator size={'large'} />
         </View>
       ) : jobs.length > 0 ? (
-        <ScrollView>
+        <KeyboardAwareScrollView enableResetScrollToCoords={false}>
           {jobs &&
             jobs.map((item, index) => (
               <JobCard
+                onSendApply={val => {
+                  setJobId(val.id);
+                  setVisibleApply(true);
+                }}
                 onPress={() => {
                   navigation.navigate('Job', {job: item});
                 }}
@@ -95,7 +126,7 @@ export const JobsScreen = ({navigation}) => {
                 item={item}
               />
             ))}
-        </ScrollView>
+        </KeyboardAwareScrollView>
       ) : (
         <View style={globalStyles.fullScreenSection}>
           <Text style={globalStyles.text}>No matches found</Text>

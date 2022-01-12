@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   View,
+  Image,
   Pressable,
   StyleSheet,
-  Image,
   Dimensions,
 } from 'react-native';
 
@@ -31,89 +32,110 @@ import {numberWithSpaces} from '../../../utils/common';
 
 const dimensions = Dimensions.get('screen');
 
-export const JobCard = ({item, onPress}) => {
-  const getSalary = (salaryMin, salaryMax) => {
-    if (salaryMin && salaryMax) {
-      return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(salaryMax)}`;
-    } else if (salaryMin) {
-      return `от ${numberWithSpaces(salaryMin)}`;
-    }
-    return `до ${numberWithSpaces(salaryMax)}`;
-  };
-  return (
-    <React.Fragment>
-      <Pressable style={globalStyles.card} onPress={onPress}>
-        {/* Position title & company name, address, photo */}
-        <View style={[styles.row, styles.mb2]}>
-          <View style={styles.leftCol}>
-            <View style={styles.row}>
-              <Text style={styles.positionTitle}>
-                {item?.position?.title_ru}
-              </Text>
-              <SmallBadge
-                style={styles.smallBadge}
-                text={'TOP'}
-                color={'#9B51E0'}
-              />
-            </View>
-            <View style={[styles.row, styles.alignCenter]}>
-              <IconBuilding color={PrimaryColors.grey1} size={16} />
-              <Text style={[styles.text, styles.ml]}>{item.company.title}</Text>
-            </View>
-            <View style={[styles.row, styles.alignCenter]}>
-              <IconAddress color={PrimaryColors.grey1} size={16} />
-              <Text numberOfLines={1} style={[styles.text, styles.ml]}>
-                {item?.city?.title_ru}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.imageWrapper}>
-            <Image style={styles.image} source={{uri: item.company.photoUrl}} />
-            {item.company.isActive && <ActivePoint style={styles.isActive} />}
-
-            {/*TODO: if isConfirmed show the icon*/}
-            <View style={styles.iconChecked}>
-              {item.company.verificationStatus === 'VERIFIED' && (
-                <IconChecked size={24} />
-              )}
-            </View>
-          </View>
-        </View>
-
-        {/* Salary & company avgAvgScore */}
-        <View
-          style={[
-            styles.row,
-            styles.alignCenter,
-            styles.justifyBetween,
-            styles.mb,
-          ]}>
-          <Text style={styles.salary}>
-            {getSalary(item.salaryMin, item.salaryMax)} ₸
-          </Text>
-          <RatingScale score={Math.ceil(item.company.avgAvgScore)} />
-        </View>
-
-        {/* Description */}
-        <Text style={[styles.text, styles.mb2]}>{item.description}</Text>
-
-        {/* Apply job & save buttons */}
-        <View style={[styles.row]}>
-          <GradientButton style={{width: width - 196}} label={'Откликнуться'} />
-          <OutlineButton
-            style={styles.outlineBtn}
-            labelStyle={styles.outlineBtnLabel}
-            label={'В избранные'}>
-            <IconBookmark width={1.7} size={16} color={PrimaryColors.brand} />
-          </OutlineButton>
-        </View>
-      </Pressable>
-
-      {/* Updated at */}
-      <UpdatedAt date={item.updatedAt} />
-    </React.Fragment>
-  );
+const propTypes = {
+  item: PropTypes.object,
+  onPress: PropTypes.func,
+  onSendApply: PropTypes.func,
 };
+
+class JobCard extends React.PureComponent {
+  render() {
+    const {item, onPress, onSendApply} = this.props;
+    const getSalary = (salaryMin, salaryMax) => {
+      if (salaryMin && salaryMax) {
+        return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(
+          salaryMax,
+        )}`;
+      } else if (salaryMin) {
+        return `от ${numberWithSpaces(salaryMin)}`;
+      }
+      return `до ${numberWithSpaces(salaryMax)}`;
+    };
+    return (
+      <React.Fragment>
+        <Pressable style={globalStyles.card} onPress={onPress}>
+          {/* Position title & company name, address, photo */}
+          <View style={[styles.row, styles.mb2]}>
+            <View style={styles.leftCol}>
+              <View style={styles.row}>
+                <Text style={styles.positionTitle}>
+                  {item?.position?.title_ru}
+                </Text>
+                <SmallBadge
+                  style={styles.smallBadge}
+                  text={'TOP'}
+                  color={'#9B51E0'}
+                />
+              </View>
+              <View style={[styles.row, styles.alignCenter]}>
+                <IconBuilding color={PrimaryColors.grey1} size={16} />
+                <Text style={[styles.text, globalStyles.ml2]}>
+                  {item.company.title}
+                </Text>
+              </View>
+              <View style={[styles.row, styles.alignCenter]}>
+                <IconAddress color={PrimaryColors.grey1} size={16} />
+                <Text numberOfLines={1} style={[styles.text, globalStyles.ml2]}>
+                  {item?.city?.title_ru}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.imageWrapper}>
+              <Image
+                style={styles.image}
+                source={{uri: item.company.photoUrl}}
+              />
+              {item.company.isActive && <ActivePoint style={styles.isActive} />}
+
+              <View style={styles.iconChecked}>
+                {item.company.verificationStatus === 'VERIFIED' && (
+                  <IconChecked size={24} />
+                )}
+              </View>
+            </View>
+          </View>
+
+          {/* Salary & company avgAvgScore */}
+          <View
+            style={[
+              styles.row,
+              styles.alignCenter,
+              styles.justifyBetween,
+              globalStyles.mb3,
+            ]}>
+            <Text style={styles.salary}>
+              {getSalary(item.salaryMin, item.salaryMax)} ₸
+            </Text>
+            <RatingScale score={Math.ceil(item.company.avgAvgScore)} />
+          </View>
+
+          {/* Description */}
+          <Text style={[styles.text, globalStyles.mb6]}>
+            {item.description}
+          </Text>
+
+          {/* Apply job & save buttons */}
+          <View style={[styles.row]}>
+            <GradientButton
+              onPress={() => onSendApply(item)}
+              style={{width: width - 196}}
+              label={'Откликнуться'}
+            />
+            <OutlineButton
+              style={styles.outlineBtn}
+              labelStyle={styles.outlineBtnLabel}
+              label={'В избранные'}>
+              <IconBookmark width={1.7} size={16} color={PrimaryColors.brand} />
+            </OutlineButton>
+          </View>
+        </Pressable>
+
+        {/* Updated at */}
+        <UpdatedAt date={item.updatedAt} />
+      </React.Fragment>
+    );
+  }
+}
 
 const width = dimensions.width;
 const imageSize = 80;
@@ -164,15 +186,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: PrimaryColors.element,
   },
-  ml: {
-    marginLeft: 6,
-  },
-  mb: {
-    marginBottom: 8,
-  },
-  mb2: {
-    marginBottom: 24,
-  },
   salary: {
     fontFamily: 'Inter-Regular',
     fontSize: 20,
@@ -189,3 +202,6 @@ const styles = StyleSheet.create({
   outlineBtn: {marginLeft: 8, width: 148},
   outlineBtnLabel: {marginLeft: 4},
 });
+
+JobCard.propTypes = propTypes;
+export default JobCard;

@@ -35,6 +35,7 @@ export const globalStyles = StyleSheet.create({
     color: PrimaryColors.grey1,
   },
   inputText: {
+    paddingHorizontal: 0,
     marginBottom: 10,
     fontFamily: 'Inter-Regular',
     fontSize: 16,

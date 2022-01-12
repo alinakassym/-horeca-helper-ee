@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
   View,
   Text,
   StyleSheet,
@@ -21,6 +20,7 @@ import {PrimaryColors} from '../../styles/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import GradientButton from '../../components/buttons/GradientButton';
 import {IconMessages} from '../../assets/icons/tabs/IconMessages';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const dimensions = Dimensions.get('screen');
 
@@ -90,7 +90,7 @@ export const JobScreen = ({route, navigation}) => {
         photoUrl={job?.company?.photoUrl}
         title={job?.company?.title}
       />
-      <ScrollView>
+      <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <CompanyInfo
           avgAvgScore={job?.company?.avgAvgScore}
           position={job?.position?.title_ru}
@@ -102,7 +102,7 @@ export const JobScreen = ({route, navigation}) => {
           <Text style={styles.title}>Требования</Text>
           <Text style={styles.text}>{job.description}</Text>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <BottomModal
         visible={visible}
