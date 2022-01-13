@@ -414,6 +414,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 3,
   },
+  btn: {
+    width: width * 0.45,
+    minWidth: 180,
+  },
   resetBtn: {
     alignSelf: 'flex-end',
   },

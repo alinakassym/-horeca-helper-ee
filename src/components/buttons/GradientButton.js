@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   btn: {
     paddingVertical: 14,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   btnLabel: {
     textAlign: 'center',
