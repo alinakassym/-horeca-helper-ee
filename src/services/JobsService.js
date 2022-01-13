@@ -17,3 +17,9 @@ export const postJobApply = async (id, data) => {
   // console.log('postJobApply result: ', r.data)
   return r;
 };
+
+export const postJobStar = async (id, data) => {
+  const r = await http.post(`/ee/jobs/${id}/star`, data);
+  // console.log('postJobStar result: ', r)
+  return r;
+};

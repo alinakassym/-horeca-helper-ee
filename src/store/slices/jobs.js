@@ -33,6 +33,7 @@ export const jobsSlice = createSlice({
       schedule: null,
       salaryMin: null,
       salaryMax: null,
+      isStarred: null,
       sortBy: 'updatedAt',
       sortOrder: 'DESC',
       orderBy: {
@@ -60,6 +61,7 @@ export const jobsSlice = createSlice({
       schedule: null,
       salaryMin: null,
       salaryMax: null,
+      isStarred: null,
       sortBy: 'updatedAt',
       orderBy: {
         title: 'Date',
@@ -96,6 +98,8 @@ export const jobsSlice = createSlice({
           action.payload.salaryMax && action.payload.salaryMax.length > 0
             ? Number(action.payload.salaryMax)
             : null,
+
+        isStarred: action.payload.isStarred,
         sortBy: action.payload.orderBy
           ? action.payload.orderBy.key
           : 'updatedAt',

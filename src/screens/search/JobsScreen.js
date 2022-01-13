@@ -20,13 +20,19 @@ import {BottomModal} from './components/BottomModal';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // store
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // services
-import {postJobApply, searchJobs} from '../../services/JobsService';
+import {
+  postJobApply,
+  postJobStar,
+  searchJobs,
+} from '../../services/JobsService';
 import {getStats} from '../../services/UtilsService';
+import {setFilter} from '../../store/slices/jobs';
 
 export const JobsScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const filterState = useSelector(state => {
     const {jobs} = state;
     return jobs.filter;
@@ -58,8 +64,26 @@ export const JobsScreen = ({navigation}) => {
     return applyMessage && applyMessage.length > 0;
   };
 
+  const setJobStar = async item => {
+    await postJobStar(item.id, {isStarred: !item.isStarred});
+    const jobsData = await searchJobs(filterState);
+    setJobs(jobsData.items);
+  };
+
+  const getStarredJobs = async () => {
+    await dispatch(
+      setFilter({
+        ...filterState,
+        isStarred: filterState.isStarred ? null : true,
+      }),
+    );
+    console.log('isStarred', filterState.isStarred);
+    /*const jobsData = await searchJobs(filterState);
+    setJobs(jobsData.items);*/
+  };
+
   useEffect(() => {
-    return navigation.addListener('focus', async () => {
+    const fetchData = async () => {
       try {
         const jobsData = await searchJobs(filterState);
         const statsData = await getStats();
@@ -69,8 +93,9 @@ export const JobsScreen = ({navigation}) => {
       } catch (e) {
         console.log('searchJobs err:', e);
       }
-    });
-  }, [filterState, navigation]);
+    };
+    fetchData().then();
+  }, [filterState]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -80,8 +105,17 @@ export const JobsScreen = ({navigation}) => {
       />
       <Header options title={'Поиск'} subtitle={'вакансий'}>
         <React.Fragment>
-          <IconButton>
-            <IconBookmark width={1.7} color={PrimaryColors.element} size={16} />
+          <IconButton onPress={() => getStarredJobs()}>
+            <IconBookmark
+              fillColor={
+                filterState.isStarred
+                  ? PrimaryColors.element
+                  : PrimaryColors.white
+              }
+              width={1.7}
+              color={PrimaryColors.element}
+              size={16}
+            />
           </IconButton>
           <IconButton
             onPress={() => {
@@ -124,6 +158,9 @@ export const JobsScreen = ({navigation}) => {
                 }}
                 key={index}
                 item={item}
+                onSelect={() => {
+                  setJobStar(item).then();
+                }}
               />
             ))}
         </KeyboardAwareScrollView>

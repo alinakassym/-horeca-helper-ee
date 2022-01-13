@@ -35,12 +35,13 @@ const dimensions = Dimensions.get('screen');
 const propTypes = {
   item: PropTypes.object,
   onPress: PropTypes.func,
+  onSelect: PropTypes.func,
   onSendApply: PropTypes.func,
 };
 
 class JobCard extends React.PureComponent {
   render() {
-    const {item, onPress, onSendApply} = this.props;
+    const {item, onPress, onSelect, onSendApply} = this.props;
     const getSalary = (salaryMin, salaryMax) => {
       if (salaryMin && salaryMax) {
         return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(
@@ -122,10 +123,18 @@ class JobCard extends React.PureComponent {
               label={'Откликнуться'}
             />
             <OutlineButton
+              onPress={onSelect}
               style={styles.outlineBtn}
               labelStyle={styles.outlineBtnLabel}
-              label={'В избранные'}>
-              <IconBookmark width={1.7} size={16} color={PrimaryColors.brand} />
+              label={item.isStarred ? 'В избранных' : 'В избранные'}>
+              <IconBookmark
+                fillColor={
+                  item.isStarred ? PrimaryColors.brand : PrimaryColors.white
+                }
+                width={1.7}
+                size={16}
+                color={PrimaryColors.brand}
+              />
             </OutlineButton>
           </View>
         </Pressable>
