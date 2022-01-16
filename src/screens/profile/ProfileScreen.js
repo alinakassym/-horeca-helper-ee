@@ -39,7 +39,6 @@ export const ProfileScreen = ({navigation}) => {
     city: null,
     description: '',
   });
-  const [open, setOpen] = useState(false);
 
   // Notification
   const [isNotification, setIsNotification] = useState(false);

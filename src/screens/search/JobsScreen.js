@@ -4,6 +4,7 @@ import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
 // styles
 import {globalStyles} from '../../styles/globalStyles';
 import {PrimaryColors} from '../../styles/colors';
+import {typography} from '../../styles/typography';
 
 // icons
 import {IconBookmark} from '../../assets/icons/main/IconBookmark';
@@ -77,9 +78,6 @@ export const JobsScreen = ({navigation}) => {
         isStarred: filterState.isStarred ? null : true,
       }),
     );
-    console.log('isStarred', filterState.isStarred);
-    /*const jobsData = await searchJobs(filterState);
-    setJobs(jobsData.items);*/
   };
 
   useEffect(() => {
@@ -166,7 +164,7 @@ export const JobsScreen = ({navigation}) => {
         </KeyboardAwareScrollView>
       ) : (
         <View style={globalStyles.fullScreenSection}>
-          <Text style={globalStyles.text}>No matches found</Text>
+          <Text style={typography.text}>Нет подходящих вакансий</Text>
         </View>
       )}
     </SafeAreaView>
