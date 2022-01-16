@@ -4,14 +4,13 @@ import {
   View,
   ScrollView,
   Switch,
-  Modal,
   TouchableOpacity,
   SafeAreaView,
+  Share,
   StyleSheet,
-  Pressable,
+  Platform,
 } from 'react-native';
 import moment from 'moment';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 // styles
 import {globalStyles} from '../../styles/globalStyles';
@@ -20,20 +19,19 @@ import {PrimaryColors, StatusesColors} from '../../styles/colors';
 // icons
 import {IconExpandRight} from '../../assets/icons/main/IconExpandRight';
 import {IconSignOut} from '../../assets/icons/main/IconSignOut';
+import {IconShare} from '../../assets/icons/main/IconShare';
 
 // components
 import {ProfileHeader} from './components/ProfileHeader';
 import ProfileInfo from './components/ProfileInfo';
 import LightGradientButton from '../../components/buttons/LightGradientButton';
+import OutlineButton from '../../components/buttons/OutlineButton';
 
 // store
 import {AuthContext} from '../../store/context';
 
 //services
-import {
-  getEmployee,
-  updateEmployeePhoto,
-} from '../../services/EmployeesService';
+import {getEmployee} from '../../services/EmployeesService';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -50,6 +48,19 @@ export const ProfileScreen = ({navigation}) => {
 
   const getAge = birthDate =>
     birthDate ? moment().diff(birthDate, 'years', false) : null;
+
+  const onShare = async () => {
+    try {
+      await Share.share({
+        message:
+          Platform.OS === 'android'
+            ? 'https://play.google.com/store/apps'
+            : 'https://www.appstore.com',
+      });
+    } catch (error) {
+      console.log('onShare err: ', error.message);
+    }
+  };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -141,7 +152,25 @@ export const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.list, styles.marginBottom]}>
+        <View
+          style={[
+            globalStyles.alignCenter,
+            globalStyles.mt6,
+            globalStyles.mb4,
+          ]}>
+          <OutlineButton
+            onPress={() => onShare()}
+            style={styles.shareButton}
+            label={'Поделиться приложением'}>
+            <IconShare
+              style={globalStyles.mr3}
+              color={PrimaryColors.brand}
+              size={16}
+            />
+          </OutlineButton>
+        </View>
+
+        <View style={[styles.list, globalStyles.mb3]}>
           <TouchableOpacity
             onPress={() => {
               signOut();
@@ -199,24 +228,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.7,
     borderBottomColor: PrimaryColors.grey3,
   },
-  marginBottom: {
-    marginBottom: padding,
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-  },
-  wrap: {
-    padding: 16,
-    width: '80%',
-    borderRadius: 8,
+  shareButton: {
+    paddingVertical: 12,
+    minWidth: '60%',
     backgroundColor: PrimaryColors.white,
-  },
-  item: {
-    padding: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

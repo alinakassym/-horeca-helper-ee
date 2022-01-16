@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {PrimaryColors} from '../../styles/colors';
 
 const propTypes = {
@@ -8,12 +8,11 @@ const propTypes = {
   onPress: PropTypes.func,
   color: PropTypes.string,
   style: PropTypes.object,
-  labelStyle: PropTypes.object,
 };
 
 class OutlineButton extends React.PureComponent {
   render() {
-    const {label, color, onPress, style, labelStyle, children} = this.props;
+    const {label, color, style, onPress, children} = this.props;
     const btnColor = color || PrimaryColors.brand;
     return (
       <TouchableOpacity
@@ -21,9 +20,7 @@ class OutlineButton extends React.PureComponent {
         onPress={onPress}
         style={[styles.btn, style, {borderColor: btnColor}]}>
         {children}
-        <Text style={[styles.btnLabel, labelStyle, {color: btnColor}]}>
-          {label}
-        </Text>
+        <Text style={[styles.btnLabel, {color: btnColor}]}>{label}</Text>
       </TouchableOpacity>
     );
   }
