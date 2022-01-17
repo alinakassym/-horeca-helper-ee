@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
+import {PrimaryColors} from '../../styles/colors';
 
 const propTypes = {
   label: PropTypes.string,
@@ -34,16 +35,17 @@ class LightGradientButton extends React.PureComponent {
 
 const styles = StyleSheet.create({
   btn: {
-    paddingVertical: 14,
-    paddingHorizontal: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 8,
+    minHeight: 48,
     borderRadius: 8,
   },
   btnLabel: {
     textAlign: 'center',
     fontFamily: 'Inter-SemiBold',
     fontSize: 14,
-    lineHeight: 20,
-    color: '#2A8BE4',
+    lineHeight: 16,
+    color: PrimaryColors.brand,
   },
 });
 

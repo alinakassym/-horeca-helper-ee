@@ -29,7 +29,9 @@ class PlainButton extends React.PureComponent {
 
 const styles = StyleSheet.create({
   btn: {
-    padding: 2,
+    paddingVertical: 15,
+    paddingHorizontal: 8,
+    minHeight: 48,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   btnLabel: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 16,
     textAlign: 'center',
   },
 });

@@ -21,7 +21,11 @@ class DisabledButton extends React.PureComponent {
 const styles = StyleSheet.create({
   btn: {
     paddingVertical: 15,
-    paddingHorizontal: 35,
+    paddingHorizontal: 8,
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 12,
     backgroundColor: PrimaryColors.grey3,
   },
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Inter-SemiBold',
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 16,
     color: PrimaryColors.grey1,
   },
 });
