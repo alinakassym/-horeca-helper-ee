@@ -8,7 +8,7 @@ import {PrimaryColors} from '../../styles/colors';
 
 // components
 import Header from '../../components/Header';
-import PrimaryButton from '../../components/buttons/PrimaryButton';
+import GradientButton from '../../components/buttons/GradientButton';
 import MultilineInput from '../../components/MultilineInput';
 import LinearGradient from 'react-native-linear-gradient';
 import Autocomplete from '../../components/selects/Autocomplete';
@@ -146,7 +146,7 @@ export const AddWorkScreen = ({navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btn}>
-          <PrimaryButton label={'Save'} onPress={() => save()} />
+          <GradientButton label={'Сохранить'} onPress={() => save()} />
         </LinearGradient>
       )}
     </SafeAreaView>

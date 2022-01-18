@@ -1,16 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+// styles
 import {globalStyles} from '../../styles/globalStyles';
-import ModalHeader from '../../components/ModalHeader';
 import {PrimaryColors} from '../../styles/colors';
+
+// components
+import Header from '../../components/Header';
 import RatingScale from './components/RatingScale';
 import MultilineInput from '../../components/MultilineInput';
-import {sendCompanyReview} from '../../services/EmployeesService';
 import DisabledButton from '../../components/buttons/DisabledButton';
-import LinearGradient from 'react-native-linear-gradient';
-import lodash from 'lodash';
 import GradientButton from '../../components/buttons/GradientButton';
+import LinearGradient from 'react-native-linear-gradient';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import lodash from 'lodash';
+
+// services
+import {sendCompanyReview} from '../../services/EmployeesService';
 
 export const CompanyReviewScreen = ({route, navigation}) => {
   const workId = route.params.id;
@@ -39,10 +45,12 @@ export const CompanyReviewScreen = ({route, navigation}) => {
   return (
     <SafeAreaView
       style={[globalStyles.container, styles.companyReviewContainer]}>
-      <ModalHeader navigation={navigation} title={'Оценка заведения'} />
-      <KeyboardAwareScrollView
-        style={styles.scrollView}
-        enableResetScrollToCoords={false}>
+      <Header
+        modal
+        onClose={() => navigation.goBack()}
+        title={'Оценка заведения'}
+      />
+      <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <RatingScale
           title={'Добропорядочность руководства'}
           score={review.conditionsScore}
@@ -85,11 +93,11 @@ export const CompanyReviewScreen = ({route, navigation}) => {
         />
 
         <MultilineInput
-          style={styles.multilineInput}
+          style={globalStyles.section}
           label={'Комментарий'}
           value={comment}
           onChangeText={val => setComment(val)}
-          marginBottom={100}
+          marginBottom={isFocused ? 0 : 88}
           onInputFocus={val => {
             setIsFocused(val);
           }}
@@ -98,7 +106,8 @@ export const CompanyReviewScreen = ({route, navigation}) => {
       {!isFocused && !valid && (
         <LinearGradient
           colors={[
-            'rgba(255, 255, 255, 0.2)',
+            'rgba(255, 255, 255, 0)',
+            'rgba(255, 255, 255, 0.9)',
             'rgba(255, 255, 255, 0.9)',
             'rgba(255, 255, 255, 1)',
           ]}
@@ -109,7 +118,8 @@ export const CompanyReviewScreen = ({route, navigation}) => {
       {!isFocused && valid && (
         <LinearGradient
           colors={[
-            'rgba(255, 255, 255, 0.2)',
+            'rgba(255, 255, 255, 0)',
+            'rgba(255, 255, 255, 0.9)',
             'rgba(255, 255, 255, 0.9)',
             'rgba(255, 255, 255, 1)',
           ]}
@@ -135,13 +145,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    height: 108,
+    height: 88,
     zIndex: 3,
-  },
-  multilineInput: {
-    padding: 20,
   },
 });

@@ -21,7 +21,6 @@ import {AddWorkScreen} from '../screens/profile/AddWorkScreen';
 import {EditWorkScreen} from '../screens/profile/EditWorkScreen';
 import {ProfileEditScreen} from '../screens/profile/ProfileEditScreen';
 import {ProfileScreen} from '../screens/profile/ProfileScreen';
-import {ProfileWorkScreen} from '../screens/profile/ProfileWorkScreen';
 import {MyCVScreen} from '../screens/profile/MyCVScreen';
 import {MyExperienceScreen} from '../screens/profile/MyExperienceScreen';
 
@@ -190,13 +189,6 @@ export const Navigator = () => {
           options={{headerShown: false}}
           name="AddWork"
           component={AddWorkScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle: 'Work Information',
-          }}
-          name="ProfileWorkScreen"
-          component={ProfileWorkScreen}
         />
         <Stack.Screen
           options={{headerShown: false}}

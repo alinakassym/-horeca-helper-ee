@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 
 // styles
@@ -52,7 +53,7 @@ export const MyExperienceScreen = ({navigation}) => {
           <ActivityIndicator size="large" />
         </View>
       ) : (
-        <>
+        <ScrollView>
           {works.map((item, index) => (
             <ProfileWorkCard
               key={index}
@@ -69,11 +70,12 @@ export const MyExperienceScreen = ({navigation}) => {
             onPress={() => {
               navigation.navigate('AddWork');
             }}
-            style={globalStyles.card}>
+            style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
             <PlainButton
               onPress={() => {
                 navigation.navigate('AddWork');
               }}
+              btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
               labelStyle={globalStyles.ml3}
               label={'Добавить опыт работы'}>
               <IconAdd
@@ -84,7 +86,7 @@ export const MyExperienceScreen = ({navigation}) => {
               />
             </PlainButton>
           </TouchableOpacity>
-        </>
+        </ScrollView>
       )}
     </SafeAreaView>
   );

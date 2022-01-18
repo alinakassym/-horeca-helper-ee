@@ -8,11 +8,11 @@ import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 // components
 import Header from '../../components/Header';
-import PrimaryButton from '../../components/buttons/PrimaryButton';
-import OutlineButton from '../../components/buttons/OutlineButton';
 import MultilineInput from '../../components/MultilineInput';
 import {DateSelect} from '../../components/selects/DateSelect';
-import {Autocomplete} from '../../components/selects/Autocomplete';
+import Autocomplete from '../../components/selects/Autocomplete';
+import GradientButton from '../../components/buttons/GradientButton';
+import PlainButton from '../../components/buttons/PlainButton';
 import LinearGradient from 'react-native-linear-gradient';
 
 // services
@@ -46,7 +46,7 @@ export const EditWorkScreen = ({route, navigation}) => {
       };
       try {
         await updateWork(data);
-        navigation.navigate('ProfileWorkScreen', {id: work.id});
+        navigation.navigate('MyExperience');
       } catch (e) {
         console.log('updateWork err: ', e);
       }
@@ -106,40 +106,30 @@ export const EditWorkScreen = ({route, navigation}) => {
         style={[globalStyles.section, styles.mb]}
         enableResetScrollToCoords={false}>
         <Autocomplete
-          onCloseModal={() => navigation.goBack()}
           label={'Город'}
-          onChangeText={val => {
-            setWork({...work, city: val});
-          }}
-          value={work}
-          valueKey={'city'}
+          value={work.city}
           items={cities}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title_ru'}
+          onSelect={val => setWork({...work, city: val})}
+          onClear={() => setWork({...work, city: null})}
         />
 
         <Autocomplete
           label={'Название компании'}
-          onChangeText={val => {
-            setWork({...work, company: val});
-          }}
-          value={work}
-          valueKey={'company'}
+          value={work.company}
           items={companies}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title'}
+          onSelect={val => setWork({...work, company: val})}
+          onClear={() => setWork({...work, company: null})}
         />
 
         <Autocomplete
           label={'Должность'}
-          onChangeText={val => {
-            setWork({...work, position: val});
-          }}
-          value={work}
-          valueKey={'position'}
+          value={work.position}
           items={positions}
-          itemTitle={'title'}
-          required={true}
+          itemKey={'title_ru'}
+          onSelect={val => setWork({...work, position: val})}
+          onClear={() => setWork({...work, position: null})}
         />
         <DateSelect
           label={'Дата начала'}
@@ -158,7 +148,7 @@ export const EditWorkScreen = ({route, navigation}) => {
         />
 
         <MultilineInput
-          style={styles.multilineInput}
+          style={globalStyles.mt5}
           label={'Описание'}
           value={work.description}
           onChangeText={val => {
@@ -178,13 +168,13 @@ export const EditWorkScreen = ({route, navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btn}>
-          <PrimaryButton
-            style={globalStyles.mb3}
-            label={'Save'}
+          <GradientButton
+            style={globalStyles.mb4}
+            label={'Сохранить'}
             onPress={() => save()}
           />
-          <OutlineButton
-            label={'Delete work'}
+          <PlainButton
+            label={'Удалить'}
             color={StatusesColors.red}
             onPress={() => confirmDeletion()}
           />
@@ -206,8 +196,5 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 20,
     width: '100%',
-  },
-  multilineInput: {
-    marginTop: 20,
   },
 });
