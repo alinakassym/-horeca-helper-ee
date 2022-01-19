@@ -8,7 +8,6 @@ import {typography} from '../../styles/typography';
 
 // icons
 import {IconBookmark} from '../../assets/icons/main/IconBookmark';
-import {IconOptions} from '../../assets/icons/main/IconOptions';
 
 // components
 import Header from '../../components/Header';
@@ -16,6 +15,7 @@ import JobCard from './components/JobCard';
 import UsersInfo from './components/UsersInfo';
 import IconButton from '../../components/buttons/IconButton';
 import BottomModalComponent from '../../components/BottomModal';
+import OptionsButton from '../../components/buttons/OptionsButton';
 import StatCard from './components/StatCard';
 import {BottomModal} from './components/BottomModal';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -34,9 +34,9 @@ import {setFilter} from '../../store/slices/jobs';
 
 export const JobsScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const filterState = useSelector(state => {
+  const {filter, isFilterApplied} = useSelector(state => {
     const {jobs} = state;
-    return jobs.filter;
+    return jobs;
   });
   const [jobs, setJobs] = useState([]);
   const [jobId, setJobId] = useState();
@@ -67,15 +67,15 @@ export const JobsScreen = ({navigation}) => {
 
   const setJobStar = async item => {
     await postJobStar(item.id, {isStarred: !item.isStarred});
-    const jobsData = await searchJobs(filterState);
+    const jobsData = await searchJobs(filter);
     setJobs(jobsData.items);
   };
 
   const getStarredJobs = async () => {
     await dispatch(
       setFilter({
-        ...filterState,
-        isStarred: filterState.isStarred ? null : true,
+        ...filter,
+        isStarred: filter.isStarred ? null : true,
       }),
     );
   };
@@ -83,7 +83,7 @@ export const JobsScreen = ({navigation}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const jobsData = await searchJobs(filterState);
+        const jobsData = await searchJobs(filter);
         const statsData = await getStats();
         setJobs(jobsData.items);
         setStats(statsData);
@@ -93,7 +93,7 @@ export const JobsScreen = ({navigation}) => {
       }
     };
     fetchData().then();
-  }, [filterState]);
+  }, [filter]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -106,21 +106,19 @@ export const JobsScreen = ({navigation}) => {
           <IconButton onPress={() => getStarredJobs()}>
             <IconBookmark
               fillColor={
-                filterState.isStarred
-                  ? PrimaryColors.element
-                  : PrimaryColors.white
+                filter.isStarred ? PrimaryColors.element : PrimaryColors.white
               }
               width={1.7}
               color={PrimaryColors.element}
               size={16}
             />
           </IconButton>
-          <IconButton
+          <OptionsButton
+            applied={isFilterApplied}
             onPress={() => {
               navigation.navigate('JobsFilter');
-            }}>
-            <IconOptions color={PrimaryColors.element} size={16} />
-          </IconButton>
+            }}
+          />
         </React.Fragment>
       </Header>
       <BottomModalComponent
