@@ -138,7 +138,11 @@ export const JobScreen = ({route, navigation}) => {
                     company: job.company,
                   })
                 }>
-                <IconMessages size={12.67} color={PrimaryColors.white} />
+                <IconMessages
+                  style={globalStyles.mr3}
+                  size={12.67}
+                  color={PrimaryColors.white}
+                />
               </PrimaryButton>
             </View>
           </View>
