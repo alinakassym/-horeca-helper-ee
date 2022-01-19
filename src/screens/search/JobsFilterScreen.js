@@ -58,7 +58,6 @@ export const JobsFilterScreen = ({navigation}) => {
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [listSortBy] = useState(sortBy);
-  const [focused, setFocused] = useState(false);
 
   const apply = async () => {
     console.log({filters});
@@ -137,7 +136,7 @@ export const JobsFilterScreen = ({navigation}) => {
           />
         </View>
 
-        <View style={[globalStyles.mt3, styles.container]}>
+        <View style={[globalStyles.mt3, globalStyles.mb6]}>
           {/*Категория*/}
           <ExpansionPanel
             items={[{title: 'Категория'}]}
@@ -237,36 +236,24 @@ export const JobsFilterScreen = ({navigation}) => {
               validIcon={<></>}
               style={styles.numberInput}
               label={'От'}
-              value={filters.salaryMin}
+              value={filters.salaryMin ? filters.salaryMin.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, salaryMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, salaryMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
               label={'До'}
-              value={filters.salaryMax}
+              value={filters.salaryMax ? filters.salaryMax.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, salaryMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, salaryMax: null});
-              }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
               }}
             />
           </ExpansionPanel>
@@ -279,36 +266,24 @@ export const JobsFilterScreen = ({navigation}) => {
               validIcon={<></>}
               style={styles.numberInput}
               label={'От'}
-              value={filters.ageMin}
+              value={filters.ageMin ? filters.ageMin.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, ageMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, ageMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
               label={'До'}
-              value={filters.ageMax}
+              value={filters.ageMax ? filters.ageMax.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, ageMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, ageMax: null});
-              }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
               }}
             />
           </ExpansionPanel>
@@ -342,57 +317,48 @@ export const JobsFilterScreen = ({navigation}) => {
               validIcon={<></>}
               style={styles.numberInput}
               label={'От'}
-              value={filters.experienceMin}
+              value={
+                filters.experienceMin ? filters.experienceMin.toString() : null
+              }
               onChangeText={val => {
                 setFilters({...filters, experienceMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, experienceMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
               label={'До'}
-              value={filters.experienceMax}
+              value={
+                filters.experienceMax ? filters.experienceMax.toString() : null
+              }
               onChangeText={val => {
                 setFilters({...filters, experienceMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, experienceMax: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
           </ExpansionPanel>
         </View>
       </KeyboardAwareScrollView>
-      {!focused && (
-        <LinearGradient
-          colors={[
-            'rgba(255, 255, 255, 0)',
-            'rgba(255, 255, 255, 0.9)',
-            'rgba(255, 255, 255, 0.9)',
-            'rgba(255, 255, 255, 1)',
-          ]}
-          style={styles.btnSection}>
-          <GradientButton
-            style={styles.btn}
-            label={'Применить фильтр'}
-            onPress={() => apply()}
-          />
-        </LinearGradient>
-      )}
+      <LinearGradient
+        colors={[
+          'rgba(255, 255, 255, 0)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 1)',
+        ]}
+        style={styles.btnSection}>
+        <GradientButton
+          style={styles.btn}
+          label={'Применить фильтр'}
+          onPress={() => apply()}
+        />
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -400,19 +366,13 @@ export const JobsFilterScreen = ({navigation}) => {
 const width = dimensions.width;
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 88,
-  },
   btnSection: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingTop: 20,
+    marginTop: -20,
+    paddingTop: 22,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    height: 90,
     alignItems: 'center',
-    zIndex: 3,
   },
   btn: {
     width: width * 0.45,
