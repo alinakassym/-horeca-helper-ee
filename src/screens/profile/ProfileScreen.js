@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  Switch,
   TouchableOpacity,
   SafeAreaView,
   Share,
@@ -39,11 +38,6 @@ export const ProfileScreen = ({navigation}) => {
     city: null,
     description: '',
   });
-
-  // Notification
-  const [isNotification, setIsNotification] = useState(false);
-  const toggleNotification = () =>
-    setIsNotification(previousNotificationState => !previousNotificationState);
 
   const getAge = birthDate =>
     birthDate ? moment().diff(birthDate, 'years', false) : null;
@@ -132,22 +126,6 @@ export const ProfileScreen = ({navigation}) => {
             style={[styles.listItem]}>
             <Text style={styles.listItemTitle}>Вопросы и ответы</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.list}>
-          <TouchableOpacity style={styles.listItem}>
-            <Text style={styles.listItemTitle}>Уведомления</Text>
-            <Switch
-              trackColor={{
-                false: PrimaryColors.grey3,
-                true: '#5CC689',
-              }}
-              thumbColor={PrimaryColors.white}
-              ios_backgroundColor={PrimaryColors.grey3}
-              onValueChange={toggleNotification}
-              value={isNotification}
-            />
           </TouchableOpacity>
         </View>
 
