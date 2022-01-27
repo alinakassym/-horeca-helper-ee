@@ -7,6 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 // styles
@@ -17,6 +18,7 @@ import {typography} from '../styles/typography';
 // icons
 import WelcomeImage from '../assets/images/WelcomeImage';
 import {IconGoogle} from '../assets/icons/social/IconGoogle';
+import {IconApple} from '../assets/icons/social/IconApple';
 
 // components
 import PrimaryButton from '../components/buttons/PrimaryButton';
@@ -33,6 +35,8 @@ import {AuthContext} from '../store/context';
 // services
 import {getHhToken} from '../services/AuthService';
 
+import i18n from '../assets/i18n/i18n';
+
 GoogleSignin.configure({
   // webClientId is taken from android/app/google-services.json
   webClientId:
@@ -44,6 +48,8 @@ const dimensions = Dimensions.get('screen');
 const width = dimensions.width;
 const imageSize = width > 340 ? 300 : width - 40;
 const paddingTop = width > 340 ? (width - imageSize - 20) / 2 : 20;
+
+const isIOS = Platform.OS === 'ios';
 
 export const WelcomeScreen = ({navigation}) => {
   const {signIn} = React.useContext(AuthContext);
@@ -66,6 +72,8 @@ export const WelcomeScreen = ({navigation}) => {
       // Error saving data
     }
   };
+
+  const onAppleButtonPress = async () => {};
 
   const googleSignIn = async () => {
     try {
@@ -135,24 +143,42 @@ export const WelcomeScreen = ({navigation}) => {
           <View style={styles.section}>
             <WelcomeImage size={imageSize} style={globalStyles.mb5} />
             <Text style={[typography.h1, globalStyles.mb4]}>
-              {'Добро пожаловать\nв Horeca Helper'}
+              {i18n.t('Welcome to\nHoreca Helper')}
             </Text>
             <Text style={[typography.text, globalStyles.mb6]}>
-              Пожалуйста выберите удобный способ для входа или регистрации в
-              приложение
+              {i18n.t(
+                'Please choose a convenient way to enter or register in the application',
+              )}
             </Text>
+
+            {/*Enter with LOGIN & PASSWORD*/}
             <PrimaryButton
               onPress={() => navigation.navigate('SignIn')}
               style={styles.btn}
               color={PrimaryColors.grey4}
               labelStyle={styles.labelStyle}
               labelColor={PrimaryColors.element}
-              label={'Войти по логину'}
+              label={i18n.t('Enter with login')}
             />
+
+            {/*Enter with APPLE*/}
+            {isIOS && (
+              <PrimaryButton
+                onPress={() => onAppleButtonPress()}
+                style={styles.btn}
+                color="#000000"
+                labelStyle={styles.labelStyle}
+                labelColor="#FFFFFF"
+                label={`${i18n.t('Continue with')} Apple`}>
+                <IconApple style={styles.appleButtonIcon} color={'#FFFFFF'} />
+              </PrimaryButton>
+            )}
+
+            {/*Enter with GOOGLE*/}
             <View style={styles.googleButtonWrapper}>
               <IconGoogle style={styles.googleButtonIcon} color={'#FFFFFF'} />
               <Text style={[styles.labelStyle, styles.googleButtonText]}>
-                Продолжить с Google
+                {i18n.t('Continue with')} Google
               </Text>
               <GoogleSigninButton
                 style={styles.googleButton}
@@ -175,6 +201,7 @@ const styles = StyleSheet.create({
     width: imageSize,
   },
   btn: {
+    position: 'relative',
     marginTop: 8,
     paddingVertical: 18,
   },
@@ -195,10 +222,18 @@ const styles = StyleSheet.create({
     left: 16,
     top: 16,
   },
+  appleButtonIcon: {
+    position: 'absolute',
+    left: 16,
+    top: 15,
+  },
   googleButtonText: {
     position: 'absolute',
     top: 18,
     width: '100%',
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 16,
+    lineHeight: 20,
     textAlign: 'center',
     color: '#FFFFFF',
   },

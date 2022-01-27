@@ -1,13 +1,9 @@
 import * as React from 'react';
-import Svg, { Path } from 'react-native-svg';
+import Svg, {Path} from 'react-native-svg';
 
-export const IconAddress = ({color, size, width}) => {
+export const IconAddress = ({color, size}) => {
   return (
-    <Svg
-      width={size || 24}
-      height={size || 24}
-      viewBox="0 0 24 24"
-      fill="none">
+    <Svg width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none">
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

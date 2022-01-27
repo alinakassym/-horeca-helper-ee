@@ -2,7 +2,7 @@
 // to avoid e.g. "unsupported top level event type onGuestureHandlerEvent" crashes
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator, Platform, NativeModules} from 'react-native';
 import {AuthContext} from './src/store/context';
 import {RootStackScreen} from './src/screens/RootStackScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,6 +26,8 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {setToken} from './src/store/slices/auth';
 import {globalStyles} from './src/styles/globalStyles';
+import {setLang} from './src/store/slices/locale';
+import i18n from './src/assets/i18n/i18n';
 
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -137,9 +139,24 @@ const App = () => {
       // setIsLoading(false);
       let hhToken;
       hhToken = null;
+      let locale;
+      let lang = val => val.substring(0, 2);
       try {
         hhToken = await AsyncStorage.getItem('hhToken');
         store.dispatch(setToken(hhToken));
+        locale = await AsyncStorage.getItem('i18n');
+        console.log('Saved locale: ', locale);
+        if (!locale) {
+          locale =
+            Platform.OS === 'android'
+              ? NativeModules.I18nManager.localeIdentifier
+              : NativeModules.SettingsManager.settings.AppleLocale ||
+                NativeModules.SettingsManager.settings.AppleLanguages[0];
+          console.log('Device locale: ', locale);
+          await AsyncStorage.setItem('i18n', locale);
+        }
+        store.dispatch(setLang(lang(locale)));
+        await i18n.changeLanguage(lang(locale) === 'en' ? 'en' : 'ru');
       } catch (e) {
         console.log(e);
       }
