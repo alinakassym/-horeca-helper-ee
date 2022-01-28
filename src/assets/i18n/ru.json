@@ -103,6 +103,10 @@
     "Today": "Сегодня",
     "Rating": "Рейтинг",
     "MyCV": "Мои резюме",
-    "My experience": "Мой опыт работы"
+    "My experience": "Мой опыт работы",
+    "Username must be at least 2 characters": "Имя пользователя может содержать мнимум 2 символа",
+    "First name": "Имя",
+    "Last name": "Фамилия",
+    "Birth date": "Дата рождения"
   }
 }

@@ -37,7 +37,6 @@ import {useSelector} from 'react-redux';
 
 export const ProfileScreen = ({navigation}) => {
   const {locale} = useSelector(state => state);
-  console.log(locale);
   const suffix = locale.suffix;
   const titleKey = `title${suffix}`;
 
