@@ -17,19 +17,24 @@ import {IconTime} from '../../../assets/icons/main/IconTime';
 import LightGradientButton from '../../../components/buttons/LightGradientButton';
 import PrimaryButton from '../../../components/buttons/PrimaryButton';
 
+// locale
+import i18n from '../../../assets/i18n/i18n';
+
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
   item: PropTypes.object,
+  itemKey: PropTypes.string,
+  locale: PropTypes.string,
   edit: PropTypes.func,
   rate: PropTypes.func,
 };
 
 class ProfileWorkCard extends React.PureComponent {
   render() {
-    const {item, edit, rate} = this.props;
+    const {item, itemKey, locale, edit, rate} = this.props;
 
-    moment.locale('ru');
+    moment.locale(locale);
     const formattedDate = date => {
       const fd = moment(date).format('MMMM YYYY');
       return fd.slice(0, 1).toUpperCase() + fd.substr(1, fd.length - 1);
@@ -39,7 +44,7 @@ class ProfileWorkCard extends React.PureComponent {
       <View style={globalStyles.card}>
         <View style={styles.row}>
           <View style={styles.leftCol}>
-            <Text style={styles.positionTitle}>{item.position.title_ru}</Text>
+            <Text style={styles.positionTitle}>{item.position[itemKey]}</Text>
             {item?.company && (
               <View style={[styles.row, styles.marginBottom]}>
                 <IconBuilding
@@ -81,18 +86,18 @@ class ProfileWorkCard extends React.PureComponent {
           <View style={[styles.row, styles.marginTop]}>
             <IconTime color={StatusesColors.orange} size={16} />
             <Text style={styles.statusText}>
-              Ожидайте подтверждение заведения
+              {i18n.t('Wait for confirmation')}
             </Text>
           </View>
         ) : !item.companyReview ? (
           <View style={[styles.row, styles.marginTop]}>
             <View style={styles.leftCol2}>
-              <LightGradientButton onPress={edit} label={'Редактировать'} />
+              <LightGradientButton onPress={edit} label={i18n.t('Edit')} />
             </View>
             <View style={styles.rightCol}>
               <PrimaryButton
                 onPress={rate}
-                label={'Оценить'}
+                label={i18n.t('Rate')}
                 color={StatusesColors.orangeOpacity}
                 labelColor={StatusesColors.orange}
               />
@@ -100,7 +105,7 @@ class ProfileWorkCard extends React.PureComponent {
           </View>
         ) : (
           <View style={styles.marginTop}>
-            <LightGradientButton onPress={edit} label={'Редактировать'} />
+            <LightGradientButton onPress={edit} label={i18n.t('Edit')} />
           </View>
         )}
       </View>

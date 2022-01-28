@@ -13,9 +13,16 @@ import ModalButton from '../../components/buttons/ModalButton';
 
 // store
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+
+// locale
+import i18n from '../../assets/i18n/i18n';
 
 export const MyCVScreen = ({route, navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const [me] = useState(route.params.value);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
@@ -52,15 +59,22 @@ export const MyCVScreen = ({route, navigation}) => {
   };
   return (
     <SafeAreaView style={globalStyles.container}>
-      <Header onClose={() => navigation.goBack()} title={'Мои резюме'} goBack />
-      <BottomModal visible={visible} onCancel={() => setVisible(false)}>
-        <ModalButton divide label={'Продвигать'} />
-        <ModalButton divide label={'Деактивировать'} />
-        <ModalButton divide label={'Редактировать'} />
-        <ModalButton label={'Удалить'} labelColor={StatusesColors.red} />
+      <Header
+        onClose={() => navigation.goBack()}
+        title={i18n.t('MyCV')}
+        goBack
+      />
+      <BottomModal
+        cancelBtnLabel={i18n.t('Cancel')}
+        visible={visible}
+        onCancel={() => setVisible(false)}>
+        <ModalButton divide label={i18n.t('Promote')} />
+        <ModalButton divide label={i18n.t('Deactivate')} />
+        <ModalButton divide label={i18n.t('Edit')} />
+        <ModalButton label={i18n.t('Remove')} labelColor={StatusesColors.red} />
       </BottomModal>
       <CVCard
-        position={me.position?.title_ru}
+        position={me.position[titleKey]}
         salary={me.salary}
         updatedAt={me.updatedAt}
         onPress={() => {

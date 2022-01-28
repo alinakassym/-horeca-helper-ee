@@ -18,6 +18,9 @@ import lodash from 'lodash';
 // services
 import {sendCompanyReview} from '../../services/EmployeesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+
 export const CompanyReviewScreen = ({route, navigation}) => {
   const workId = route.params.id;
   console.log({workId});
@@ -48,11 +51,11 @@ export const CompanyReviewScreen = ({route, navigation}) => {
       <Header
         modal
         onClose={() => navigation.goBack()}
-        title={'Оценка заведения'}
+        title={i18n.t('Rate company')}
       />
       <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <RatingScale
-          title={'Добропорядочность руководства'}
+          title={i18n.t('Conditions score')}
           score={review.conditionsScore}
           onPress={val =>
             setReview({
@@ -62,7 +65,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
           }
         />
         <RatingScale
-          title={'Условия труда'}
+          title={i18n.t('Management score')}
           score={review.managementScore}
           onPress={val =>
             setReview({
@@ -72,7 +75,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
           }
         />
         <RatingScale
-          title={'Атмосфера в команде'}
+          title={i18n.t('Team score')}
           score={review.teamScore}
           onPress={val =>
             setReview({
@@ -82,7 +85,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
           }
         />
         <RatingScale
-          title={'Своевременная оплата'}
+          title={i18n.t('Payment score')}
           score={review.paymentsScore}
           onPress={val =>
             setReview({
@@ -94,7 +97,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
 
         <MultilineInput
           style={globalStyles.section}
-          label={'Комментарий'}
+          label={i18n.t('Comment')}
           value={comment}
           onChangeText={val => setComment(val)}
           marginBottom={isFocused ? 0 : 88}
@@ -112,7 +115,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btnSection}>
-          <DisabledButton label={'Поставить оценку'} />
+          <DisabledButton label={i18n.t('Rate2')} />
         </LinearGradient>
       )}
       {!isFocused && valid && (
@@ -126,7 +129,7 @@ export const CompanyReviewScreen = ({route, navigation}) => {
           style={styles.btnSection}>
           <GradientButton
             onPress={() => sendReview()}
-            label={'Поставить оценку'}
+            label={i18n.t('Rate2')}
           />
         </LinearGradient>
       )}

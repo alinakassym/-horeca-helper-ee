@@ -19,7 +19,15 @@ import {postWork} from '../../services/EmployeesService';
 import {getCities, getPositions} from '../../services/DictionariesService';
 import {getCompanies} from '../../services/CompaniesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
+
 export const AddWorkScreen = ({navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const [isFocused, setIsFocused] = useState(false);
   const [work, setWork] = useState({
     company: null,
@@ -56,7 +64,10 @@ export const AddWorkScreen = ({navigation}) => {
         console.log('postWork err: ', e);
       }
     } else {
-      Alert.alert('Warning', 'Please fill in all the required fields');
+      Alert.alert(
+        i18n.t('Warning'),
+        i18n.t('Please fill in all the required fields'),
+      );
     }
   };
 
@@ -85,22 +96,22 @@ export const AddWorkScreen = ({navigation}) => {
       <Header
         modal
         onClose={() => navigation.goBack()}
-        title={'Основная информация'}
+        title={i18n.t('Basic information')}
       />
       <KeyboardAwareScrollView
         style={globalStyles.section}
         enableResetScrollToCoords={false}>
         <Autocomplete
-          label={'Город'}
+          label={i18n.t('City')}
           value={work.city}
           items={cities}
-          itemKey={'title_ru'}
+          itemKey={titleKey}
           onSelect={val => setWork({...work, city: val})}
           onClear={() => setWork({...work, city: null})}
         />
 
         <Autocomplete
-          label={'Название компании'}
+          label={i18n.t('Name')}
           value={work.company}
           items={companies}
           itemKey={'title'}
@@ -109,17 +120,21 @@ export const AddWorkScreen = ({navigation}) => {
         />
 
         <Autocomplete
-          label={'Должность'}
+          label={i18n.t('Position')}
           value={work.position}
           items={positions}
-          itemKey={'title_ru'}
+          itemKey={titleKey}
           onSelect={val => setWork({...work, position: val})}
           onClear={() => setWork({...work, position: null})}
         />
 
-        <DateSelect label={'Дата начала'} value={work} valueKey={'startDate'} />
         <DateSelect
-          label={'Дата окончания'}
+          label={i18n.t('Start date')}
+          value={work}
+          valueKey={'startDate'}
+        />
+        <DateSelect
+          label={i18n.t('End date')}
           value={work}
           valueKey={'endDate'}
           minimumDate={new Date(work.startDate)}
@@ -127,7 +142,7 @@ export const AddWorkScreen = ({navigation}) => {
 
         <MultilineInput
           style={styles.multilineInput}
-          label={'Описание'}
+          label={i18n.t('Description')}
           value={work.description}
           onChangeText={val => {
             setWork({...work, description: val});
@@ -146,7 +161,7 @@ export const AddWorkScreen = ({navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btn}>
-          <GradientButton label={'Сохранить'} onPress={() => save()} />
+          <GradientButton label={i18n.t('Save')} onPress={() => save()} />
         </LinearGradient>
       )}
     </SafeAreaView>

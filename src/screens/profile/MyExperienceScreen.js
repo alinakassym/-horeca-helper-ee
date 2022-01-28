@@ -22,7 +22,15 @@ import ProfileWorkCard from './components/ProfileWorkCard';
 // services
 import {getEmployee} from '../../services/EmployeesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
+
 export const MyExperienceScreen = ({navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const [loading, setLoading] = useState(true);
   const [works, setWorks] = useState([]);
 
@@ -45,7 +53,7 @@ export const MyExperienceScreen = ({navigation}) => {
     <SafeAreaView style={globalStyles.container}>
       <Header
         onClose={() => navigation.goBack()}
-        title={'Мой опыт работы'}
+        title={i18n.t('My experience')}
         goBack
       />
       {loading ? (
@@ -58,6 +66,8 @@ export const MyExperienceScreen = ({navigation}) => {
             <ProfileWorkCard
               key={index}
               item={item}
+              itemKey={titleKey}
+              locale={locale.lang}
               edit={() => {
                 navigation.navigate('EditWorkScreen', {value: item});
               }}
@@ -77,7 +87,7 @@ export const MyExperienceScreen = ({navigation}) => {
               }}
               btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
               labelStyle={globalStyles.ml3}
-              label={'Добавить опыт работы'}>
+              label={i18n.t('Add experience')}>
               <IconAdd
                 style={globalStyles.mr3}
                 color={PrimaryColors.brand}

@@ -20,7 +20,7 @@
     "Share app": "Поделиться приложением",
     "Log out": "Выйти",
     "Profile information": "Профильные данные",
-    "Name": "Название заведения",
+    "Name": "Название компании",
     "Choose category": "Выбор категории",
     "Category": "Категория",
     "Address": "Адрес",
@@ -59,7 +59,7 @@
     "Schedule": "График",
     "Gender": "Пол",
     "Warning": "Внимание",
-    "Please fill in all required fields": "Пожалуйста, заполните все обязательные поля",
+    "Please fill in all the required fields": "Пожалуйста, заполните все обязательные поля",
     "Search": "Поиск",
     "for employees": "соискателей",
     "Helpful information": "Полезная информация",
@@ -107,6 +107,19 @@
     "Username must be at least 2 characters": "Имя пользователя может содержать мнимум 2 символа",
     "First name": "Имя",
     "Last name": "Фамилия",
-    "Birth date": "Дата рождения"
+    "Birth date": "Дата рождения",
+    "Position not specified": "Позиция не указана",
+    "Find relevant jobs": "Найти подходящие вакансии",
+    "Add experience": "Добавить опыт работы",
+    "Start date": "Дата начала",
+    "End date": "Дата окончания",
+    "Wait for confirmation": "Ожидайте подтверждение заведения",
+    "Delete Job": "Удалить",
+    "Are you sure you want to delete": "Вы уверены, что хотите удалить",
+    "Rate company": "Оценка заведения",
+    "Conditions score": "Добропорядочность руководства",
+    "Management score": "Условия труда",
+    "Team score": "Атмосфера в команде",
+    "Payment score": "Своевременная оплата"
   }
 }
