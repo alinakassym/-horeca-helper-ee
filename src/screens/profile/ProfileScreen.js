@@ -36,10 +36,10 @@ import i18n from '../../assets/i18n/i18n';
 import {useSelector} from 'react-redux';
 
 export const ProfileScreen = ({navigation}) => {
-  const suffix = useSelector(state => {
-    const {locale} = state;
-    return locale.suffix;
-  });
+  const {locale} = useSelector(state => state);
+  console.log(locale);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
 
   const {signOut} = React.useContext(AuthContext);
   const [me, setMe] = useState({
@@ -87,10 +87,14 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         <ProfileInfo
+          locale={locale.lang}
           avgAvgScore={me.avgAvgScore}
-          contactInfo={'+7 (777) 123-45-56'}
+          contactInfo={me.contactInfo}
           age={getAge(me.birthDate)}
-          city={me.city?.title_ru}
+          city={
+            me.city &&
+            (me.city[titleKey] || me.city?.title_ru || me?.city.title)
+          }
           email={me.email}
         />
 
@@ -101,7 +105,7 @@ export const ProfileScreen = ({navigation}) => {
                 value: me,
               });
             }}
-            label={'Редактировать профиль'}
+            label={i18n.t('Edit profile')}
           />
         </View>
 
@@ -109,7 +113,7 @@ export const ProfileScreen = ({navigation}) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('MyCV', {value: me})}
             style={[styles.listItem, styles.listItemDivider]}>
-            <Text style={styles.listItemTitle}>Мои резюме</Text>
+            <Text style={styles.listItemTitle}>{i18n.t('MyCV')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -117,7 +121,7 @@ export const ProfileScreen = ({navigation}) => {
               navigation.navigate('MyExperience', {value: me.works})
             }
             style={[styles.listItem]}>
-            <Text style={styles.listItemTitle}>Мой опыт работы</Text>
+            <Text style={styles.listItemTitle}>{i18n.t('My experience')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
         </View>
@@ -126,13 +130,15 @@ export const ProfileScreen = ({navigation}) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Support')}
             style={[styles.listItem, styles.listItemDivider]}>
-            <Text style={styles.listItemTitle}>Контактная поддержка</Text>
+            <Text style={styles.listItemTitle}>
+              {i18n.t('Contact support')}
+            </Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('FAQ')}
             style={[styles.listItem, styles.listItemDivider]}>
-            <Text style={styles.listItemTitle}>Вопросы и ответы</Text>
+            <Text style={styles.listItemTitle}>{i18n.t('FAQ')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -152,7 +158,7 @@ export const ProfileScreen = ({navigation}) => {
           <OutlineButton
             onPress={() => onShare()}
             style={styles.shareButton}
-            label={'Поделиться приложением'}>
+            label={i18n.t('Share app')}>
             <IconShare
               style={globalStyles.mr3}
               color={PrimaryColors.brand}
@@ -175,7 +181,7 @@ export const ProfileScreen = ({navigation}) => {
                   globalStyles.ml3,
                   {color: StatusesColors.red},
                 ]}>
-                Выйти
+                {i18n.t('Log out')}
               </Text>
             </View>
           </TouchableOpacity>
