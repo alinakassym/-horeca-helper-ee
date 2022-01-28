@@ -4,16 +4,25 @@ import 'moment/locale/ru';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text} from 'react-native';
 import {PrimaryColors} from '../styles/colors';
+import i18 from '../assets/i18n/i18n';
 
 const propTypes = {
+  locale: PropTypes.string,
   date: PropTypes.string,
 };
 class UpdatedAt extends React.PureComponent {
   render() {
-    const formatDate = val => moment(val).locale('ru').format('DD MMM YYYY');
-    const {date} = this.props;
+    const {locale, date} = this.props;
+    const formatDate = val =>
+      moment(val)
+        .locale(locale || 'ru')
+        .format('DD MMM YYYY');
 
-    return <Text style={styles.updatedAt}>Обновлено {formatDate(date)}</Text>;
+    return (
+      <Text style={styles.updatedAt}>
+        {i18.t('Updated at')} {formatDate(date)}
+      </Text>
+    );
   }
 }
 

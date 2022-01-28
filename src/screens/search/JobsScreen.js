@@ -32,7 +32,14 @@ import {
 import {getStats} from '../../services/UtilsService';
 import {setFilter} from '../../store/slices/jobs';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+
 export const JobsScreen = ({navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const dispatch = useDispatch();
   const {filter, isFilterApplied} = useSelector(state => {
     const {jobs} = state;
@@ -93,7 +100,7 @@ export const JobsScreen = ({navigation}) => {
       }
     };
     fetchData().then();
-  }, [filter]);
+  }, [filter, locale]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -101,7 +108,7 @@ export const JobsScreen = ({navigation}) => {
         onPress={() => setVisible(true)}
         usersNumber={stats?.numCompaniesOnline || 0}
       />
-      <Header options title={'Поиск'} subtitle={'вакансий'}>
+      <Header options title={i18n.t('Search')} subtitle={i18n.t('jobs')}>
         <React.Fragment>
           <IconButton onPress={() => getStarredJobs()}>
             <IconBookmark
@@ -124,7 +131,7 @@ export const JobsScreen = ({navigation}) => {
       <BottomModalComponent
         onCancel={() => setVisible(false)}
         visible={visible}
-        title={'Полезная информация'}>
+        title={i18n.t('Useful information')}>
         <StatCard numUsers={stats?.numCompanies} numJobs={stats?.numJobs} />
       </BottomModalComponent>
 
@@ -145,6 +152,7 @@ export const JobsScreen = ({navigation}) => {
           {jobs &&
             jobs.map((item, index) => (
               <JobCard
+                locale={locale.lang}
                 onSendApply={val => {
                   setJobId(val.id);
                   setVisibleApply(true);
@@ -154,6 +162,9 @@ export const JobsScreen = ({navigation}) => {
                 }}
                 key={index}
                 item={item}
+                position={(item.position && item.position[titleKey]) || ''}
+                city={(item.city && item.city[titleKey]) || ''}
+                company={item?.company.title || ''}
                 onSelect={() => {
                   setJobStar(item).then();
                 }}
@@ -162,7 +173,7 @@ export const JobsScreen = ({navigation}) => {
         </KeyboardAwareScrollView>
       ) : (
         <View style={globalStyles.fullScreenSection}>
-          <Text style={typography.text}>Нет подходящих вакансий</Text>
+          <Text style={typography.text}>{i18n.t('No relevant jobs')}</Text>
         </View>
       )}
     </SafeAreaView>

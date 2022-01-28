@@ -21,10 +21,16 @@ import LinearGradient from 'react-native-linear-gradient';
 import GradientButton from '../../components/buttons/GradientButton';
 import {IconMessages} from '../../assets/icons/tabs/IconMessages';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
 
 const dimensions = Dimensions.get('screen');
 
 export const JobScreen = ({route, navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const jobParams = route.params ? route.params.job : null;
 
   const [chatId, setChatId] = useState(null);
@@ -84,7 +90,7 @@ export const JobScreen = ({route, navigation}) => {
       <Header
         goBack
         onClose={() => navigation.goBack()}
-        title={'Подробная информация'}
+        title={i18n.t('Detailed information')}
       />
       <CompanyCard
         photoUrl={job?.company?.photoUrl}
@@ -93,13 +99,13 @@ export const JobScreen = ({route, navigation}) => {
       <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <CompanyInfo
           avgAvgScore={job?.company?.avgAvgScore}
-          position={job?.position?.title_ru}
+          position={job?.position[titleKey] || ''}
           location={job.company.address}
           salaryMin={job.salaryMin}
           salaryMax={job.salaryMax}
         />
         <View style={globalStyles.card}>
-          <Text style={styles.title}>Требования</Text>
+          <Text style={styles.title}>{i18n.t('Requirements')}</Text>
           <Text style={styles.text}>{job.description}</Text>
         </View>
       </KeyboardAwareScrollView>
@@ -125,12 +131,12 @@ export const JobScreen = ({route, navigation}) => {
             <View style={styles.leftCol}>
               <GradientButton
                 onPress={() => setVisible(true)}
-                label={'Откликнуться'}
+                label={i18n.t('Apply')}
               />
             </View>
             <View style={styles.rightCol}>
               <PrimaryButton
-                label={'Чат'}
+                label={i18n.t('Chat')}
                 color={PrimaryColors.element}
                 onPress={() =>
                   navigation.navigate('MessagesChatScreen', {
@@ -149,7 +155,7 @@ export const JobScreen = ({route, navigation}) => {
         ) : (
           <GradientButton
             onPress={() => setVisible(true)}
-            label={'Откликнуться'}
+            label={i18n.t('Apply')}
           />
         )}
       </LinearGradient>

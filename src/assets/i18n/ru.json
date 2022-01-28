@@ -61,11 +61,13 @@
     "Warning": "Внимание",
     "Please fill in all the required fields": "Пожалуйста, заполните все обязательные поля",
     "Search": "Поиск",
+    "jobs": "вакансий",
     "for employees": "соискателей",
-    "Helpful information": "Полезная информация",
+    "Useful information": "Полезная информация",
     "employees online": "соискателей онлайн",
     "registered users": "количество\nзарегистрированных",
     "CV's added": "резюме\nдобавлено",
+    "jobs added": "вакансий\nдобавлено",
     "The list of employees is empty": "Список соискателей пуст",
     "Detailed information": "Подробная информация",
     "No vacancies": "Нет вакансий",
@@ -120,6 +122,14 @@
     "Conditions score": "Добропорядочность руководства",
     "Management score": "Условия труда",
     "Team score": "Атмосфера в команде",
-    "Payment score": "Своевременная оплата"
+    "Payment score": "Своевременная оплата",
+    "No relevant jobs": "Нет подходящих вакансий",
+    "employers online": "работодателей онлайн",
+    "Updated at": "Обновлено",
+    "TOP": "ТОП",
+    "Apply": "Откликнуться",
+    "Saved item": "В избранных",
+    "Save item": "В избранные",
+    "Requirements": "Требования"
   }
 }

@@ -11,6 +11,9 @@ import RatingScale from '../../../components/RatingScale';
 // utils
 import {numberWithSpaces} from '../../../utils/common';
 
+// locale
+import i18n from '../../../assets/i18n/i18n';
+
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
@@ -43,7 +46,7 @@ class CompanyInfo extends React.PureComponent {
       <View style={styles.col}>
         {!!avgAvgScore && (
           <View style={styles.row}>
-            <Text style={styles.leftColText}>Рейтинг</Text>
+            <Text style={styles.leftColText}>{i18n.t('Rating')}</Text>
             <View style={styles.rightCol}>
               <RatingScale score={Math.ceil(avgAvgScore)} />
             </View>
@@ -51,25 +54,25 @@ class CompanyInfo extends React.PureComponent {
         )}
         {position && (
           <View style={styles.row}>
-            <Text style={styles.leftColText}>Телефон</Text>
+            <Text style={styles.leftColText}>{i18n.t('Position')}</Text>
             <Text style={styles.rightColText}>{position}</Text>
           </View>
         )}
         {location && (
           <View style={styles.row}>
-            <Text style={styles.leftColText}>Адрес</Text>
+            <Text style={styles.leftColText}>{i18n.t('Address')}</Text>
             <Text style={styles.rightColText}>{location}</Text>
           </View>
         )}
         {schedule && (
           <View style={styles.row}>
-            <Text style={styles.leftColText}>График</Text>
+            <Text style={styles.leftColText}>{i18n.t('Schedule')}</Text>
             <Text style={styles.rightColText}>{schedule}</Text>
           </View>
         )}
         {(salaryMin || salaryMax) && (
           <View style={styles.row}>
-            <Text style={styles.leftColText}>Зарплата</Text>
+            <Text style={styles.leftColText}>{i18n.t('Salary')}</Text>
             <Text style={styles.rightColText}>{getSalary()} ₸</Text>
           </View>
         )}

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   smallBadge: {
     paddingVertical: 2,
     paddingHorizontal: 11,
-    height: 20,
+    height: 22,
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
