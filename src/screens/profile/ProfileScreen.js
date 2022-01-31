@@ -32,6 +32,7 @@ import {AuthContext} from '../../store/context';
 
 //services
 import {getEmployee} from '../../services/EmployeesService';
+import * as ResumesService from '../../services/ResumesService';
 
 export const ProfileScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -39,6 +40,7 @@ export const ProfileScreen = ({navigation}) => {
     city: null,
     description: '',
   });
+  const [myResumes, setMyResumes] = useState([]);
 
   // Notification
   const [isNotification, setIsNotification] = useState(false);
@@ -66,6 +68,8 @@ export const ProfileScreen = ({navigation}) => {
       try {
         const res = await getEmployee();
         setMe(res.data);
+        const myResumesData = await ResumesService.getMy();
+        setMyResumes(myResumesData);
       } catch (e) {
         console.log('ProfileScreen err: ', e);
       }
@@ -105,7 +109,7 @@ export const ProfileScreen = ({navigation}) => {
 
         <View style={styles.list}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MyCV', {value: me})}
+            onPress={() => navigation.navigate('MyCV', {me, myResumes})}
             style={[styles.listItem, styles.listItemDivider]}>
             <Text style={styles.listItemTitle}>Мои резюме</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
