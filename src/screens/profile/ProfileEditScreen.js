@@ -54,16 +54,10 @@ export const ProfileEditScreen = ({route, navigation}) => {
         firstName: me.firstName,
         lastName: me.lastName,
         email: me.email,
-        photoUrl: me.photoUrl,
-        googleId: me.googleId,
-        positionId: me.position ? me.position.id : null,
-        description: me.position ? me.description : '',
+        description: me.description ? me.description : '',
         cityId: me.city ? me.city.id : null,
         birthDate: me.birthDate,
         genderId: me.gender ? me.gender.id : null,
-        experience: me.experience,
-        scheduleId: me.schedule ? me.schedule.id : null,
-        salary: me.salary,
       };
       try {
         await updateEmployee(data);
