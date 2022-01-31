@@ -30,6 +30,8 @@ import {
   searchJobs,
 } from '../../services/JobsService';
 import {getStats} from '../../services/UtilsService';
+import * as ResumesService from '../../services/ResumesService';
+
 import {setFilter} from '../../store/slices/jobs';
 
 export const JobsScreen = ({navigation}) => {
@@ -47,7 +49,11 @@ export const JobsScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
   const sendApply = async () => {
+    // TODO: unhardcode & let user select via UI
+    const myResumesData = await ResumesService.getMy();
+
     const data = {
+      resumeId: myResumesData[0]?.id,
       body: applyMessage,
     };
 
