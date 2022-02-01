@@ -6,6 +6,7 @@ import {IconProfile} from '../../../assets/icons/tabs/IconProfile';
 import PlainButton from '../../../components/buttons/PlainButton';
 
 const propTypes = {
+  label: PropTypes.string,
   imageSize: PropTypes.number,
   iconSize: PropTypes.number,
   editable: PropTypes.bool,
@@ -15,7 +16,7 @@ const propTypes = {
 
 class ProfilePhotoPlaceholder extends React.PureComponent {
   render() {
-    const {imageSize, iconSize, editable, onPress, style} = this.props;
+    const {label, imageSize, iconSize, editable, onPress, style} = this.props;
     const imgSize = {
       width: imageSize || 96,
       height: imageSize || 96,
@@ -30,11 +31,7 @@ class ProfilePhotoPlaceholder extends React.PureComponent {
           />
         </View>
         {editable && (
-          <PlainButton
-            onPress={onPress}
-            btnStyle={styles.btn}
-            label={'Добавить фото'}
-          />
+          <PlainButton onPress={onPress} btnStyle={styles.btn} label={label} />
         )}
       </Pressable>
     );

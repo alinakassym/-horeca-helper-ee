@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {globalStyles} from '../styles/globalStyles';
-import {PrimaryColors} from '../styles/colors';
+import {globalStyles} from '../../styles/globalStyles';
+import {PrimaryColors} from '../../styles/colors';
 
 const propTypes = {
   label: PropTypes.string,

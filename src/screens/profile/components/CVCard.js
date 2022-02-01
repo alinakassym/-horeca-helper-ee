@@ -19,6 +19,9 @@ import IconButton from '../../../components/buttons/IconButton';
 import {numberWithSpaces} from '../../../utils/common';
 import UpdatedAt from '../../../components/UpdatedAt';
 
+// locale
+import i18n from '../../../assets/i18n/i18n';
+
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
@@ -50,7 +53,7 @@ class CVCard extends React.PureComponent {
                   globalStyles.mb1,
                 ]}>
                 <Text style={styles.positionTitle}>
-                  {position || 'Позиция не указана'}
+                  {position || i18n.t('Position not specified')}
                 </Text>
 
                 <ActivePoint style={globalStyles.ml2} />
@@ -65,7 +68,7 @@ class CVCard extends React.PureComponent {
           </View>
           <PlainButton
             onPress={findRelevant}
-            label={'Найти подходящие вакансии'}
+            label={i18n.t('Find relevant jobs')}
             btnStyle={styles.findBtn}>
             <IconSearch
               size={16}

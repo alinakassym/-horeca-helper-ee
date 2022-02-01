@@ -15,4 +15,16 @@ export const typography = StyleSheet.create({
     lineHeight: 18,
     color: PrimaryColors.grey1,
   },
+
+  textAlignCenter: {
+    textAlign: 'center',
+  },
+
+  textMedium: {
+    fontFamily: 'Inter-Medium',
+  },
+
+  textColorElement: {
+    color: PrimaryColors.element,
+  },
 });

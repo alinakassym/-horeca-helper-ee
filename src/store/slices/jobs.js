@@ -76,28 +76,37 @@ export const jobsSlice = createSlice({
   reducers: {
     setFilter: (state, action) => {
       state.filter = {
+        //age
+        ageMin: action.payload.ageMin ? Number(action.payload.ageMin) : null,
+        ageMax: action.payload.ageMax ? Number(action.payload.ageMax) : null,
+
+        // experience
+        experienceMin: action.payload.experienceMin
+          ? Number(action.payload.experienceMin)
+          : null,
+        experienceMax: action.payload.experienceMax
+          ? Number(action.payload.experienceMax)
+          : null,
+
+        // salary
+        salaryMin: action.payload.salaryMin
+          ? Number(action.payload.salaryMin)
+          : null,
+        salaryMax: action.payload.salaryMax
+          ? Number(action.payload.salaryMax)
+          : null,
+
         position: action.payload.position,
         positionId: action.payload.position?.id,
         companyCategoryId: action.payload.companyCategory?.id,
         companyCategory: action.payload.companyCategory,
         cityId: action.payload.city?.id,
         city: action.payload.city,
-        ageMin: action.payload.ageMin,
-        ageMax: action.payload.ageMax,
         genderId: action.payload.gender?.id,
         gender: action.payload.gender,
-        experienceMin: action.payload.experienceMin,
-        experienceMax: action.payload.experienceMax,
+
         scheduleId: action.payload.schedule?.id,
         schedule: action.payload.schedule,
-        salaryMin:
-          action.payload.salaryMin && action.payload.salaryMin.length > 0
-            ? Number(action.payload.salaryMin)
-            : null,
-        salaryMax:
-          action.payload.salaryMax && action.payload.salaryMax.length > 0
-            ? Number(action.payload.salaryMax)
-            : null,
 
         isStarred: action.payload.isStarred,
         sortBy: action.payload.orderBy

@@ -7,9 +7,9 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import {PrimaryColors} from '../styles/colors';
-import {IconClose} from '../assets/icons/main/IconClose';
-import {IconCheck} from '../assets/icons/main/IconCheck';
+import {PrimaryColors} from '../../styles/colors';
+import {IconClose} from '../../assets/icons/main/IconClose';
+import {IconCheck} from '../../assets/icons/main/IconCheck';
 
 const propTypes = {
   label: PropTypes.string,
@@ -20,11 +20,11 @@ const propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   validIcon: PropTypes.object,
-  keyboardType: PropTypes.string,
-  secureTextEntry: PropTypes.bool,
+  hideValidIcon: PropTypes.bool,
+  style: PropTypes.object,
 };
 
-class Input extends React.PureComponent {
+class NumberInput extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -35,34 +35,36 @@ class Input extends React.PureComponent {
     const {
       label,
       value,
-      onEndEditing,
       onChangeText,
       onFocus,
       onBlur,
       onClear,
       validIcon,
-      keyboardType,
-      secureTextEntry,
+      style,
     } = this.props;
     const {focused} = this.state;
-    const inputType = keyboardType ? keyboardType : 'default';
-
     return (
-      <View style={styles.inputSection}>
-        <Text style={styles.label}>
+      <View style={[styles.inputSection, style]}>
+        <Text
+          style={[
+            styles.label,
+            {
+              color: focused ? PrimaryColors.brand : PrimaryColors.grey1,
+            },
+          ]}>
           {((!!label && focused) || (!!label && !!value)) && `${label}`}
         </Text>
         <TextInput
-          secureTextEntry={secureTextEntry}
-          keyboardType={inputType}
+          keyboardType={'number-pad'}
           value={value}
           style={[
             styles.input,
             {
-              borderBottomColor:
-                focused || !!value
-                  ? PrimaryColors.element
-                  : PrimaryColors.grey3,
+              borderBottomColor: focused
+                ? PrimaryColors.brand
+                : value
+                ? PrimaryColors.element
+                : PrimaryColors.grey3,
             },
           ]}
           placeholder={focused ? '' : label}
@@ -79,10 +81,7 @@ class Input extends React.PureComponent {
             }
             this.setState({...this.state, focused: true});
           }}
-          onEndEditing={e => {
-            !!onEndEditing && onEndEditing(e);
-            this.setState({...this.state, focused: false});
-          }}
+          onEndEditing={() => this.setState({...this.state, focused: false})}
         />
 
         {!!value && value.length > 0 && (
@@ -116,7 +115,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 12,
     lineHeight: 14,
-    color: PrimaryColors.grey1,
   },
   input: {
     marginBottom: 20,
@@ -133,16 +131,15 @@ const styles = StyleSheet.create({
   },
   iconClear: {
     position: 'absolute',
-    top: 24,
+    top: 22,
     right: 4,
     padding: 2,
     flexDirection: 'row',
-    alignItems: 'center',
   },
   icon: {
     marginRight: 4,
   },
 });
 
-Input.propTypes = propTypes;
-export default Input;
+NumberInput.propTypes = propTypes;
+export default NumberInput;

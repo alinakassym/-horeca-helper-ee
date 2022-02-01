@@ -1,9 +1,14 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-export const IconMessages = ({color, size}) => {
+export const IconMessages = ({style, color, size}) => {
   return (
-    <Svg width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none">
+    <Svg
+      style={style}
+      width={size || 24}
+      height={size || 24}
+      viewBox="0 0 24 24"
+      fill="none">
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

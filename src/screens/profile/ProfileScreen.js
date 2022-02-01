@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  Switch,
   TouchableOpacity,
   SafeAreaView,
   Share,
@@ -34,18 +33,21 @@ import {AuthContext} from '../../store/context';
 import {getEmployee} from '../../services/EmployeesService';
 import * as ResumesService from '../../services/ResumesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
+
 export const ProfileScreen = ({navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const {signOut} = React.useContext(AuthContext);
   const [me, setMe] = useState({
     city: null,
     description: '',
   });
   const [myResumes, setMyResumes] = useState([]);
-
-  // Notification
-  const [isNotification, setIsNotification] = useState(false);
-  const toggleNotification = () =>
-    setIsNotification(previousNotificationState => !previousNotificationState);
 
   const getAge = birthDate =>
     birthDate ? moment().diff(birthDate, 'years', false) : null;
@@ -89,10 +91,14 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         <ProfileInfo
+          locale={locale.lang}
           avgAvgScore={me.avgAvgScore}
-          contactInfo={'+7 (777) 123-45-56'}
+          contactInfo={me.contactInfo}
           age={getAge(me.birthDate)}
-          city={me.city?.title_ru}
+          city={
+            me.city &&
+            (me.city[titleKey] || me.city?.title_ru || me?.city.title)
+          }
           email={me.email}
         />
 
@@ -103,7 +109,7 @@ export const ProfileScreen = ({navigation}) => {
                 value: me,
               });
             }}
-            label={'Редактировать профиль'}
+            label={i18n.t('Edit profile')}
           />
         </View>
 
@@ -111,7 +117,7 @@ export const ProfileScreen = ({navigation}) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('MyCV', {me, myResumes})}
             style={[styles.listItem, styles.listItemDivider]}>
-            <Text style={styles.listItemTitle}>Мои резюме</Text>
+            <Text style={styles.listItemTitle}>{i18n.t('MyCV')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -119,7 +125,7 @@ export const ProfileScreen = ({navigation}) => {
               navigation.navigate('MyExperience', {value: me.works})
             }
             style={[styles.listItem]}>
-            <Text style={styles.listItemTitle}>Мой опыт работы</Text>
+            <Text style={styles.listItemTitle}>{i18n.t('My experience')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
         </View>
@@ -128,30 +134,22 @@ export const ProfileScreen = ({navigation}) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Support')}
             style={[styles.listItem, styles.listItemDivider]}>
-            <Text style={styles.listItemTitle}>Контактная поддержка</Text>
+            <Text style={styles.listItemTitle}>
+              {i18n.t('Contact support')}
+            </Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('FAQ')}
-            style={[styles.listItem]}>
-            <Text style={styles.listItemTitle}>Вопросы и ответы</Text>
+            style={[styles.listItem, styles.listItemDivider]}>
+            <Text style={styles.listItemTitle}>{i18n.t('FAQ')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.list}>
-          <TouchableOpacity style={styles.listItem}>
-            <Text style={styles.listItemTitle}>Уведомления</Text>
-            <Switch
-              trackColor={{
-                false: PrimaryColors.grey3,
-                true: '#5CC689',
-              }}
-              thumbColor={PrimaryColors.white}
-              ios_backgroundColor={PrimaryColors.grey3}
-              onValueChange={toggleNotification}
-              value={isNotification}
-            />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Settings')}
+            style={styles.listItem}>
+            <Text style={styles.listItemTitle}>{i18n.t('Settings')}</Text>
+            <IconExpandRight size={16} color={PrimaryColors.grey1} />
           </TouchableOpacity>
         </View>
 
@@ -164,7 +162,7 @@ export const ProfileScreen = ({navigation}) => {
           <OutlineButton
             onPress={() => onShare()}
             style={styles.shareButton}
-            label={'Поделиться приложением'}>
+            label={i18n.t('Share app')}>
             <IconShare
               style={globalStyles.mr3}
               color={PrimaryColors.brand}
@@ -187,7 +185,7 @@ export const ProfileScreen = ({navigation}) => {
                   globalStyles.ml3,
                   {color: StatusesColors.red},
                 ]}>
-                Выйти
+                {i18n.t('Log out')}
               </Text>
             </View>
           </TouchableOpacity>

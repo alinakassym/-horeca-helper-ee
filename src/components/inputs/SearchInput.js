@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {PrimaryColors} from '../styles/colors';
-import {IconSearch} from '../assets/icons/tabs/IconSearch';
-import {IconClose} from '../assets/icons/main/IconClose';
+import {PrimaryColors} from '../../styles/colors';
+import {IconSearch} from '../../assets/icons/tabs/IconSearch';
+import {IconClose} from '../../assets/icons/main/IconClose';
 
 const propTypes = {
   text: PropTypes.string,

@@ -21,10 +21,10 @@ import ProfilePhoto from './components/ProfilePhoto';
 import ProfilePhotoPlaceholder from './components/ProfilePhotoPlaceholder';
 import ModalButton from '../../components/buttons/ModalButton';
 import BottomModal from '../../components/BottomModal';
-import Input from '../../components/Input';
+import Input from '../../components/inputs/Input';
 import {DateSelect} from '../../components/selects/DateSelect';
 import Autocomplete from '../../components/selects/Autocomplete';
-import MultilineInput from '../../components/MultilineInput';
+import MultilineInput from '../../components/inputs/MultilineInput';
 import GradientButton from '../../components/buttons/GradientButton';
 import LinearGradient from 'react-native-linear-gradient';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -37,7 +37,14 @@ import {
 import {getCities, getGenders} from '../../services/DictionariesService';
 import ModalSelect from '../../components/selects/ModalSelect';
 
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
+
 export const ProfileEditScreen = ({route, navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const [me, setMe] = useState(route.params.value);
   const [cities, setCities] = useState([]);
   const [genders, setGenders] = useState([]);
@@ -66,7 +73,10 @@ export const ProfileEditScreen = ({route, navigation}) => {
         console.log('updateEmployee err: ', e);
       }
     } else {
-      Alert.alert('Warning', 'Username must be at least 2 characters');
+      Alert.alert(
+        i18n.t('Warning'),
+        i18n.t('Username must be at least 2 characters'),
+      );
     }
   };
 
@@ -79,11 +89,12 @@ export const ProfileEditScreen = ({route, navigation}) => {
     };
     launchCamera(options, response => {
       console.log('Response = ', response);
+      const {error, didCancel} = response;
 
-      if (response.didCancel) {
+      if (didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+      } else if (error) {
+        console.log('ImagePicker Error: ', error);
       } else {
         try {
           const r = updateEmployeePhoto(response.assets[0]);
@@ -104,11 +115,12 @@ export const ProfileEditScreen = ({route, navigation}) => {
     };
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
+      const {error, didCancel} = response;
 
-      if (response.didCancel) {
+      if (didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+      } else if (error) {
+        console.log('ImagePicker Error: ', error);
       } else {
         updateEmployeePhoto(response.assets[0])
           .then(result => {
@@ -152,20 +164,28 @@ export const ProfileEditScreen = ({route, navigation}) => {
       <Header
         goBack
         onClose={() => navigation.goBack()}
-        title={'Профильные данные'}
+        title={i18n.t('Profile information')}
       />
       <KeyboardAwareScrollView
         style={styles.container}
         enableResetScrollToCoords={false}>
         {me?.photoUrl ? (
-          <ProfilePhoto onPress={() => setOpen(true)} photoUrl={me.photoUrl} />
+          <ProfilePhoto
+            label={i18n.t('Change photo')}
+            onPress={() => setOpen(true)}
+            photoUrl={me.photoUrl}
+          />
         ) : (
-          <ProfilePhotoPlaceholder editable onPress={() => setOpen(true)} />
+          <ProfilePhotoPlaceholder
+            label={i18n.t('Add photo')}
+            editable
+            onPress={() => setOpen(true)}
+          />
         )}
 
         {/*Имя*/}
         <Input
-          label={'Имя'}
+          label={i18n.t('First name')}
           onChangeText={val => {
             setMe({...me, firstName: val});
           }}
@@ -177,7 +197,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
         {/*Фамилия*/}
         <Input
-          label={'Фамилия'}
+          label={i18n.t('Last name')}
           onChangeText={val => {
             setMe({...me, lastName: val});
           }}
@@ -189,17 +209,17 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
         {/*Дата рождения*/}
         <DateSelect
-          label={'Дата рождения'}
+          label={i18n.t('Birth date')}
           value={me}
           valueKey={'birthDate'}
           clearable
         />
 
         <ModalSelect
-          label={'Пол'}
+          label={i18n.t('Gender')}
           value={me.gender}
           items={genders}
-          itemText={'title_ru'}
+          itemText={titleKey}
           onSaveSelection={val => {
             setMe({...me, gender: val});
           }}
@@ -210,10 +230,10 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
         {/*Город*/}
         <Autocomplete
-          label={'Город'}
+          label={i18n.t('City')}
           value={me.city}
           items={cities}
-          itemKey={'title_ru'}
+          itemKey={titleKey}
           onSelect={val => setMe({...me, city: val})}
           onClear={() => setMe({...me, city: null})}
           validIcon={<IconLocation size={16} color={PrimaryColors.brand} />}
@@ -222,7 +242,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
         {/*Эл. почта*/}
         <Input
           keyboardType={'email-address'}
-          label={'Эл. почта'}
+          label={i18n.t('Email')}
           onChangeText={val => {
             setMe({...me, email: val});
           }}
@@ -234,7 +254,7 @@ export const ProfileEditScreen = ({route, navigation}) => {
 
         {/*Описание*/}
         <MultilineInput
-          label={'Обо мне'}
+          label={i18n.t('About me')}
           value={me.description}
           onChangeText={val => {
             setMe({...me, description: val});
@@ -253,13 +273,13 @@ export const ProfileEditScreen = ({route, navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btn}>
-          <GradientButton label={'Save'} onPress={() => save()} />
+          <GradientButton label={i18n.t('Save')} onPress={() => save()} />
         </LinearGradient>
       )}
       <BottomModal visible={open} onCancel={() => setOpen(false)}>
         <ModalButton
           divide
-          label={'Открыть галерею'}
+          label={i18n.t('Open gallery')}
           onPress={() => {
             openGallery().then(() => {});
             setOpen(false);
@@ -267,14 +287,14 @@ export const ProfileEditScreen = ({route, navigation}) => {
         />
         <ModalButton
           divide
-          label={'Сделать снимок'}
+          label={i18n.t('Take a photo')}
           onPress={() => {
             openCamera().then(() => {});
             setOpen(false);
           }}
         />
         <ModalButton
-          label={'Удалить фото'}
+          label={i18n.t('Remove photo')}
           labelColor={StatusesColors.red}
           onPress={() => {
             setOpen(false);

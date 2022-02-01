@@ -15,7 +15,7 @@ import PlainButton from '../../components/buttons/PlainButton';
 import GroupButton from '../../components/buttons/GroupButton';
 import ExpansionPanel from '../../components/ExpansionPanel';
 import RadioBtn from '../../components/buttons/RadioBtn';
-import NumberInput from '../../components/NumberInput';
+import NumberInput from '../../components/inputs/NumberInput';
 import GradientButton from '../../components/buttons/GradientButton';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -32,9 +32,16 @@ import {
   getSchedules,
 } from '../../services/DictionariesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+
 const dimensions = Dimensions.get('screen');
 
 export const JobsFilterScreen = ({navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const filterState = useSelector(state => {
     const {jobs} = state;
     return jobs.filter;
@@ -58,7 +65,6 @@ export const JobsFilterScreen = ({navigation}) => {
   const [genders, setGenders] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [listSortBy] = useState(sortBy);
-  const [focused, setFocused] = useState(false);
 
   const apply = async () => {
     console.log({filters});
@@ -111,11 +117,11 @@ export const JobsFilterScreen = ({navigation}) => {
         headerStyle={globalStyles.mr4}
         goBack
         onClose={() => navigation.goBack()}
-        title={'Фильтр'}>
+        title={i18n.t('Filter')}>
         <PlainButton
           onPress={() => resetFilter()}
           btnStyle={styles.resetBtn}
-          label={'Сбросить'}>
+          label={i18n.t('Reset')}>
           <IconBucket
             width={1.5}
             size={16}
@@ -127,20 +133,20 @@ export const JobsFilterScreen = ({navigation}) => {
       <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <View style={globalStyles.card}>
           <GroupButton
-            label={'Сортировать по'}
+            label={i18n.t('Sort by')}
             selectedItem={filters.orderBy}
             items={listSortBy}
-            itemKey={'title_ru'}
+            itemKey={titleKey}
             onSelect={val => {
               setFilters({...filters, orderBy: val});
             }}
           />
         </View>
 
-        <View style={[globalStyles.mt3, styles.container]}>
+        <View style={[globalStyles.mt3, globalStyles.mb6]}>
           {/*Категория*/}
           <ExpansionPanel
-            items={[{title: 'Категория'}]}
+            items={[{title: i18n.t('Category')}]}
             expandedBlockStyle={styles.wrapperRadio}>
             {categories.map((cItem, index) => (
               <RadioBtn
@@ -149,7 +155,7 @@ export const JobsFilterScreen = ({navigation}) => {
                 }
                 key={index}
                 item={cItem}
-                itemKey={'title_ru'}
+                itemKey={titleKey}
                 activeItem={filters.companyCategory}
                 onSelect={() =>
                   setFilters({
@@ -164,14 +170,14 @@ export const JobsFilterScreen = ({navigation}) => {
 
           {/*Город*/}
           <ExpansionPanel
-            items={[{title: 'Город'}]}
+            items={[{title: i18n.t('City')}]}
             expandedBlockStyle={styles.wrapperRadio}>
             {cities.map((cItem, index) => (
               <RadioBtn
                 style={cities.length > 3 ? styles.radioBtn2 : styles.radioBtn1}
                 key={index}
                 item={cItem}
-                itemKey={'title_ru'}
+                itemKey={titleKey}
                 activeItem={filters.city}
                 onSelect={() =>
                   setFilters({
@@ -185,7 +191,7 @@ export const JobsFilterScreen = ({navigation}) => {
 
           {/*Позиция*/}
           <ExpansionPanel
-            items={[{title: 'Позиция'}]}
+            items={[{title: i18n.t('Position')}]}
             expandedBlockStyle={styles.wrapperRadio}>
             {positions.map((pItem, index) => (
               <RadioBtn
@@ -194,7 +200,7 @@ export const JobsFilterScreen = ({navigation}) => {
                 }
                 key={index}
                 item={pItem}
-                itemKey={'title_ru'}
+                itemKey={titleKey}
                 activeItem={filters.position}
                 onSelect={() =>
                   setFilters({
@@ -208,7 +214,7 @@ export const JobsFilterScreen = ({navigation}) => {
 
           {/*Расписание*/}
           <ExpansionPanel
-            items={[{title: 'Расписание'}]}
+            items={[{title: i18n.t('Schedule')}]}
             expandedBlockStyle={styles.wrapperRadio}>
             {schedules.map((sItem, index) => (
               <RadioBtn
@@ -217,7 +223,7 @@ export const JobsFilterScreen = ({navigation}) => {
                 }
                 key={index}
                 item={sItem}
-                itemKey={'title_ru'}
+                itemKey={titleKey}
                 activeItem={filters.schedule}
                 onSelect={() =>
                   setFilters({
@@ -231,98 +237,74 @@ export const JobsFilterScreen = ({navigation}) => {
 
           {/*Зарплата*/}
           <ExpansionPanel
-            items={[{title: 'Зарплата'}]}
+            items={[{title: i18n.t('Salary')}]}
             expandedBlockStyle={styles.wrapperInputs}>
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'От'}
-              value={filters.salaryMin}
+              label={i18n.t('From')}
+              value={filters.salaryMin ? filters.salaryMin.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, salaryMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, salaryMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'До'}
-              value={filters.salaryMax}
+              label={i18n.t('To')}
+              value={filters.salaryMax ? filters.salaryMax.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, salaryMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, salaryMax: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
           </ExpansionPanel>
 
           {/*Возраст*/}
           <ExpansionPanel
-            items={[{title: 'Возраст'}]}
+            items={[{title: i18n.t('Age')}]}
             expandedBlockStyle={styles.wrapperInputs}>
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'От'}
-              value={filters.ageMin}
+              label={i18n.t('From')}
+              value={filters.ageMin ? filters.ageMin.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, ageMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, ageMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'До'}
-              value={filters.ageMax}
+              label={i18n.t('To')}
+              value={filters.ageMax ? filters.ageMax.toString() : null}
               onChangeText={val => {
                 setFilters({...filters, ageMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, ageMax: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
           </ExpansionPanel>
 
           {/*Пол*/}
           <ExpansionPanel
-            items={[{title: 'Пол'}]}
+            items={[{title: i18n.t('Gender')}]}
             expandedBlockStyle={styles.wrapperRadio}>
             {genders.map((gItem, index) => (
               <RadioBtn
                 style={styles.radioBtn2}
                 key={index}
                 item={gItem}
-                itemKey={'title_ru'}
+                itemKey={titleKey}
                 activeItem={filters.gender}
                 onSelect={() =>
                   setFilters({
@@ -336,63 +318,54 @@ export const JobsFilterScreen = ({navigation}) => {
 
           {/*Опыт*/}
           <ExpansionPanel
-            items={[{title: 'Опыт'}]}
+            items={[{title: i18n.t('Experience')}]}
             expandedBlockStyle={styles.wrapperInputs}>
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'От'}
-              value={filters.experienceMin}
+              label={i18n.t('From')}
+              value={
+                filters.experienceMin ? filters.experienceMin.toString() : null
+              }
               onChangeText={val => {
                 setFilters({...filters, experienceMin: val});
               }}
               onClear={() => {
                 setFilters({...filters, experienceMin: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
             <NumberInput
               validIcon={<></>}
               style={styles.numberInput}
-              label={'До'}
-              value={filters.experienceMax}
+              label={i18n.t('To')}
+              value={
+                filters.experienceMax ? filters.experienceMax.toString() : null
+              }
               onChangeText={val => {
                 setFilters({...filters, experienceMax: val});
               }}
               onClear={() => {
                 setFilters({...filters, experienceMax: null});
               }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onBlur={() => {
-                setFocused(false);
-              }}
             />
           </ExpansionPanel>
         </View>
       </KeyboardAwareScrollView>
-      {!focused && (
-        <LinearGradient
-          colors={[
-            'rgba(255, 255, 255, 0)',
-            'rgba(255, 255, 255, 0.9)',
-            'rgba(255, 255, 255, 0.9)',
-            'rgba(255, 255, 255, 1)',
-          ]}
-          style={styles.btnSection}>
-          <GradientButton
-            style={styles.btn}
-            label={'Применить фильтр'}
-            onPress={() => apply()}
-          />
-        </LinearGradient>
-      )}
+      <LinearGradient
+        colors={[
+          'rgba(255, 255, 255, 0)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 0.9)',
+          'rgba(255, 255, 255, 1)',
+        ]}
+        style={styles.btnSection}>
+        <GradientButton
+          style={styles.btn}
+          label={'Применить фильтр'}
+          onPress={() => apply()}
+        />
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -400,25 +373,21 @@ export const JobsFilterScreen = ({navigation}) => {
 const width = dimensions.width;
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 88,
-  },
   btnSection: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingTop: 20,
+    marginTop: -20,
+    paddingTop: 22,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    height: 90,
     alignItems: 'center',
-    zIndex: 3,
   },
   btn: {
     width: width * 0.45,
     minWidth: 180,
   },
   resetBtn: {
+    paddingVertical: 4,
+    minHeight: 18,
     alignSelf: 'flex-end',
   },
   wrapperRadio: {

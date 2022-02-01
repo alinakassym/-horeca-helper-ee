@@ -8,7 +8,7 @@ import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 // components
 import Header from '../../components/Header';
-import MultilineInput from '../../components/MultilineInput';
+import MultilineInput from '../../components/inputs/MultilineInput';
 import {DateSelect} from '../../components/selects/DateSelect';
 import Autocomplete from '../../components/selects/Autocomplete';
 import GradientButton from '../../components/buttons/GradientButton';
@@ -20,7 +20,15 @@ import {deleteWork, updateWork} from '../../services/EmployeesService';
 import {getCities, getPositions} from '../../services/DictionariesService';
 import {getCompanies} from '../../services/CompaniesService';
 
+// locale
+import i18n from '../../assets/i18n/i18n';
+import {useSelector} from 'react-redux';
+
 export const EditWorkScreen = ({route, navigation}) => {
+  const {locale} = useSelector(state => state);
+  const suffix = locale.suffix;
+  const titleKey = `title${suffix}`;
+
   const [isFocused, setIsFocused] = useState(false);
   const [work, setWork] = useState(route.params.value);
   const [companies, setCompanies] = useState([]);
@@ -51,7 +59,10 @@ export const EditWorkScreen = ({route, navigation}) => {
         console.log('updateWork err: ', e);
       }
     } else {
-      Alert.alert('Warning', 'Please fill in all the required fields');
+      Alert.alert(
+        i18n.t('Warning'),
+        i18n.t('Please fill in all the required fields'),
+      );
     }
   };
 
@@ -85,14 +96,22 @@ export const EditWorkScreen = ({route, navigation}) => {
   };
 
   const confirmDeletion = () => {
-    Alert.alert('Delete Job', 'Are you sure you want to delete?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Delete', onPress: () => removeWork(), style: 'destructive'},
-    ]);
+    Alert.alert(
+      i18n.t('Delete Job'),
+      `${i18n.t('Are you sure you want to delete')}?`,
+      [
+        {
+          text: i18n.t('Cancel'),
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: i18n.t('Delete'),
+          onPress: () => removeWork(),
+          style: 'destructive',
+        },
+      ],
+    );
   };
 
   return (
@@ -100,22 +119,22 @@ export const EditWorkScreen = ({route, navigation}) => {
       <Header
         modal
         onClose={() => navigation.goBack()}
-        title={'Основная информация'}
+        title={i18n.t('Basic information')}
       />
       <KeyboardAwareScrollView
         style={[globalStyles.section, styles.mb]}
         enableResetScrollToCoords={false}>
         <Autocomplete
-          label={'Город'}
+          label={i18n.t('City')}
           value={work.city}
           items={cities}
-          itemKey={'title_ru'}
+          itemKey={titleKey}
           onSelect={val => setWork({...work, city: val})}
           onClear={() => setWork({...work, city: null})}
         />
 
         <Autocomplete
-          label={'Название компании'}
+          label={i18n.t('Name')}
           value={work.company}
           items={companies}
           itemKey={'title'}
@@ -124,22 +143,22 @@ export const EditWorkScreen = ({route, navigation}) => {
         />
 
         <Autocomplete
-          label={'Должность'}
+          label={i18n.t('Position')}
           value={work.position}
           items={positions}
-          itemKey={'title_ru'}
+          itemKey={titleKey}
           onSelect={val => setWork({...work, position: val})}
           onClear={() => setWork({...work, position: null})}
         />
         <DateSelect
-          label={'Дата начала'}
+          label={i18n.t('Start date')}
           value={work}
           valueKey={'startDate'}
           required={true}
           androidVariant="nativeAndroid"
         />
         <DateSelect
-          label={'Дата окончания'}
+          label={i18n.t('End date')}
           value={work}
           valueKey={'endDate'}
           minimumDate={new Date(work.startDate)}
@@ -149,7 +168,7 @@ export const EditWorkScreen = ({route, navigation}) => {
 
         <MultilineInput
           style={globalStyles.mt5}
-          label={'Описание'}
+          label={i18n.t('Description')}
           value={work.description}
           onChangeText={val => {
             setWork({...work, description: val});
@@ -168,13 +187,9 @@ export const EditWorkScreen = ({route, navigation}) => {
             'rgba(255, 255, 255, 1)',
           ]}
           style={styles.btn}>
-          <GradientButton
-            style={globalStyles.mb4}
-            label={'Сохранить'}
-            onPress={() => save()}
-          />
+          <GradientButton label={i18n.t('Save')} onPress={() => save()} />
           <PlainButton
-            label={'Удалить'}
+            label={i18n.t('Delete')}
             color={StatusesColors.red}
             onPress={() => confirmDeletion()}
           />

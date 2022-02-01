@@ -5,23 +5,20 @@ import {PrimaryColors} from '../../../styles/colors';
 import ModalButton from '../../../components/buttons/ModalButton';
 
 const propTypes = {
+  label: PropTypes.string,
   photoUrl: PropTypes.string,
   onPress: PropTypes.func,
 };
 
 class ProfilePhoto extends React.PureComponent {
   render() {
-    const {photoUrl, onPress} = this.props;
+    const {label, photoUrl, onPress} = this.props;
     return (
       <View style={styles.section}>
         <TouchableOpacity onPress={onPress} style={styles.imageWrapper}>
           <Image style={styles.image} source={{uri: photoUrl}} />
         </TouchableOpacity>
-        <ModalButton
-          onPress={onPress}
-          style={styles.btn}
-          label={'Изменить фото'}
-        />
+        <ModalButton onPress={onPress} style={styles.btn} label={label} />
       </View>
     );
   }

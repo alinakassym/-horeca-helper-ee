@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import { PrimaryColors } from "../styles/colors";
+import {PrimaryColors} from '../styles/colors';
 
 const propTypes = {
   text: PropTypes.string,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   smallBadge: {
     paddingVertical: 2,
     paddingHorizontal: 11,
-    height: 20,
+    height: 22,
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',

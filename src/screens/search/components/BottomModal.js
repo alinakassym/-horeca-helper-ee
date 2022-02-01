@@ -13,6 +13,7 @@ import PrimaryButton from '../../../components/buttons/PrimaryButton';
 import GradientButton from '../../../components/buttons/GradientButton';
 import {PrimaryColors} from '../../../styles/colors';
 import {globalStyles} from '../../../styles/globalStyles';
+import i18n from '../../../assets/i18n/i18n';
 
 const dimensions = Dimensions.get('screen');
 
@@ -37,11 +38,11 @@ export const BottomModal = ({
         <Pressable style={styles.overlay} onPress={onClose}>
           <View style={styles.wrap}>
             <CloseButton onPress={onClose} />
-            <Text style={styles.title}>Отклик на вакансию</Text>
+            <Text style={styles.title}>{i18n.t('Applying for a job')}</Text>
             {children}
             <View style={styles.inputSection}>
               <Text style={[globalStyles.inputLabel, styles.inputLabel]}>
-                Сопроводительное письмо
+                {i18n.t('Covering letter')}
               </Text>
               <TextInput
                 multiline={true}
@@ -55,12 +56,12 @@ export const BottomModal = ({
             </View>
             <View style={styles.btn}>
               {isValid ? (
-                <GradientButton label={'Отправить'} onPress={onSend} />
+                <GradientButton label={i18n.t('Send')} onPress={onSend} />
               ) : (
                 <PrimaryButton
                   color={PrimaryColors.grey3}
                   labelColor={PrimaryColors.grey1}
-                  label={'Отправить'}
+                  label={i18n.t('Send')}
                 />
               )}
             </View>

@@ -30,10 +30,17 @@ import UpdatedAt from '../../../components/UpdatedAt';
 // utils
 import {numberWithSpaces} from '../../../utils/common';
 
+// locale
+import i18n from '../../../assets/i18n/i18n';
+
 const dimensions = Dimensions.get('screen');
 
 const propTypes = {
+  locale: PropTypes.string,
   item: PropTypes.object,
+  position: PropTypes.string,
+  company: PropTypes.string,
+  city: PropTypes.string,
   onPress: PropTypes.func,
   onSelect: PropTypes.func,
   onSendApply: PropTypes.func,
@@ -41,7 +48,16 @@ const propTypes = {
 
 class JobCard extends React.PureComponent {
   render() {
-    const {item, onPress, onSelect, onSendApply} = this.props;
+    const {
+      locale,
+      item,
+      position,
+      company,
+      city,
+      onPress,
+      onSelect,
+      onSendApply,
+    } = this.props;
     const getSalary = (salaryMin, salaryMax) => {
       if (salaryMin && salaryMax) {
         return `${numberWithSpaces(salaryMin)} - ${numberWithSpaces(
@@ -59,25 +75,21 @@ class JobCard extends React.PureComponent {
           <View style={[styles.row, styles.mb2]}>
             <View style={styles.leftCol}>
               <View style={styles.row}>
-                <Text style={styles.positionTitle}>
-                  {item?.position?.title_ru}
-                </Text>
+                <Text style={styles.positionTitle}>{position}</Text>
                 <SmallBadge
-                  style={styles.smallBadge}
-                  text={'TOP'}
+                  style={globalStyles.ml3}
+                  text={i18n.t('TOP')}
                   color={'#9B51E0'}
                 />
               </View>
               <View style={[styles.row, styles.alignCenter]}>
                 <IconBuilding color={PrimaryColors.grey1} size={16} />
-                <Text style={[styles.text, globalStyles.ml2]}>
-                  {item.company.title}
-                </Text>
+                <Text style={[styles.text, globalStyles.ml2]}>{company}</Text>
               </View>
               <View style={[styles.row, styles.alignCenter]}>
                 <IconAddress color={PrimaryColors.grey1} size={16} />
                 <Text numberOfLines={1} style={[styles.text, globalStyles.ml2]}>
-                  {item?.city?.title_ru}
+                  {city}
                 </Text>
               </View>
             </View>
@@ -120,14 +132,16 @@ class JobCard extends React.PureComponent {
             <GradientButton
               onPress={() => onSendApply(item)}
               style={{width: width - 196}}
-              label={'Откликнуться'}
+              label={i18n.t('Apply')}
             />
             <OutlineButton
               onPress={onSelect}
               style={styles.outlineBtn}
-              labelStyle={styles.outlineBtnLabel}
-              label={item.isStarred ? 'В избранных' : 'В избранные'}>
+              label={
+                item.isStarred ? i18n.t('Saved item') : i18n.t('Save item')
+              }>
               <IconBookmark
+                style={globalStyles.mr1}
                 fillColor={
                   item.isStarred ? PrimaryColors.brand : PrimaryColors.white
                 }
@@ -140,7 +154,7 @@ class JobCard extends React.PureComponent {
         </Pressable>
 
         {/* Updated at */}
-        <UpdatedAt date={item.updatedAt} />
+        <UpdatedAt locale={locale} date={item.updatedAt} />
       </React.Fragment>
     );
   }
@@ -207,9 +221,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: PrimaryColors.grey1,
   },
-  smallBadge: {marginLeft: 8},
   outlineBtn: {marginLeft: 8, width: 148},
-  outlineBtnLabel: {marginLeft: 4},
 });
 
 JobCard.propTypes = propTypes;
