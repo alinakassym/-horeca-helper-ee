@@ -13,17 +13,14 @@ import ModalButton from '../../components/buttons/ModalButton';
 
 // store
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 // locale
 import i18n from '../../assets/i18n/i18n';
 
 export const MyCVScreen = ({route, navigation}) => {
-  const {locale} = useSelector(state => state);
-  const suffix = locale.suffix;
-  const titleKey = `title${suffix}`;
-
-  const [me] = useState(route.params.value);
+  const [me] = useState(route.params.me);
+  const [myResumes] = useState(route.params.myResumes);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
 
@@ -73,19 +70,23 @@ export const MyCVScreen = ({route, navigation}) => {
         <ModalButton divide label={i18n.t('Edit')} />
         <ModalButton label={i18n.t('Remove')} labelColor={StatusesColors.red} />
       </BottomModal>
-      <CVCard
-        position={me.position[titleKey]}
-        salary={me.salary}
-        updatedAt={me.updatedAt}
-        onPress={() => {
-          setVisible(true);
-        }}
-        findRelevant={() =>
-          apply().then(() => {
-            navigation.navigate('Jobs');
-          })
-        }
-      />
+      {myResumes.map((resume, index) => (
+        <CVCard
+          key={index}
+          position={resume.position?.title_ru}
+          salary={resume.salary}
+          updatedAt={resume.updatedAt}
+          onPress={() => {
+            setVisible(true);
+          }}
+          findRelevant={() =>
+            apply().then(() => {
+              // TODO: navigating twice?
+              navigation.navigate('Jobs');
+            })
+          }
+        />
+      ))}
     </SafeAreaView>
   );
 };

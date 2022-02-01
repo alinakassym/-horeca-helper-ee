@@ -24,6 +24,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import i18n from '../../assets/i18n/i18n';
 import {useSelector} from 'react-redux';
 
+import * as ResumesService from '../../services/ResumesService';
+
 const dimensions = Dimensions.get('screen');
 
 export const JobScreen = ({route, navigation}) => {
@@ -40,8 +42,12 @@ export const JobScreen = ({route, navigation}) => {
   const [applyMessage, setApplyMessage] = useState();
 
   const sendApply = async () => {
+    // TODO: unhardcode & let user select via UI
+    const myResumesData = await ResumesService.getMy();
+
     const id = job.id;
     const data = {
+      resumeId: myResumesData[0]?.id,
       body: applyMessage,
     };
 
