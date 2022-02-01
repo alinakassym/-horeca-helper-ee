@@ -11,6 +11,10 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: PrimaryColors.background,
   },
+  flex1: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
   rootStackContainer: {
     flex: 1,
     backgroundColor: PrimaryColors.white,
@@ -24,6 +28,12 @@ export const globalStyles = StyleSheet.create({
     marginTop: 8,
     padding: 20,
     width: dimensions.width,
+    backgroundColor: PrimaryColors.white,
+  },
+  btnSection: {
+    paddingHorizontal: 20,
+    width: dimensions.width,
+    minHeight: 90,
     backgroundColor: PrimaryColors.white,
   },
   inputLabel: {

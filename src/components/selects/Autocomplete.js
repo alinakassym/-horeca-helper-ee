@@ -19,7 +19,7 @@ import {IconCheck} from '../../assets/icons/main/IconCheck';
 
 // components
 import Header from '../Header';
-import SearchInput from '../SearchInput';
+import SearchInput from '../inputs/SearchInput';
 
 const propTypes = {
   label: PropTypes.string,

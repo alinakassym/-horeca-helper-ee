@@ -153,7 +153,7 @@ export const WelcomeScreen = ({navigation}) => {
 
             {/*Enter with LOGIN & PASSWORD*/}
             <PrimaryButton
-              onPress={() => navigation.navigate('SignIn')}
+              onPress={() => navigation.navigate('Registration')}
               style={styles.btn}
               color={PrimaryColors.grey4}
               labelStyle={styles.labelStyle}

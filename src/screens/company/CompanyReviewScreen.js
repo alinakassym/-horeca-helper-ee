@@ -8,7 +8,7 @@ import {PrimaryColors} from '../../styles/colors';
 // components
 import Header from '../../components/Header';
 import RatingScale from './components/RatingScale';
-import MultilineInput from '../../components/MultilineInput';
+import MultilineInput from '../../components/inputs/MultilineInput';
 import DisabledButton from '../../components/buttons/DisabledButton';
 import GradientButton from '../../components/buttons/GradientButton';
 import LinearGradient from 'react-native-linear-gradient';

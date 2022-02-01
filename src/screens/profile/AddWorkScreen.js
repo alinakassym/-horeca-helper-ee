@@ -9,7 +9,7 @@ import {PrimaryColors} from '../../styles/colors';
 // components
 import Header from '../../components/Header';
 import GradientButton from '../../components/buttons/GradientButton';
-import MultilineInput from '../../components/MultilineInput';
+import MultilineInput from '../../components/inputs/MultilineInput';
 import LinearGradient from 'react-native-linear-gradient';
 import Autocomplete from '../../components/selects/Autocomplete';
 import {DateSelect} from '../../components/selects/DateSelect';

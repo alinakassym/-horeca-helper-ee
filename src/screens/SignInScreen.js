@@ -14,7 +14,7 @@ import {typography} from '../styles/typography';
 
 // components
 import Header from '../components/Header';
-import Input from '../components/Input';
+import Input from '../components/inputs/Input';
 import GradientButton from '../components/buttons/GradientButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

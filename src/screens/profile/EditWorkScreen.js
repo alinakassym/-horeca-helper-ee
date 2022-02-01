@@ -8,7 +8,7 @@ import {PrimaryColors, StatusesColors} from '../../styles/colors';
 
 // components
 import Header from '../../components/Header';
-import MultilineInput from '../../components/MultilineInput';
+import MultilineInput from '../../components/inputs/MultilineInput';
 import {DateSelect} from '../../components/selects/DateSelect';
 import Autocomplete from '../../components/selects/Autocomplete';
 import GradientButton from '../../components/buttons/GradientButton';

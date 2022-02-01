@@ -15,7 +15,7 @@ import PlainButton from '../../components/buttons/PlainButton';
 import GroupButton from '../../components/buttons/GroupButton';
 import ExpansionPanel from '../../components/ExpansionPanel';
 import RadioBtn from '../../components/buttons/RadioBtn';
-import NumberInput from '../../components/NumberInput';
+import NumberInput from '../../components/inputs/NumberInput';
 import GradientButton from '../../components/buttons/GradientButton';
 import LinearGradient from 'react-native-linear-gradient';
 
