@@ -69,7 +69,11 @@ export const ChooseWorkScreen = ({route, navigation}) => {
         />
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton style={globalStyles.mt5} label={i18n.t('Next')} />
+        <GradientButton
+          onPress={() => navigation.navigate('SpecifySalary', {me})}
+          style={globalStyles.mt5}
+          label={i18n.t('Next')}
+        />
       </View>
     </SafeAreaView>
   );

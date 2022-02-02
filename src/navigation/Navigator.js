@@ -35,6 +35,7 @@ import {SettingsScreen} from '../screens/settings/SettingsScreen';
 import {ChoosePositionScreen} from '../screens/resumes/ChoosePositionScreen';
 import {ChooseScheduleScreen} from '../screens/resumes/ChooseScheduleScreen';
 import {ChooseWorkScreen} from '../screens/resumes/ChooseWorkScreen';
+import {SpecifySalaryScreen} from '../screens/resumes/SpecifySalaryScreen';
 
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
@@ -253,6 +254,11 @@ export const Navigator = () => {
         <Stack.Screen
           name={'ChooseWork'}
           component={ChooseWorkScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'SpecifySalary'}
+          component={SpecifySalaryScreen}
           options={{headerShown: false}}
         />
       </Stack.Group>
