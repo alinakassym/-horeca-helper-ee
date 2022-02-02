@@ -14,21 +14,21 @@ const propTypes = {
 class RadioSelect extends React.PureComponent {
   render() {
     const {items, itemKey, selectedItem, onSelect, style} = this.props;
-    const Item = value => {
-      if (selectedItem && value.value[itemKey] === selectedItem[itemKey]) {
+    const Item = ({item}) => {
+      if (selectedItem && item[itemKey] === selectedItem[itemKey]) {
         return (
           <Pressable
             style={[styles.btn, styles.active]}
-            onPress={() => onSelect(value.value)}>
+            onPress={() => onSelect(item)}>
             <Text style={[styles.btnText, styles.activeBtnText]}>
-              {value.value[itemKey]}
+              {item[itemKey]}
             </Text>
           </Pressable>
         );
       }
       return (
-        <Pressable style={styles.btn} onPress={() => onSelect(value.value)}>
-          <Text style={styles.btnText}>{value.value[itemKey]}</Text>
+        <Pressable style={styles.btn} onPress={() => onSelect(item)}>
+          <Text style={styles.btnText}>{item[itemKey]}</Text>
         </Pressable>
       );
     };
@@ -36,7 +36,7 @@ class RadioSelect extends React.PureComponent {
     return (
       <View style={[styles.wrapper, style]}>
         {items.map((item, index) => (
-          <Item value={item} key={index} />
+          <Item item={item} key={index} />
         ))}
       </View>
     );

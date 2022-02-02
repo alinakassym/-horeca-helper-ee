@@ -3,7 +3,7 @@ import Svg, {Path} from 'react-native-svg';
 
 export const IconCheck = ({color, size, width}) => {
   return (
-    <Svg width={size || 16} height={size || 16} fill="none">
+    <Svg width={size || 16} height={size || 16} viewBox="0 0 16 16" fill="none">
       <Path
         d="m13.5 4.5-7 7L3 8"
         stroke={color || '#000000'}

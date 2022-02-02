@@ -44,13 +44,17 @@ export const ChoosePositionScreen = ({navigation}) => {
           <RadioSelect
             items={positions}
             itemKey={'title'}
-            selectedPosition={selectedPosition}
+            selectedItem={selectedPosition}
             onSelect={val => setSelectedPosition(val)}
           />
         </View>
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton style={globalStyles.mt5} label={i18n.t('Next')} />
+        <GradientButton
+          onPress={() => navigation.navigate('ChooseSchedule')}
+          style={globalStyles.mt5}
+          label={i18n.t('Next')}
+        />
       </View>
     </SafeAreaView>
   );

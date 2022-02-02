@@ -23,7 +23,7 @@ import {useDispatch} from 'react-redux';
 import i18n from '../../assets/i18n/i18n';
 
 export const MyCVScreen = ({route, navigation}) => {
-  const [me] = useState(route.params.me);
+  const [me] = useState(route.params && route.params.me);
   const [myResumes] = useState(route.params.myResumes);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
