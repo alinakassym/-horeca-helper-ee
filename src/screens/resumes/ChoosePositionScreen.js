@@ -14,7 +14,8 @@ import SearchInput from '../../components/inputs/SearchInput';
 import RadioSelect from '../../components/selects/RadioSelect';
 import GradientButton from '../../components/buttons/GradientButton';
 
-export const ChoosePositionScreen = ({navigation}) => {
+export const ChoosePositionScreen = ({route, navigation}) => {
+  const [me] = useState(route.params && route.params.me);
   const [positions, setPositions] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState();
   const [search, setSearch] = useState('');
@@ -51,7 +52,7 @@ export const ChoosePositionScreen = ({navigation}) => {
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
         <GradientButton
-          onPress={() => navigation.navigate('ChooseSchedule')}
+          onPress={() => navigation.navigate('ChooseSchedule', {me})}
           style={globalStyles.mt5}
           label={i18n.t('Next')}
         />

@@ -98,7 +98,7 @@ export const MyCVScreen = ({route, navigation}) => {
         style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
         <PlainButton
           onPress={() => {
-            navigation.navigate('ChoosePosition');
+            navigation.navigate('ChoosePosition', {me});
           }}
           btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
           labelStyle={globalStyles.ml3}
