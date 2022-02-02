@@ -10,10 +10,16 @@ import Header from '../../components/Header';
 import StepProgress from './components/StepProgress';
 import GradientButton from '../../components/buttons/GradientButton';
 import NumberInput from '../../components/inputs/NumberInput';
+import DisabledButton from '../../components/buttons/DisabledButton';
+// services
+import * as ResumesService from '../../services/ResumesService';
 
 export const SpecifySalaryScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
+  const [resume, setResume] = useState(route.params && route.params.resume);
   const [salary, setSalary] = useState();
+
+  console.log({resume});
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -23,6 +29,16 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
       }
     });
   }, [me, navigation]);
+
+  const createResume = async () => {
+    try {
+      await ResumesService.create(resume);
+      navigation.navigate('Profile');
+    } catch (e) {
+      console.log('createResume err: ', e);
+    }
+  };
+
   return (
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
@@ -37,12 +53,27 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
           <NumberInput
             value={salary}
             label={i18n.t('Salary')}
-            onChangeText={val => setSalary(val)}
+            onChangeText={val => {
+              setResume({...resume, salary: val});
+              setSalary(val);
+            }}
+            onClear={() => setSalary(null)}
           />
         </View>
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton style={globalStyles.mt5} label={i18n.t('Create CV')} />
+        {salary ? (
+          <GradientButton
+            onPress={() => createResume()}
+            style={globalStyles.mt5}
+            label={i18n.t('Create CV')}
+          />
+        ) : (
+          <DisabledButton
+            label={i18n.t('Create CV')}
+            style={globalStyles.mt5}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

@@ -13,12 +13,19 @@ import StepProgress from './components/StepProgress';
 import SearchInput from '../../components/inputs/SearchInput';
 import RadioSelect from '../../components/selects/RadioSelect';
 import GradientButton from '../../components/buttons/GradientButton';
+import DisabledButton from '../../components/buttons/DisabledButton';
 
 export const ChoosePositionScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
+  const [resume, setResume] = useState(route.params && route.params.resume);
   const [positions, setPositions] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState();
   const [search, setSearch] = useState('');
+
+  const choosePosition = val => {
+    setSelectedPosition(val);
+    setResume({...resume, positionId: val.id});
+  };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -46,16 +53,20 @@ export const ChoosePositionScreen = ({route, navigation}) => {
             items={positions}
             itemKey={'title'}
             selectedItem={selectedPosition}
-            onSelect={val => setSelectedPosition(val)}
+            onSelect={val => choosePosition(val)}
           />
         </View>
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton
-          onPress={() => navigation.navigate('ChooseSchedule', {me})}
-          style={globalStyles.mt5}
-          label={i18n.t('Next')}
-        />
+        {selectedPosition ? (
+          <GradientButton
+            onPress={() => navigation.navigate('ChooseSchedule', {me, resume})}
+            style={globalStyles.mt5}
+            label={i18n.t('Next')}
+          />
+        ) : (
+          <DisabledButton label={i18n.t('Next')} style={globalStyles.mt5} />
+        )}
       </View>
     </SafeAreaView>
   );

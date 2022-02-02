@@ -11,24 +11,33 @@ import StepProgress from './components/StepProgress';
 import GradientButton from '../../components/buttons/GradientButton';
 import MultiSelect from '../../components/selects/MultiSelect';
 import _ from 'lodash';
+import DisabledButton from '../../components/buttons/DisabledButton';
 
 export const ChooseWorkScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
+  const [resume, setResume] = useState(route.params && route.params.resume);
   const [works, setWorks] = useState([]);
-  const [selectedWork, setSelectedWork] = useState([]);
+  const [selectedWorks, setSelectedWorks] = useState([]);
+
+  console.log({resume});
 
   const addItem = val => {
     const include = _.includes(
-      selectedWork.map(item => item.id),
+      selectedWorks.map(item => item.id),
       val.id,
     );
     if (include) {
-      const arrWithRemoved = _.remove(selectedWork, el => el.id !== val.id);
-      setSelectedWork(arrWithRemoved);
+      const arrWithRemoved = _.remove(selectedWorks, el => el.id !== val.id);
+      setSelectedWorks(arrWithRemoved);
     } else {
-      const uniqArr = _.uniqBy([...selectedWork, val], 'id');
-      setSelectedWork(uniqArr);
+      const uniqArr = _.uniqBy([...selectedWorks, val], 'id');
+      setResume({...resume, workIds: uniqArr.map(el => el.id)});
+      setSelectedWorks(uniqArr);
     }
+  };
+
+  const next = () => {
+    navigation.navigate('SpecifySalary', {me, resume});
   };
 
   useEffect(() => {
@@ -62,18 +71,22 @@ export const ChooseWorkScreen = ({route, navigation}) => {
       <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <MultiSelect
           description
-          activeItems={selectedWork}
+          activeItems={selectedWorks}
           items={works}
           itemKey={'title_ru'}
           onSelect={val => addItem(val)}
         />
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton
-          onPress={() => navigation.navigate('SpecifySalary', {me})}
-          style={globalStyles.mt5}
-          label={i18n.t('Next')}
-        />
+        {selectedWorks.length > 0 ? (
+          <GradientButton
+            onPress={() => next()}
+            style={globalStyles.mt5}
+            label={i18n.t('Next')}
+          />
+        ) : (
+          <DisabledButton label={i18n.t('Next')} style={globalStyles.mt5} />
+        )}
       </View>
     </SafeAreaView>
   );

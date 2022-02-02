@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   label: PropTypes.string,
+  style: PropTypes.object,
 };
 
 class DisabledButton extends React.PureComponent {
   render() {
-    const {label} = this.props;
+    const {label, style} = this.props;
     return (
-      <View activeOpacity={0.5} style={styles.btn}>
+      <View activeOpacity={0.5} style={[styles.btn, style]}>
         <Text style={styles.btnLabel}>{label}</Text>
       </View>
     );

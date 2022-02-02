@@ -13,9 +13,11 @@ import StepProgress from './components/StepProgress';
 import GradientButton from '../../components/buttons/GradientButton';
 import MultiSelect from '../../components/selects/MultiSelect';
 import _ from 'lodash';
+import DisabledButton from '../../components/buttons/DisabledButton';
 
 export const ChooseScheduleScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
+  const [resume, setResume] = useState(route.params && route.params.resume);
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedules, setSelectedSchedules] = useState([]);
 
@@ -32,8 +34,13 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
       setSelectedSchedules(arrWithRemoved);
     } else {
       const uniqArr = _.uniqBy([...selectedSchedules, val], 'id');
+      setResume({...resume, scheduleId: uniqArr[0].id});
       setSelectedSchedules(uniqArr);
     }
+  };
+
+  const next = () => {
+    navigation.navigate('ChooseWork', {me, resume});
   };
 
   useEffect(() => {
@@ -64,11 +71,15 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
         />
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton
-          onPress={() => navigation.navigate('ChooseWork', {me})}
-          style={globalStyles.mt5}
-          label={i18n.t('Next')}
-        />
+        {selectedSchedules.length > 0 ? (
+          <GradientButton
+            onPress={() => next()}
+            style={globalStyles.mt5}
+            label={i18n.t('Next')}
+          />
+        ) : (
+          <DisabledButton label={i18n.t('Next')} style={globalStyles.mt5} />
+        )}
       </View>
     </SafeAreaView>
   );

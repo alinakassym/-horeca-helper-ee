@@ -10,7 +10,7 @@ export const getOne = async id => {
   return r.data;
 };
 
-export const create = async (id, data) => {
+export const create = async data => {
   const r = await http.post('/ee/resumes', data);
   return r.data;
 };
