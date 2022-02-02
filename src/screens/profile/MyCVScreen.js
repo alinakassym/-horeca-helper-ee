@@ -93,12 +93,7 @@ export const MyCVScreen = ({route, navigation}) => {
               setSelectedResume(resume);
               setVisible(true);
             }}
-            findRelevant={() =>
-              apply().then(() => {
-                // TODO: navigating twice?
-                navigation.navigate('Jobs');
-              })
-            }
+            findRelevant={() => apply()}
           />
         ))}
         <TouchableOpacity
