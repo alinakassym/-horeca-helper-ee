@@ -17,9 +17,7 @@ import * as ResumesService from '../../services/ResumesService';
 export const SpecifySalaryScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [resume, setResume] = useState(route.params && route.params.resume);
-  const [salary, setSalary] = useState();
-
-  console.log({resume});
+  const [salary, setSalary] = useState(resume && resume.salary.toString());
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -33,6 +31,21 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
   const createResume = async () => {
     try {
       await ResumesService.create(resume);
+      navigation.navigate('Profile');
+    } catch (e) {
+      console.log('createResume err: ', e);
+    }
+  };
+
+  const saveResume = async () => {
+    try {
+      await ResumesService.update(resume.id, {
+        positionId: resume.position.id,
+        experience: null,
+        scheduleId: resume.schedule.id,
+        salary: resume.salary,
+        workIds: resume.workIds,
+      });
       navigation.navigate('Profile');
     } catch (e) {
       console.log('createResume err: ', e);
@@ -62,7 +75,13 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
         </View>
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        {salary ? (
+        {resume.createdAt ? (
+          <GradientButton
+            onPress={() => saveResume()}
+            style={globalStyles.mt5}
+            label={i18n.t('Save')}
+          />
+        ) : salary ? (
           <GradientButton
             onPress={() => createResume()}
             style={globalStyles.mt5}

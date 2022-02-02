@@ -19,7 +19,9 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [resume, setResume] = useState(route.params && route.params.resume);
   const [schedules, setSchedules] = useState([]);
-  const [selectedSchedules, setSelectedSchedules] = useState([]);
+  const [selectedSchedules, setSelectedSchedules] = useState(
+    resume ? [resume.schedule] : [],
+  );
 
   const addItem = val => {
     const include = _.includes(

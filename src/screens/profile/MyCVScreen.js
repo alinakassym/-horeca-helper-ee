@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, TouchableOpacity} from 'react-native';
+import {SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
 
 //styles
 import {globalStyles} from '../../styles/globalStyles';
@@ -26,6 +26,7 @@ export const MyCVScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [myResumes] = useState(route.params.myResumes);
   const [visible, setVisible] = useState(false);
+  const [selectedResume, setSelectedResume] = useState();
   const dispatch = useDispatch();
 
   const apply = async () => {
@@ -71,46 +72,56 @@ export const MyCVScreen = ({route, navigation}) => {
         onCancel={() => setVisible(false)}>
         <ModalButton divide label={i18n.t('Promote')} />
         <ModalButton divide label={i18n.t('Deactivate')} />
-        <ModalButton divide label={i18n.t('Edit')} />
+        <ModalButton
+          onPress={() => {
+            setVisible(false);
+            navigation.navigate('ChoosePosition', {me, resume: selectedResume});
+          }}
+          divide
+          label={i18n.t('Edit')}
+        />
         <ModalButton label={i18n.t('Remove')} labelColor={StatusesColors.red} />
       </BottomModal>
-      {myResumes.map((resume, index) => (
-        <CVCard
-          key={index}
-          position={resume.position?.title_ru}
-          salary={resume.salary}
-          updatedAt={resume.updatedAt}
-          onPress={() => {
-            setVisible(true);
-          }}
-          findRelevant={() =>
-            apply().then(() => {
-              // TODO: navigating twice?
-              navigation.navigate('Jobs');
-            })
-          }
-        />
-      ))}
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('AddWork');
-        }}
-        style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
-        <PlainButton
-          onPress={() => {
-            navigation.navigate('ChoosePosition', {me});
-          }}
-          btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
-          labelStyle={globalStyles.ml3}
-          label={i18n.t('Add CV')}>
-          <IconAdd
-            style={globalStyles.mr3}
-            color={PrimaryColors.brand}
-            size={16}
-            width={2}
+      <ScrollView>
+        {myResumes.map((resume, index) => (
+          <CVCard
+            key={index}
+            position={resume.position?.title_ru}
+            salary={resume.salary}
+            updatedAt={resume.updatedAt}
+            onPress={() => {
+              setSelectedResume(resume);
+              setVisible(true);
+            }}
+            findRelevant={() =>
+              apply().then(() => {
+                // TODO: navigating twice?
+                navigation.navigate('Jobs');
+              })
+            }
           />
-        </PlainButton>
-      </TouchableOpacity>
+        ))}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AddWork');
+          }}
+          style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
+          <PlainButton
+            onPress={() => {
+              navigation.navigate('ChoosePosition', {me});
+            }}
+            btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
+            labelStyle={globalStyles.ml3}
+            label={i18n.t('Add CV')}>
+            <IconAdd
+              style={globalStyles.mr3}
+              color={PrimaryColors.brand}
+              size={16}
+              width={2}
+            />
+          </PlainButton>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };

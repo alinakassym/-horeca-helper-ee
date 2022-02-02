@@ -16,10 +16,10 @@ import DisabledButton from '../../components/buttons/DisabledButton';
 export const ChooseWorkScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [resume, setResume] = useState(route.params && route.params.resume);
-  const [works, setWorks] = useState([]);
+  const [works, setWorks] = useState(
+    resume && resume.works ? resume.works.map(el => el.id) : [],
+  );
   const [selectedWorks, setSelectedWorks] = useState([]);
-
-  console.log({resume});
 
   const addItem = val => {
     const include = _.includes(

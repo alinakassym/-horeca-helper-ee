@@ -19,7 +19,9 @@ export const ChoosePositionScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [resume, setResume] = useState(route.params && route.params.resume);
   const [positions, setPositions] = useState([]);
-  const [selectedPosition, setSelectedPosition] = useState();
+  const [selectedPosition, setSelectedPosition] = useState(
+    resume && resume.position,
+  );
   const [search, setSearch] = useState('');
 
   const choosePosition = val => {
