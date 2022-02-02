@@ -14,7 +14,8 @@ import GradientButton from '../../components/buttons/GradientButton';
 import MultiSelect from '../../components/selects/MultiSelect';
 import _ from 'lodash';
 
-export const ChooseScheduleScreen = ({navigation}) => {
+export const ChooseScheduleScreen = ({route, navigation}) => {
+  const [me] = useState(route.params && route.params.me);
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedules, setSelectedSchedules] = useState([]);
 
@@ -63,7 +64,11 @@ export const ChooseScheduleScreen = ({navigation}) => {
         />
       </KeyboardAwareScrollView>
       <View style={globalStyles.btnSection}>
-        <GradientButton style={globalStyles.mt5} label={i18n.t('Next')} />
+        <GradientButton
+          onPress={() => navigation.navigate('ChooseWork', {me})}
+          style={globalStyles.mt5}
+          label={i18n.t('Next')}
+        />
       </View>
     </SafeAreaView>
   );

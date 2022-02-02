@@ -34,6 +34,7 @@ import {SettingsScreen} from '../screens/settings/SettingsScreen';
 // resumes screens
 import {ChoosePositionScreen} from '../screens/resumes/ChoosePositionScreen';
 import {ChooseScheduleScreen} from '../screens/resumes/ChooseScheduleScreen';
+import {ChooseWorkScreen} from '../screens/resumes/ChooseWorkScreen';
 
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
@@ -247,6 +248,11 @@ export const Navigator = () => {
         <Stack.Screen
           name={'ChooseSchedule'}
           component={ChooseScheduleScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'ChooseWork'}
+          component={ChooseWorkScreen}
           options={{headerShown: false}}
         />
       </Stack.Group>

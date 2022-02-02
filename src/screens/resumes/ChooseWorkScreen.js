@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View} from 'react-native';
 // styles
 import {globalStyles} from '../../styles/globalStyles';
-// services
-import {getSchedules} from '../../services/DictionariesService';
 // locale
 import i18n from '../../assets/i18n/i18n';
 // components
@@ -14,50 +12,58 @@ import GradientButton from '../../components/buttons/GradientButton';
 import MultiSelect from '../../components/selects/MultiSelect';
 import _ from 'lodash';
 
-export const ChooseWorkScreen = ({navigation}) => {
-  const [schedules, setSchedules] = useState([]);
-  const [selectedSchedules, setSelectedSchedules] = useState([]);
+export const ChooseWorkScreen = ({route, navigation}) => {
+  const [me] = useState(route.params && route.params.me);
+  const [works, setWorks] = useState([]);
+  const [selectedWork, setSelectedWork] = useState([]);
 
   const addItem = val => {
     const include = _.includes(
-      selectedSchedules.map(item => item.id),
+      selectedWork.map(item => item.id),
       val.id,
     );
     if (include) {
-      const arrWithRemoved = _.remove(
-        selectedSchedules,
-        el => el.id !== val.id,
-      );
-      setSelectedSchedules(arrWithRemoved);
+      const arrWithRemoved = _.remove(selectedWork, el => el.id !== val.id);
+      setSelectedWork(arrWithRemoved);
     } else {
-      const uniqArr = _.uniqBy([...selectedSchedules, val], 'id');
-      setSelectedSchedules(uniqArr);
+      const uniqArr = _.uniqBy([...selectedWork, val], 'id');
+      setSelectedWork(uniqArr);
     }
   };
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
       try {
-        const schedulesData = await getSchedules();
-        setSchedules(schedulesData);
+        const worksData = me.works.map(el => {
+          return {
+            id: el.id,
+            title: el.position.title,
+            title_ru: el.position.title_ru,
+            company: el.company,
+            startDate: el.startDate,
+            endDate: el.endDate,
+          };
+        });
+        setWorks(worksData);
       } catch (e) {
         console.log('getData err: ', e);
       }
     });
-  }, [navigation]);
+  }, [me, navigation]);
   return (
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
       <Header
         onClose={() => navigation.goBack(2)}
         modal
-        title={'Укажите свою занятость'}>
-        <StepProgress step={2} />
+        title={'Укажите опыт работы'}>
+        <StepProgress step={3} />
       </Header>
       <KeyboardAwareScrollView enableResetScrollToCoords={false}>
         <MultiSelect
-          activeItems={selectedSchedules}
-          items={schedules}
+          description
+          activeItems={selectedWork}
+          items={works}
           itemKey={'title_ru'}
           onSelect={val => addItem(val)}
         />
