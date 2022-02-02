@@ -5,17 +5,17 @@ import {IconClose} from '../../assets/icons/main/IconClose';
 
 const propTypes = {
   onPress: PropTypes.func,
-  color: PropTypes.string,
+  style: PropTypes.object,
 };
 
 class CloseButton extends React.PureComponent {
   render() {
-    const {onPress} = this.props;
+    const {onPress, style} = this.props;
     return (
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={onPress}
-        style={[styles.btn]}>
+        style={[styles.btn, style]}>
         <IconClose color={'#8391A1'} />
       </TouchableOpacity>
     );

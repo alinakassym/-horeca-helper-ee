@@ -63,7 +63,14 @@ class Header extends React.PureComponent {
           </View>
         ) : modal ? (
           <View style={[styles.modalHeaderSection, style]}>
-            <CloseButton onPress={onClose} />
+            {children ? (
+              <View style={[globalStyles.row, globalStyles.alignCenter]}>
+                <CloseButton style={globalStyles.mr4} onPress={onClose} />
+                {children}
+              </View>
+            ) : (
+              <CloseButton onPress={onClose} />
+            )}
             {!!title && (
               <Text style={[styles.title, globalStyles.mt4]}>{title}</Text>
             )}

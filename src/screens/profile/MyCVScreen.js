@@ -1,15 +1,19 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, TouchableOpacity} from 'react-native';
 
 //styles
 import {globalStyles} from '../../styles/globalStyles';
-import {StatusesColors} from '../../styles/colors';
+import {PrimaryColors, StatusesColors} from '../../styles/colors';
+
+//icons
+import {IconAdd} from '../../assets/icons/main/IconAdd';
 
 // components
 import Header from '../../components/Header';
 import CVCard from './components/CVCard';
 import BottomModal from '../../components/BottomModal';
 import ModalButton from '../../components/buttons/ModalButton';
+import PlainButton from '../../components/buttons/PlainButton';
 
 // store
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
@@ -87,6 +91,26 @@ export const MyCVScreen = ({route, navigation}) => {
           }
         />
       ))}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('AddWork');
+        }}
+        style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
+        <PlainButton
+          onPress={() => {
+            navigation.navigate('ChoosePosition');
+          }}
+          btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
+          labelStyle={globalStyles.ml3}
+          label={i18n.t('Add CV')}>
+          <IconAdd
+            style={globalStyles.mr3}
+            color={PrimaryColors.brand}
+            size={16}
+            width={2}
+          />
+        </PlainButton>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

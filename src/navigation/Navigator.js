@@ -31,6 +31,9 @@ import {FAQScreen} from '../screens/support/FAQScreen';
 // settings screens
 import {SettingsScreen} from '../screens/settings/SettingsScreen';
 
+// resumes screens
+import {ChoosePositionScreen} from '../screens/resumes/ChoosePositionScreen';
+
 // Icons
 import {IconSearch} from '../assets/icons/tabs/IconSearch';
 import {IconMessages} from '../assets/icons/tabs/IconMessages';
@@ -229,6 +232,15 @@ export const Navigator = () => {
         <Stack.Screen
           name={'Settings'}
           component={SettingsScreen}
+          options={{headerShown: false}}
+        />
+      </Stack.Group>
+
+      {/*RESUMES SCREENS*/}
+      <Stack.Group>
+        <Stack.Screen
+          name={'ChoosePosition'}
+          component={ChoosePositionScreen}
           options={{headerShown: false}}
         />
       </Stack.Group>
