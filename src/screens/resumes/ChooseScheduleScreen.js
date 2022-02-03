@@ -20,12 +20,14 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
   const [resume, setResume] = useState(route.params && route.params.resume);
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedules, setSelectedSchedules] = useState(
-    resume ? [resume.schedule] : [],
+    resume.schedule ? [resume.schedule] : [],
   );
+
+  console.log({selectedSchedules});
 
   const addItem = val => {
     const include = _.includes(
-      selectedSchedules.map(item => item.id),
+      selectedSchedules.map(item => item && item?.id),
       val.id,
     );
     if (include) {
@@ -36,7 +38,7 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
       setSelectedSchedules(arrWithRemoved);
     } else {
       const uniqArr = _.uniqBy([...selectedSchedules, val], 'id');
-      setResume({...resume, scheduleId: uniqArr[0].id});
+      setResume({...resume, scheduleId: uniqArr[0] && uniqArr[0].id});
       setSelectedSchedules(uniqArr);
     }
   };
@@ -59,7 +61,7 @@ export const ChooseScheduleScreen = ({route, navigation}) => {
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
       <Header
-        onClose={() => navigation.goBack(2)}
+        onClose={() => navigation.navigate('MyCV')}
         modal
         title={'Укажите свою занятость'}>
         <StepProgress step={2} />

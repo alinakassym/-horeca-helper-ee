@@ -43,7 +43,7 @@ export const ChoosePositionScreen = ({route, navigation}) => {
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
       <Header
-        onClose={() => navigation.goBack()}
+        onClose={() => navigation.navigate('MyCV')}
         modal
         title={'Кем вы хотите работать?'}>
         <StepProgress step={1} />

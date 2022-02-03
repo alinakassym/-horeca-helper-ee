@@ -17,7 +17,9 @@ import * as ResumesService from '../../services/ResumesService';
 export const SpecifySalaryScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
   const [resume, setResume] = useState(route.params && route.params.resume);
-  const [salary, setSalary] = useState(resume && resume.salary.toString());
+  const [salary, setSalary] = useState(
+    resume && resume.salary && resume.salary.toString(),
+  );
 
   useEffect(() => {
     return navigation.addListener('focus', async () => {
@@ -31,7 +33,7 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
   const createResume = async () => {
     try {
       await ResumesService.create(resume);
-      navigation.navigate('Profile');
+      navigation.navigate('MyCV');
     } catch (e) {
       console.log('createResume err: ', e);
     }
@@ -46,9 +48,9 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
         salary: resume.salary,
         workIds: resume.workIds,
       });
-      navigation.navigate('Profile');
+      navigation.navigate('MyCV');
     } catch (e) {
-      console.log('createResume err: ', e);
+      console.log('saveResume err: ', e);
     }
   };
 
@@ -56,7 +58,7 @@ export const SpecifySalaryScreen = ({route, navigation}) => {
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
       <Header
-        onClose={() => navigation.goBack(2)}
+        onClose={() => navigation.navigate('MyCV')}
         modal
         title={'Укажите желаемую заработную плату'}>
         <StepProgress step={4} />

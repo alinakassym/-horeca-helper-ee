@@ -14,10 +14,10 @@ import {IconDots} from '../../../assets/icons/main/IconDots';
 import ActivePoint from '../../../components/ActivePoint';
 import PlainButton from '../../../components/buttons/PlainButton';
 import IconButton from '../../../components/buttons/IconButton';
+import UpdatedAt from '../../../components/UpdatedAt';
 
 // utils
 import {numberWithSpaces} from '../../../utils/common';
-import UpdatedAt from '../../../components/UpdatedAt';
 
 // locale
 import i18n from '../../../assets/i18n/i18n';
@@ -27,6 +27,7 @@ const dimensions = Dimensions.get('screen');
 const propTypes = {
   position: PropTypes.string,
   salary: PropTypes.number,
+  schedule: PropTypes.string,
   updatedAt: PropTypes.string,
   onPress: PropTypes.func,
   findRelevant: PropTypes.func,
@@ -34,7 +35,8 @@ const propTypes = {
 
 class CVCard extends React.PureComponent {
   render() {
-    const {position, salary, updatedAt, onPress, findRelevant} = this.props;
+    const {position, schedule, salary, updatedAt, onPress, findRelevant} =
+      this.props;
 
     return (
       <React.Fragment>
@@ -42,7 +44,7 @@ class CVCard extends React.PureComponent {
           <View
             style={[
               globalStyles.row,
-              globalStyles.mb6,
+              globalStyles.mb3,
               globalStyles.justifySpaceBetween,
             ]}>
             <View style={styles.leftCol}>
@@ -61,6 +63,7 @@ class CVCard extends React.PureComponent {
               <Text style={styles.salary}>
                 {salary ? `${numberWithSpaces(salary)} ₸` : ''}
               </Text>
+              <Text style={styles.salary}>{schedule ? schedule : ''}</Text>
             </View>
             <IconButton onPress={onPress}>
               <IconDots />
@@ -104,6 +107,8 @@ const styles = StyleSheet.create({
     color: PrimaryColors.element,
   },
   findBtn: {
+    paddingVertical: 8,
+    minHeight: 40,
     alignSelf: 'flex-start',
   },
 });

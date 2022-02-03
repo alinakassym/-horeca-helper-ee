@@ -1,5 +1,11 @@
-import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 //styles
 import {globalStyles} from '../../styles/globalStyles';
@@ -19,13 +25,17 @@ import PlainButton from '../../components/buttons/PlainButton';
 import {setFilter, setFilterApplied} from '../../store/slices/jobs';
 import {useDispatch} from 'react-redux';
 
+// services
+import * as ResumesService from '../../services/ResumesService';
+
 // locale
 import i18n from '../../assets/i18n/i18n';
 
 export const MyCVScreen = ({route, navigation}) => {
   const [me] = useState(route.params && route.params.me);
-  const [myResumes] = useState(route.params.myResumes);
+  const [myResumes, setMyResumes] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedResume, setSelectedResume] = useState();
   const dispatch = useDispatch();
 
@@ -59,6 +69,34 @@ export const MyCVScreen = ({route, navigation}) => {
     await dispatch(setFilterApplied(true));
     navigation.navigate('Jobs');
   };
+
+  useEffect(() => {
+    return navigation.addListener('focus', async () => {
+      try {
+        const myResumesData = await ResumesService.getMy();
+        setMyResumes(myResumesData);
+        setLoading(false);
+      } catch (e) {
+        console.log('MyCVScreen ResumesService.getMy() err: ', e);
+      }
+    });
+  }, [navigation]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={globalStyles.container}>
+        <Header
+          onClose={() => navigation.goBack()}
+          title={i18n.t('MyCV')}
+          goBack
+        />
+        <View style={globalStyles.fullScreenSection}>
+          <ActivityIndicator size={'large'} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <Header
@@ -87,6 +125,7 @@ export const MyCVScreen = ({route, navigation}) => {
           <CVCard
             key={index}
             position={resume.position?.title_ru}
+            schedule={resume?.schedule?.title_ru}
             salary={resume.salary}
             updatedAt={resume.updatedAt}
             onPress={() => {
@@ -103,7 +142,7 @@ export const MyCVScreen = ({route, navigation}) => {
           style={[globalStyles.section, globalStyles.mt3, globalStyles.mb3]}>
           <PlainButton
             onPress={() => {
-              navigation.navigate('ChoosePosition', {me});
+              navigation.navigate('ChoosePosition', {me, resume: null});
             }}
             btnStyle={{...globalStyles.mt3, ...globalStyles.mb3}}
             labelStyle={globalStyles.ml3}

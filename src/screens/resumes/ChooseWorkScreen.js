@@ -63,7 +63,7 @@ export const ChooseWorkScreen = ({route, navigation}) => {
     <SafeAreaView
       style={[globalStyles.container, globalStyles.rootStackContainer]}>
       <Header
-        onClose={() => navigation.goBack(2)}
+        onClose={() => navigation.navigate('MyCV')}
         modal
         title={'Укажите опыт работы'}>
         <StepProgress step={3} />

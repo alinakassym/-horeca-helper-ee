@@ -31,7 +31,7 @@ class MultiSelect extends React.PureComponent {
       this.props;
     const includes = val =>
       _.includes(
-        activeItems.map(el => el.id),
+        activeItems.map(el => el && el.id),
         val.id,
       );
 

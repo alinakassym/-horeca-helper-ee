@@ -31,7 +31,6 @@ import {AuthContext} from '../../store/context';
 
 //services
 import {getEmployee} from '../../services/EmployeesService';
-import * as ResumesService from '../../services/ResumesService';
 
 // locale
 import i18n from '../../assets/i18n/i18n';
@@ -47,7 +46,6 @@ export const ProfileScreen = ({navigation}) => {
     city: null,
     description: '',
   });
-  const [myResumes, setMyResumes] = useState([]);
 
   const getAge = birthDate =>
     birthDate ? moment().diff(birthDate, 'years', false) : null;
@@ -70,8 +68,6 @@ export const ProfileScreen = ({navigation}) => {
       try {
         const res = await getEmployee();
         setMe(res.data);
-        const myResumesData = await ResumesService.getMy();
-        setMyResumes(myResumesData);
       } catch (e) {
         console.log('ProfileScreen err: ', e);
       }
@@ -115,7 +111,7 @@ export const ProfileScreen = ({navigation}) => {
 
         <View style={styles.list}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MyCV', {me, myResumes})}
+            onPress={() => navigation.navigate('MyCV', {me})}
             style={[styles.listItem, styles.listItemDivider]}>
             <Text style={styles.listItemTitle}>{i18n.t('MyCV')}</Text>
             <IconExpandRight size={16} color={PrimaryColors.grey1} />
